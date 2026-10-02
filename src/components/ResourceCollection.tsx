@@ -170,7 +170,7 @@ function Collection({ materials }: Props) {
                   {loadingText && <Box sx={{ display: 'grid', minHeight: 180, placeItems: 'center' }}><CircularProgress size={28} /></Box>}
                   {textError && <Alert severity="error">No s’ha pogut carregar aquest fitxer. Pots obrir-lo en una pestanya nova.</Alert>}
                   {!loadingText && !textError && (
-                    <Box component="pre" sx={{ m: 0, p: { xs: 2, sm: 3 }, overflowX: 'auto', border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.paper', color: 'text.primary', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace', fontSize: 13, lineHeight: 1.65, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
+                    <Box component="pre" sx={{ m: 0, p: { xs: 2, sm: 3 }, overflowX: 'auto', border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.paper', color: 'text.primary', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace', fontSize: 14, lineHeight: 1.65, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
                       {textContent || 'Aquest fitxer no conté text.'}
                     </Box>
                   )}

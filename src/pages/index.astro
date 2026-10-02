@@ -1,46 +1,88 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
-import SubjectExplorer from '../components/SubjectExplorer';
-import { featuredSubjects } from '../data/subjects';
+import SiteLayout from "../layouts/SiteLayout.astro";
+import SubjectExplorer from "../components/SubjectExplorer";
+import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
+import { featuredSubjects } from "../data/subjects";
 ---
 
-<SiteLayout title="Materials d’estudi de la FIB" description="Busca apunts, exercicis i recursos per a les assignatures de la Facultat d’Informàtica de Barcelona. Explora el catàleg de Fibers o comparteix els teus materials.">
+<SiteLayout
+  title="Materials d’estudi de la FIB"
+  description="Busca apunts, exercicis i recursos per a les assignatures de la Facultat d’Informàtica de Barcelona. Explora el catàleg de Fibers o comparteix els teus materials."
+>
   <div class="page-content home-page">
     <section class="hero-panel">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="eyebrow-dot"></span> APRENENTATGE COMPARTIT</div>
-        <h1>Els bons apunts<br /><span>passen de mà en mà.</span></h1>
-        <p>Un espai de la comunitat FIB per trobar i compartir materials que ajuden a estudiar, practicar i entendre millor.</p>
-        <div class="hero-actions">
-          <a class="button-primary" href="/assignatures/">Explora assignatures <span aria-hidden="true">→</span></a>
-          <a class="button-secondary" href="/aporta/">Comparteix els teus apunts</a>
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span> APRENENTATGE COMPARTIT
         </div>
-        <div class="hero-footnote"><span class="status-pulse"></span> Un projecte col·laboratiu, fet entre estudiants</div>
+        <h1>Els bons apunts<br /><span>passen de mà en mà.</span></h1>
+        <p>
+          Un espai de la comunitat FIB per trobar i compartir materials que
+          ajuden a estudiar, practicar i entendre millor.
+        </p>
+        <div class="hero-actions">
+          <a class="button-primary" href="/assignatures/"
+            >Explora assignatures <span aria-hidden="true">→</span></a
+          >
+          <a class="button-secondary" href="/aporta/"
+            >Comparteix els teus apunts</a
+          >
+        </div>
+        <div class="hero-footnote">
+          <span class="status-pulse"></span> Un projecte col·laboratiu, fet entre
+          estudiants
+        </div>
       </div>
       <div class="hero-art" aria-hidden="true">
         <div class="art-orbit orbit-one"></div>
         <div class="art-orbit orbit-two"></div>
-        <div class="art-sheet sheet-back"><span></span><span></span><span></span><b>FIB</b></div>
-        <div class="art-sheet sheet-front"><div class="sheet-mark">f.</div><span></span><span></span><span></span><span></span><div class="sheet-sticker">apunts<br />oberts</div></div>
+        <div class="art-sheet sheet-back">
+          <span></span><span></span><span></span><b>FIB</b>
+        </div>
+        <div class="art-sheet sheet-front">
+          <div class="sheet-mark">f.</div><span></span><span></span><span
+          ></span><span></span><div class="sheet-sticker">
+            apunts<br />oberts
+          </div>
+        </div>
         <div class="art-tag tag-one">F · M2 · BD</div>
         <div class="art-tag tag-two">fet entre estudiants</div>
-        <div class="art-star star-one">✳</div><div class="art-star star-two">✦</div>
+        <div class="art-star star-one">✳</div><div class="art-star star-two">
+          ✦
+        </div>
       </div>
     </section>
 
     <section class="section-block" aria-labelledby="subjects-heading">
       <div class="section-heading">
-        <div><span class="eyebrow">EL CATÀLEG</span><h2 id="subjects-heading">Troba la teva assignatura</h2><p>Comença pel nom o pel codi i consulta l’estat de cada espai.</p></div>
-        <a class="text-link" href="/assignatures/">Veure el catàleg <span aria-hidden="true">→</span></a>
+        <div>
+          <span class="eyebrow">EL CATÀLEG</span><h2 id="subjects-heading">
+            Troba la teva assignatura
+          </h2><p>
+            Comença pel nom o pel codi i consulta l’estat de cada espai.
+          </p>
+        </div>
+        <a class="text-link" href="/assignatures/"
+          >Veure el catàleg <span aria-hidden="true">→</span></a
+        >
       </div>
       <SubjectExplorer client:load subjects={featuredSubjects} />
-      <p class="data-note">Els fitxers provenen del fons de la web anterior; comprova si el material continua vigent.</p>
+      <p class="data-note">
+        Els fitxers provenen del fons de la web anterior; comprova si el
+        material continua vigent.
+      </p>
     </section>
 
     <section class="share-banner">
-      <div class="share-icon" aria-hidden="true">↗</div>
-      <div><h2>Has preparat uns bons apunts?</h2><p>Compartir-los pot estalviar hores a una altra persona.</p></div>
-      <a class="button-primary" href="/aporta/">Aporta material <span aria-hidden="true">→</span></a>
+      <div class="share-icon" aria-hidden="true"><UploadFileRoundedIcon /></div>
+      <div>
+        <h2>Has preparat uns bons apunts?</h2><p>
+          Compartir-los pot estalviar hores a una altra persona.
+        </p>
+      </div>
+      <a class="button-primary" href="/aporta/"
+        >Aporta material <span aria-hidden="true">→</span></a
+      >
     </section>
   </div>
 </SiteLayout>

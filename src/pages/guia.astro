@@ -1,10 +1,11 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../components/SiteBreadcrumbs';
 ---
 
 <SiteLayout title="Com funciona Fibers" description="Aprèn a trobar materials d’estudi per assignatura, consultar els recursos disponibles i compartir apunts propis a Fibers.">
   <div class="page-content inner-page">
-    <nav class="breadcrumbs" aria-label="Fil d’Ariadna"><a href="/">Inici</a><span>/</span><span>Com funciona</span></nav>
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Com funciona' }]} /> -->
     <header class="page-heading"><span class="eyebrow">UNA XARXA D’APRENENTATGE</span><h1>Materials útils,<br />compartits amb cura.</h1><p>Fibers vol fer més accessibles els recursos d’estudi creats per estudiants de la Facultat d’Informàtica de Barcelona.</p></header>
     <div class="guide-grid">
       <article class="guide-card"><span class="guide-number">01</span><h2>Troba una assignatura</h2><p>Explora el catàleg i entra a l’espai de la matèria que estàs cursant.</p></article>

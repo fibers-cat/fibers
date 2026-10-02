@@ -1,12 +1,13 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../components/SiteBreadcrumbs';
 import ResourceCollection from '../components/ResourceCollection';
 import { generalMaterials } from '../data/materials';
 ---
 
 <SiteLayout title="Recursos generals de la FIB" description="Consulta documents generals, guies i recursos de recuperació recuperats del fons històric de Fibers per a estudiants de la FIB.">
   <div class="page-content inner-page">
-    <nav class="breadcrumbs" aria-label="Fil d’Ariadna"><a href="/">Inici</a><span>/</span><span>Recursos generals</span></nav>
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Recursos generals' }]} /> -->
     <header class="page-heading">
       <span class="eyebrow">FONS RECUPERAT</span>
       <h1>Recursos generals</h1>

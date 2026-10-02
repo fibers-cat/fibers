@@ -1,19 +1,39 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
-import ProjectTimeline from '../components/ProjectTimeline';
+import SiteLayout from "../layouts/SiteLayout.astro";
+// import SiteBreadcrumbs from "../components/SiteBreadcrumbs";
+import ProjectTimeline from "../components/ProjectTimeline";
 ---
 
-<SiteLayout title="Sobre Fibers" description="Coneix Fibers, el projecte comunitari on estudiants de la FIB comparteixen apunts, exercicis i recursos per facilitar l’aprenentatge.">
+<SiteLayout
+  title="Sobre Fibers"
+  description="Coneix Fibers, el projecte comunitari on estudiants de la FIB comparteixen apunts, exercicis i recursos per facilitar l’aprenentatge."
+>
   <div class="page-content inner-page">
-    <nav class="breadcrumbs" aria-label="Fil d’Ariadna"><a href="/">Inici</a><span>/</span><span>Sobre Fibers</span></nav>
-    <header class="page-heading about-heading"><span class="eyebrow">SOBRE EL PROJECTE</span><h1>Un lloc per estudiar<br />millor en comunitat.</h1><p>Fibers és una iniciativa per facilitar que l’alumnat de la FIB comparteixi materials propis i els faci accessibles a tothom.</p><a class="button-primary" href="/contacto/">Contacta amb nosaltres <span aria-hidden="true">↗</span></a></header>
+    <!-- <SiteBreadcrumbs
+      items={[{ href: "/", label: "Inici" }, { label: "Sobre Fibers" }]}
+    /> -->
+    <header class="page-heading about-heading">
+      <span class="eyebrow">SOBRE EL PROJECTE</span><h1>
+        Un lloc per estudiar<br />millor en comunitat.
+      </h1><p>
+        Fibers és una iniciativa per facilitar que l’alumnat de la FIB
+        comparteixi materials propis i els faci accessibles a tothom.
+      </p><a class="button-primary" href="/contacto/"
+        >Contacta amb nosaltres <span aria-hidden="true">→</span></a>
+    </header>
 
     <section class="about-timeline" aria-labelledby="project-timeline-title">
       <div class="section-heading">
-        <div><span class="eyebrow">CRONOLOGIA</span><h2 id="project-timeline-title">La història de Fibers</h2><p>Els inicis del projecte i l’evolució de la seva web.</p></div>
+        <div>
+          <span class="eyebrow">CRONOLOGIA</span><h2
+            id="project-timeline-title"
+          >
+            La història de Fibers
+          </h2><p>Els inicis del projecte i l’evolució de la seva web.</p>
+        </div>
       </div>
 
-      <ProjectTimeline />
+      <ProjectTimeline client:load />
     </section>
   </div>
 </SiteLayout>

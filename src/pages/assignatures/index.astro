@@ -1,12 +1,13 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../../components/SiteBreadcrumbs';
 import SubjectExplorer from '../../components/SubjectExplorer';
 import { subjects } from '../../data/subjects';
 ---
 
 <SiteLayout title="Assignatures de la FIB" description="Explora les assignatures de la FIB per nom o codi i troba els materials d’estudi recuperats per a cada matèria al catàleg de Fibers.">
   <div class="page-content inner-page">
-    <nav class="breadcrumbs" aria-label="Fil d’Ariadna"><a href="/">Inici</a><span>/</span><span>Assignatures</span></nav>
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Assignatures' }]} /> -->
     <header class="page-heading">
       <span class="eyebrow">CATÀLEG FIB</span>
       <h1>Assignatures</h1>

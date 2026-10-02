@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../../components/SiteBreadcrumbs';
 import SubjectStatus from '../../components/SubjectStatus';
 import { subjects } from '../../data/subjects';
 
@@ -13,7 +14,7 @@ const subjectDescription = `Explora els recursos d’estudi de ${subject.name} (
 
 <SiteLayout title={`${subject.name} (${subject.code})`} description={subjectDescription}>
   <div class="page-content inner-page subject-page">
-    <nav class="breadcrumbs" aria-label="Fil d’Ariadna"><a href="/">Inici</a><span>/</span><a href="/assignatures/">Assignatures</a><span>/</span><span>{subject.code}</span></nav>
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { href: '/assignatures/', label: 'Assignatures' }, { label: subject.code }]} /> -->
     <header class="subject-title-panel">
       <span class="subject-code subject-code-large">{subject.code}</span>
       <div><span class="eyebrow">ESPAI D’ESTUDI</span><h1>{subject.name}</h1><p>Materials compartits per la comunitat Fibers.</p></div>

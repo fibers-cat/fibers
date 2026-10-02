@@ -19,6 +19,7 @@
     "@mui/material": "9.4.0",
     "astro": "7.3.5",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "simple-icons": "16.33.0"
   }
 }

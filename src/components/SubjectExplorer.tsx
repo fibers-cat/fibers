@@ -33,9 +33,9 @@ export default function SubjectExplorer({ subjects }: Props) {
           <TextField
             value={query}
             onChange={(event) => setQuery(event.target.value)}
+            label="Busca per nom o codi"
             placeholder="Busca per nom o codi"
             aria-label="Busca una assignatura"
-            size="small"
             className="subject-search"
             InputProps={{
               startAdornment: <InputAdornment position="start"><SearchRounded color="action" /></InputAdornment>,

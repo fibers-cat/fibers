@@ -9,7 +9,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import SvgIcon from '@mui/material/SvgIcon';
 import MenuRounded from '@mui/icons-material/MenuRounded';
 import CloseRounded from '@mui/icons-material/CloseRounded';
 import HomeRounded from '@mui/icons-material/HomeRounded';
@@ -18,6 +18,7 @@ import VolunteerActivismRounded from '@mui/icons-material/VolunteerActivismRound
 import FolderOpenRounded from '@mui/icons-material/FolderOpenRounded';
 import GroupsRounded from '@mui/icons-material/GroupsRounded';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
+import { siDiscord, siFacebook, siGithub } from 'simple-icons';
 import { ThemeProvider } from '@mui/material/styles';
 import { fibersTheme } from './theme';
 
@@ -31,6 +32,32 @@ const links = [
 ];
 
 type Props = { currentPath: string };
+
+const socialLinks = [
+  { href: 'https://github.com/fibers-cat/fibers/', label: 'GitHub', icon: siGithub },
+  { href: 'https://www.facebook.com/fibers.cat/', label: 'Facebook', icon: siFacebook },
+  { href: 'https://discord.gg/nnd2EHGZEm', label: 'Discord', icon: siDiscord },
+];
+
+function SocialLinks({ className }: { className: string }) {
+  return (
+    <Box className={`social-links ${className}`} role="group" aria-label="Xarxes socials">
+      {socialLinks.map((link) => (
+        <IconButton
+          key={link.href}
+          component="a"
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={link.label}
+          title={link.label}
+        >
+          <SvgIcon viewBox="0 0 24 24"><path d={link.icon.path} /></SvgIcon>
+        </IconButton>
+      ))}
+    </Box>
+  );
+}
 
 function NavigationLinks({ currentPath, onNavigate }: Props & { onNavigate?: () => void }) {
   return (
@@ -72,8 +99,7 @@ export default function SiteNavigation({ currentPath }: Props) {
         <div className="sidebar-label">ESPAI D’ESTUDI</div>
         <NavigationLinks currentPath={currentPath} />
         <div className="sidebar-bottom">
-          <div className="sidebar-note">Apunts compartits, aprenentatge per a tothom.</div>
-          <a className="sidebar-mail" href="/contacto/">Contacta amb Fibers</a>
+          <SocialLinks className="desktop-socials" />
         </div>
       </aside>
 
@@ -94,7 +120,7 @@ export default function SiteNavigation({ currentPath }: Props) {
             <IconButton aria-label="Tanca el menú" onClick={() => setOpen(false)}><CloseRounded /></IconButton>
           </div>
           <NavigationLinks currentPath={currentPath} onNavigate={() => setOpen(false)} />
-          <Typography className="drawer-note">Apunts compartits, aprenentatge per a tothom.</Typography>
+          <SocialLinks className="drawer-socials" />
         </Box>
       </Drawer>
     </ThemeProvider>
