@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#fff8f5"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#20242c" flood-opacity=".12"/></filter>
+  </defs>
+  <rect width="1200" height="630" fill="#f2f4f7"/>
+  <rect x="34" y="34" width="1132" height="562" rx="34" fill="url(#paper)" stroke="#e7e9ed"/>
+  <circle cx="1050" cy="94" r="118" fill="#fff0ef"/>
+  <g transform="translate(86 78) scale(0.1328125)" fill="#ea4747"><path d="M112 80h96v32h-96z M304 80h96v32h-96z M80 112h160v32H80z M272 112h160v32H272z M48 144h416v96H48z M80 240h352v32H80z M112 272h288v32H112z M144 304h224v32H144z M176 336h160v32H176z M208 368h96v32h-96z M240 400h32v32h-32z"/></g>
+  <text x="170" y="132" font-family="Arial, sans-serif" font-size="53" font-weight="700" letter-spacing="-3" fill="#20242c">fibers<tspan fill="#e94b50">.</tspan></text>
+  <text x="88" y="287" font-family="Arial, sans-serif" font-size="58" font-weight="700" letter-spacing="-2.5" fill="#20242c">Materials d'estudi</text>
+  <text x="88" y="356" font-family="Arial, sans-serif" font-size="58" font-weight="700" letter-spacing="-2.5" fill="#e94b50">de la FIB</text>
+  <text x="92" y="414" font-family="Arial, sans-serif" font-size="24" fill="#626b77">Apunts, exercicis i recursos compartits</text>
+  <text x="92" y="449" font-family="Arial, sans-serif" font-size="24" fill="#626b77">per la comunitat d'estudiants.</text>
+  <rect x="92" y="493" width="196" height="42" rx="21" fill="#e7f5f2"/>
+  <circle cx="113" cy="514" r="5" fill="#158b84"/>
+  <text x="129" y="520" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#176c65">fet entre estudiants</text>
+  <circle cx="875" cy="330" r="207" fill="none" stroke="#f1d9d8" stroke-width="2"/>
+  <circle cx="875" cy="330" r="155" fill="none" stroke="#edc8c7" stroke-width="2" stroke-dasharray="7 10"/>
+  <g filter="url(#shadow)" transform="rotate(9 875 330)">
+    <rect x="799" y="171" width="200" height="280" rx="18" fill="#f5dedb"/>
+    <rect x="735" y="185" width="205" height="284" rx="18" fill="#fff" stroke="#eceef1"/>
+    <rect x="768" y="221" width="112" height="11" rx="6" fill="#f3b4b1"/>
+    <rect x="768" y="251" width="139" height="7" rx="4" fill="#e7e9ed"/>
+    <rect x="768" y="273" width="133" height="7" rx="4" fill="#e7e9ed"/>
+    <rect x="768" y="295" width="148" height="7" rx="4" fill="#e7e9ed"/>
+    <rect x="768" y="330" width="139" height="73" rx="11" fill="#fff2f1"/>
+    <path d="M784 382l27-25 23 18 30-34 26 28" fill="none" stroke="#e94b50" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <circle cx="1045" cy="455" r="39" fill="#158b84"/>
+  <path d="M1028 455l12 12 23-26" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

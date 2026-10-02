@@ -1,34 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Fibers
 
-## Getting Started
+Web per compartir materials d'estudi entre estudiants de la FIB, reconstruïda amb Astro i Material UI.
 
-First, run the development server:
+## Desenvolupament
 
-```bash
+```sh
+npm install
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Producció
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```sh
+npm run build
+npm run preview
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+Les pàgines i la llista inicial d'assignatures són estàtiques. El catàleg parteix de l'inventari històric de la web antiga, agrupat com abans; la disponibilitat dels materials es mostra com a pendent de revisió. El formulari de contacte desa els enviaments amb Netlify Forms. Cal activar **Form detection** a la configuració del lloc de Netlify i tornar-lo a desplegar. El formulari d'aportacions obre el programa de correu; els fitxers s'han d'adjuntar manualment.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+El domini canònic de producció es defineix a `astro.config.mjs`. En compilar, Astro genera el sitemap (`sitemap-index.xml`) i `robots.txt` hi publica la seva adreça. Les pàgines tenen metadades Open Graph i dades estructurades JSON-LD.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Els 54 fitxers recuperats es conserven a `public/files/`. `src/data/materials.json` en manté el catàleg i `src/data/materials.ts` associa cada recurs amb una assignatura o amb la pàgina de recursos generals. Els títols vinculats provenen de la pàgina HTML antiga.

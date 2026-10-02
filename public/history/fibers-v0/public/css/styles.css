@@ -1,0 +1,161 @@
+body {
+	background-color: #202728 !important;
+	/*font-family: 'Helvetica', 'Arial', sans-serif;*/
+	font-family: 'Open Sans', sans-serif !important;
+    /*color: #c0cdcf !important;*/
+}
+
+.cookies {
+	color: #ccc;
+    font: 12px/1.2 Menlo,Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;
+}
+
+.title {
+	/*color: #d44a02;*/
+	/*font-weight: bold;*/
+	color: #ea4747;
+	font-family: "haxs", sans-serif !important;
+	/*font-family: 'Monoton', cursive;*/
+}
+
+@font-face {
+    font-family: america_purpose;
+    src: url(../fonts/American_Purpose_Casual_01.otf);
+    /*font-weight: bold;*/
+}
+
+@font-face {
+    font-family: haxs;
+    src: url(../fonts/haxs.ttf);
+    /*font-weight: bold;*/
+}
+
+.sub_title {
+	/*background-color: #d6f1ff;
+	padding: 5px;
+	border-radius: 3px;*/
+	color: #fdfeff;
+}
+
+.free_margins {
+	padding: 0px !important;"
+}
+
+.square_icon {
+	margin-right: 5px;
+	font-size: 7px !important; 
+	color: gray;
+	vertical-align: middle;
+}
+
+h4 {
+	background-color: rgba(234, 71, 71,0.8);
+	text-align: center;
+	padding: 5px 0px 5px 0px;
+	margin-top: 0px !important;
+	border-radius: 3px;
+	margin: 0px 15px 0px 15px;
+}
+
+.q_title {
+	color: #fdfeff;
+}
+
+/*
+.panel {
+	margin-bottom: 10px !important;
+}
+*/
+
+ul li ul {
+	-webkit-padding-start: 10px !important;
+	padding-left: 10px;
+}
+
+li a {
+	/*color: #d44a02;*/
+	color: #ea4747;
+}
+
+li a:hover {
+	/*color: #d44a02;*/
+	color: #ea4747;
+}
+
+.title_header {
+	text-align: center;
+}
+
+.block_sub_title {
+	font-weight: bold;
+}
+
+li ul li {
+	list-style: none;
+}
+
+.panel-heading {
+	font-weight: bold;
+}
+
+footer {
+	/*background-color: #d6f1ff;
+	color: #fdfeff;*/
+	color: #ea4747;
+	border-top: 2px solid #ea4747;
+}
+
+/* Remove margins and padding from the list, and add a black background color */
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+/* Float the list items side by side */
+ul.topnav li {float: left;}
+
+/* Style the links inside the list items */
+ul.topnav li a {
+    display: inline-block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.topnav li a:hover {background-color: #555;}
+
+/* Hide the list item that contains the link that should open and close the topnav on small screens */
+ul.topnav li.icon {display: none;}
+
+@media screen and (max-width:680px) {
+  ul.topnav li:not(:first-child) {display: none;}
+  ul.topnav li.icon {
+    float: right;
+    display: inline-block;
+  }
+}
+
+/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens */
+@media screen and (max-width:680px) {
+  ul.topnav.responsive {position: relative;}
+  ul.topnav.responsive li.icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  ul.topnav.responsive li {
+    float: none;
+    display: inline;
+  }
+  ul.topnav.responsive li a {
+    display: block;
+    text-align: left;
+  }
+}

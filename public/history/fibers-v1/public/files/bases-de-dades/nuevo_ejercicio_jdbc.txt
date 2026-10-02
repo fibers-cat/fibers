@@ -1,0 +1,47 @@
+//ATENCION: SEGURAMENTE ES POSIBLE UNA SOLUCIÓN MÁS EFICIENTE
+/* Imports de la classe */
+import java.sql.*; 
+import java.io.*;
+/* Capa de Control de Dades */
+class CtrlDadesPublic extends CtrlDadesPrivat {
+			public ConjuntTuples consulta(Connection c,
+			Tuple params) throws BDException {
+				try {
+					Statement s=c.createStatement();
+	ResultSet rs=null; ResultSet rb=null;
+	ConjuntTuples ct = new ConjuntTuples();
+	PreparedStatement p=c.prepareStatement("select modul, numero from assignacions where dni=? AND instantFi IS NULL;");
+	PreparedStatement h=c.prepareStatement("select modul, numero from assignacions where dni=? AND instantFi=(select max(instantFi) from assignacions where dni=? group by dni);");
+	rs=s.executeQuery("select dni from professors");
+	int i=0;
+	while(rs.next()){
+						//por cada profesor de la base de datos
+		Tuple t=new Tuple(); t.afegir(rs.getString(1));
+		p.setString(1,
+						rs.getString(1));
+		rb=p.executeQuery();
+		i=1;
+		if(!(rb.next())){
+							// si no tenia assignación pendiente	intento encontrar una max entre las cerradas
+			h.setString(1,
+							rs.getString(1)); h.setString(2,
+							rs.getString(1));
+			rb=h.executeQuery();	
+			if(!(rb.next())){
+								//si no encontro un max
+				t.afegir("XXX"); t.afegir("YYY");
+				i=2;
+							}
+						}if(i==1){
+							//añado el pendiente o max que encontre
+			t.afegir(rb.getString(1)); 
+			t.afegir(rb.getString(2));
+						}ct.afegir(t);
+					}if(i==0) throw new BDException(10);
+		return ct;
+				}catch(SQLException se) 
+	     {
+					throw new BDException(11);
+				}
+			}
+		}

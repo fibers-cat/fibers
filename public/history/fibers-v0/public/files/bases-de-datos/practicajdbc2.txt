@@ -1,0 +1,34 @@
+/* Imports de la classe */
+import java.sql.*; 
+import java.io.*;
+/* Capa de Control de Dades */
+class CtrlDadesPublic extends CtrlDadesPrivat {
+			public ConjuntTuples consulta(Connection c,
+			Tuple params) throws BDException {
+				try {
+					ConjuntTuples ct = new ConjuntTuples();
+			Statement s=c.createStatement();
+			ResultSet rs = null;
+			rs=s.executeQuery("SELECT COUNT(*) FROM assignacions WHERE dni='"+params.consulta(1)+"';");
+			rs.next();
+			if (rs.getInt(1)>=5)
+				throw new BDException(14);
+			s.executeUpdate("UPDATE assignacions SET instantFi="+Integer.parseInt(params.consulta(4))+"-1 WHERE dni='"+params.consulta(1)+"' AND instantFi IS NULL;");	
+			s.executeUpdate("INSERT INTO assignacions VALUES ('"+params.consulta(1)+"', '"+params.consulta(2)+"', '"+params.consulta(3)+"', "+Integer.parseInt(params.consulta(4))+", NULL);");
+			rs=s.executeQuery("SELECT COUNT(*) FROM assignacions WHERE instantFi IS NOT  NULL AND dni='"+params.consulta(1)+"';");
+			rs.next();
+			Tuple t=new Tuple(); t.afegir(rs.getString(1));
+			s.close(); rs.close();
+			ct.afegir(t);
+			return ct;
+				}catch(SQLException se) 
+	     {
+					if (se.getSQLState().equals("23503"))
+			throw new BDException(12);
+		else if (se.getSQLState().equals("23505"))
+			throw new BDException(13);
+		else 
+			throw new BDException(15);
+				}
+			}
+		}

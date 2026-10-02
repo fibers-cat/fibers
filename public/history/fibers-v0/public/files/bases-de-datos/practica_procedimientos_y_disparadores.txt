@@ -1,0 +1,53 @@
+CREATE or replace FUNCTION comprobar_ciutat2() RETURNS trigger AS $$ 
+BEGIN
+DELETE FROM empleats1 WHERE ciutat1=OLD.ciutat2 AND (SELECT count(*) FROM empleats2 WHERE ciutat2=OLD.ciutat2)=0;
+RETURN NULL;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER compciutat2 AFTER DELETE OR UPDATE ON empleats2  FOR EACH ROW EXECUTE PROCEDURE comprobar_ciutat2();
+</div>
+<div id="pre" class="pre2">
+CREATE OR REPLACE FUNCTION assignar_individual(nom char(10),
+		club char(10)) RETURNS void AS $$
+DECLARE 
+   missatge varchar(50);
+BEGIN
+IF (SELECT COUNT(*) FROM socisclubs WHERE nclub=club) >=10 THEN
+	SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=1;
+	RAISE EXCEPTION '%',
+		missatge;
+END IF;
+IF (SELECT COUNT(*) FROM socisclubs s,
+		socis s2 WHERE s.nsoci=s2.nsoci and s.nclub=club AND s2.sexe='F') < 
+ ((SELECT COUNT(*) FROM socisclubs s,
+		socis s2 WHERE s.nsoci=s2.nsoci and s.nclub=club AND s2.sexe='M')+1) 
+ AND (SELECT sexe from socis WHERE nsoci=nom)='M' THEN
+	SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=2;
+	RAISE EXCEPTION '%',
+		missatge;
+END IF;
+IF (SELECT COUNT(*) FROM socisclubs WHERE nsoci=nom AND nclub=club)<>0 THEN
+	SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=3;
+	RAISE EXCEPTION '%',
+		missatge;
+END IF;
+IF (SELECT count(*) FROM socis WHERE nsoci=nom)=0 OR (SELECT COUNT(*) FROM clubs WHERE nclub=club)=0 THEN
+	SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=4;
+	RAISE EXCEPTION '%',
+		missatge;
+END IF;
+INSERT INTO socisclubs values(nom,
+		club);
+IF (SELECT COUNT(*) FROM clubs_amb_mes_de_5_socis where nclub=club)=0 AND (SELECT COUNT(*) FROM socisclubs WHERE nclub=club)>=5 THEN
+	INSERT INTO clubs_amb_mes_de_5_socis VALUES (club);
+END IF;
+EXCEPTION
+   WHEN raise_exception THEN
+           RAISE EXCEPTION '%',
+		SQLERRM;
+   WHEN OTHERS THEN
+           SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=5; 
+           RAISE EXCEPTION '%',
+		missatge;
+END;
+$$LANGUAGE plpgsql;

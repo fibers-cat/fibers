@@ -1,0 +1,68 @@
+CREATE OR REPLACE FUNCTION eliminar_dept(numdept integer) RETURNS void AS $$
+DECLARE 
+   missatge varchar(50);
+BEGIN
+     IF ((select count(*) from empleats where num_dpt=numdept)>=1) THEN 
+	SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=1; 
+	RAISE EXCEPTION '%',
+		missatge;	
+     END IF;
+     DELETE FROM departaments WHERE num_dpt = numdept;
+     IF NOT FOUND THEN
+	   SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=2; 
+           RAISE EXCEPTION '%',
+		missatge;
+     END IF;
+EXCEPTION
+   WHEN raise_exception THEN
+           RAISE EXCEPTION '%',
+		SQLERRM;
+   WHEN OTHERS THEN
+           SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=3; 
+           RAISE EXCEPTION '%',
+		missatge;
+END;
+$$LANGUAGE plpgsql;
+
+CREATE or replace FUNCTION comprobar_ciutat() RETURNS trigger AS $$
+DECLARE 
+   missatge varchar(100);
+BEGIN
+IF((select count(*) from empleats2 where ciutat2=NEW.ciutat1)=0) THEN
+	SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=1;
+	RAISE EXCEPTION '%',
+		missatge;
+END IF;	 
+RETURN NEW;
+EXCEPTION
+   WHEN raise_exception THEN
+           RAISE EXCEPTION '%',
+		SQLERRM;
+   WHEN OTHERS THEN
+           SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=3; 
+           RAISE EXCEPTION '%',
+		missatge;
+END;
+$$LANGUAGE plpgsql;
+CREATE or replace FUNCTION comprobar_ciutat2() RETURNS trigger AS $$
+DECLARE 
+   missatge varchar(100);
+BEGIN
+IF(NEW.ciutat1<>OLD.ciutat1 AND (select count(*) from empleats2 where ciutat2=NEW.ciutat1)=0) THEN
+	SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=1;
+	RAISE EXCEPTION '%',
+		missatge;
+END IF;	 
+RETURN NEW;
+EXCEPTION
+   WHEN raise_exception THEN
+           RAISE EXCEPTION '%',
+		SQLERRM;
+   WHEN OTHERS THEN
+           SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=3; 
+           RAISE EXCEPTION '%',
+		missatge;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER compciutat2 BEFORE UPDATE ON empleats1  FOR EACH ROW EXECUTE PROCEDURE comprobar_ciutat2();
+CREATE TRIGGER compciutat BEFORE INSERT ON empleats1  FOR EACH ROW EXECUTE PROCEDURE comprobar_ciutat();

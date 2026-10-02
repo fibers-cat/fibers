@@ -1,0 +1,14 @@
+Resumen capitulos
+	Subnetting -> subnetting_resumen_xc_melocuenta_fib.pdf
+	más Subnetting -> subnetting_resumen_xc_melocuenta_fib.txt
+	Calculadora subnetting -> LINK a http://jodies.de/ipcalc
+	LANs -> lan_resumen_xc_melocuenta_fib.pdf
+	TCP y Aplicaciones -> tcp_aplicaciones_resumen_xc_melocuenta_fib.pdf
+	
+Ejercicios de Seguimiento
+	IP -> ip_seguiment_xc_melocuenta_fib_2014.pdf
+	LANs -> lan_resumen_xc_melocuenta_fib.pdf
+	TCP -> tcp_seguiment_xc__melocuenta_2014
+	
+Transversal
+	XML -> xml_trans_xc_melocuenta.tar.gz

@@ -1,0 +1,176 @@
+-----EX1
+CREATE OR REPLACE FUNCTION registre2() RETURNS trigger AS $$
+BEGIN
+	NEW.usuari:=(SELECT usuari FROM usuari_actual);
+RETURN NEW;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER registret BEFORE INSERT ON treballadors FOR EACH ROW EXECUTE PROCEDURE registre2();
+-----EX2
+CREATE OR REPLACE FUNCTION auditoriarepast() RETURNS trigger AS $$
+DECLARE
+	us char(10);
+BEGIN
+	IF TG_OP='INSERT' THEN 
+		us:=(SELECT usuari FROM usuari_actual);
+		INSERT INTO auditoria VALUES(NEW.num_treballador,
+		us);
+	ELSEIF TG_OP='DELETE' THEN
+		DELETE FROM auditoria WHERE num_treballador=OLD.num_treballador;
+	END IF;
+RETURN NEW;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER auditoriarepast AFTER INSERT OR DELETE ON treballadors FOR EACH ROW EXECUTE PROCEDURE auditoriarepast();
+-----EX3
+CREATE or replace FUNCTION auditoria() RETURNS trigger AS $$
+BEGIN
+      NEW.usuari:=(select usuari from usuari_actual);       
+	  RETURN NEW;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER ex172 BEFORE INSERT ON treballadors  FOR EACH ROW EXECUTE PROCEDURE auditoria();
+-----EX4
+CREATE OR REPLACE FUNCTION empleat123f1() RETURNS TRIGGER AS $$
+DECLARE
+	missatge varchar(100);
+BEGIN
+	IF OLD.nempl=123 THEN 
+		SELECT  texte INTO  missatge FROM missatgesExcepcions WHERE num=1;
+		RAISE EXCEPTION '%',
+		missatge;
+	END IF;
+RETURN OLD;
+EXCEPTION
+	WHEN raise_exception THEN
+		RAISE EXCEPTION '%',
+		SQLERRM;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER  empleat123t1 BEFORE DELETE ON empleats FOR EACH ROW EXECUTE PROCEDURE  empleat123f1();
+CREATE OR REPLACE FUNCTION empleat123f2() RETURNS TRIGGER AS $$
+DECLARE
+	missatge varchar(100);
+BEGIN
+	IF OLD.nempl=123 AND OLD.nempl<>NEW.nempl THEN 
+		SELECT  texte INTO  missatge FROM missatgesExcepcions WHERE num=1;
+		RAISE EXCEPTION '%',
+		missatge;
+	END IF;
+RETURN NEW;
+EXCEPTION
+	WHEN raise_exception THEN
+		RAISE EXCEPTION '%',
+		SQLERRM;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER  empleat123t2 BEFORE UPDATE ON empleats FOR EACH ROW EXECUTE PROCEDURE  empleat123f2();
+-----EX5
+CREATE OR REPLACE FUNCTION bdif() RETURNS TRIGGER AS $$
+DECLARE
+	missatge varchar(50);
+	d char(10);
+BEGIN
+	d:=(SELECT t.dia FROM dia t);
+	IF (d='dijous') THEN
+		SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=1;
+		RAISE EXCEPTION '%',
+		missatge;
+	END IF;
+RETURN NULL;
+EXCEPTION
+	WHEN raise_exception THEN
+		RAISE EXCEPTION '%',
+		SQLERRM;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER bdi BEFORE DELETE ON empleats FOR EACH STATEMENT EXECUTE PROCEDURE  bdif();
+-----EX6
+CREATE OR REPLACE FUNCTION prog6_before() RETURNS TRIGGER AS $$
+DECLARE
+	x INTEGER;
+BEGIN
+DELETE FROM TEMP;
+SELECT SUM(salari) INTO x FROM empleats;
+INSERT INTO TEMP VALUES (x,
+		0);
+RETURN NULL;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER ex6_before BEFORE DELETE ON empleats FOR EACH STATEMENT EXECUTE PROCEDURE prog6_before();
+CREATE OR REPLACE FUNCTION prog6_after() RETURNS TRIGGER AS $$
+DECLARE
+	xi INTEGER;
+	yi INTEGER;
+	missatge varchar(50);
+BEGIN
+SELECT x INTO xi FROM TEMP;
+UPDATE TEMP  SET y = y + OLD.salari;
+SELECT y INTO yi FROM TEMP;
+IF (yi >= xi - yi) THEN -- borrados >= total-los_borrados=los_que quedan
+        SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=1;
+        RAISE EXCEPTION '%',
+		missatge;
+
+END IF;
+RETURN NULL;
+EXCEPTION
+        WHEN raise_exception THEN
+                RAISE EXCEPTION '%',
+		SQLERRM;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER ex6_after AFTER DELETE ON empleats FOR EACH ROW EXECUTE PROCEDURE prog6_after();
+-----EX7
+CREATE OR REPLACE FUNCTION ciutatempleatsf() RETURNS TRIGGER AS $$
+DECLARE
+	missatge varchar(100);
+BEGIN
+	IF(NOT EXISTS(SELECT * FROM empleats2 WHERE ciutat2=NEW.ciutat1)) THEN
+		SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=1;
+		RAISE EXCEPTION '%',
+		missatge;
+	END IF;
+RETURN NEW;
+EXCEPTION
+	WHEN raise_exception THEN
+		RAISE EXCEPTION '%',
+		SQLERRM;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER ciutatempleatst BEFORE  INSERT ON empleats1 FOR EACH ROW EXECUTE PROCEDURE ciutatempleatsf();
+CREATE OR REPLACE FUNCTION ciutatempleatsf2() RETURNS TRIGGER AS $$
+DECLARE
+	missatge varchar(100);
+BEGIN
+	IF OLD.ciutat1<>NEW.ciutat1 AND (NOT EXISTS(SELECT * FROM empleats2 WHERE ciutat2=NEW.ciutat1)) THEN
+		SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=1;
+		RAISE EXCEPTION '%',
+		missatge;
+	END IF;
+RETURN NEW;
+EXCEPTION
+	WHEN raise_exception THEN
+		RAISE EXCEPTION '%',
+		SQLERRM;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER ciutatempleatst2 BEFORE UPDATE ON empleats1 FOR EACH ROW EXECUTE PROCEDURE ciutatempleatsf2();
+-----EX8
+CREATE OR REPLACE FUNCTION ex7_empl2() RETURNS TRIGGER AS $$
+DECLARE
+	missatge varchar(100);
+BEGIN
+IF (TG_OP = 'DELETE') THEN
+        IF NOT EXISTS (SELECT * FROM empleats2 WHERE ciutat2 = OLD.ciutat2) THEN
+                DELETE FROM empleats1 WHERE ciutat1 = OLD.ciutat2;
+        END IF;
+ELSEIF (OLD.ciutat2<>NEW.ciutat2) THEN
+        IF NOT EXISTS (SELECT * FROM empleats2 WHERE ciutat2 = OLD.ciutat2) THEN
+                DELETE FROM empleats1 WHERE ciutat1 = OLD.ciutat2;
+        END IF;
+END IF;
+RETURN NULL;
+END;
+$$LANGUAGE plpgsql;
+CREATE TRIGGER empl2 AFTER DELETE OR UPDATE ON empleats2 FOR EACH ROW EXECUTE PROCEDURE ex7_empl2();

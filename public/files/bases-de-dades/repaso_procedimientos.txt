@@ -1,0 +1,151 @@
+-----EX1
+CREATE TYPE empl AS
+( nom char(30),
+		sou integer);
+CREATE OR REPLACE FUNCTION empl_departament(numdept integer) RETURNS setof empl AS $$
+DECLARE 
+  e empl;
+  missatge varchar(50);
+  quants integer;
+BEGIN
+  quants=0;
+  FOR e IN SELECT nom_empl,
+		sou FROM empleats em WHERE em.num_dpt = numdept and em.ciutat_empl='SITGES'
+  LOOP
+     	quants=quants+1;
+     	RETURN NEXT e;
+  END LOOP;
+  IF quants=0 THEN
+	SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=1;
+	RAISE EXCEPTION '%',
+		missatge;
+  END IF;
+RETURN;
+EXCEPTION
+	WHEN raise_exception THEN
+		RAISE EXCEPTION '%',
+		SQLERRM;
+	WHEN OTHERS THEN
+		SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=2;
+		RAISE EXCEPTION '%',
+		missatge;
+END;
+$$LANGUAGE plpgsql;
+-----EX2
+CREATE OR REPLACE FUNCTION eliminar_dept(numdept integer) RETURNS void AS $$
+DECLARE 
+   missatge varchar(50);
+BEGIN
+     IF (EXISTS (SELECT num_empl FROM empleats WHERE num_dpt=numdept)) THEN
+	   SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=1; 
+           RAISE EXCEPTION '%',
+		missatge;
+     END IF;
+     DELETE FROM departaments WHERE num_dpt = numdept;
+     IF NOT FOUND THEN
+	   SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=2; 
+           RAISE EXCEPTION '%',
+		missatge;
+     END IF;
+EXCEPTION
+   WHEN raise_exception THEN
+           RAISE EXCEPTION '%',
+		SQLERRM;
+   WHEN OTHERS THEN
+           SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=3; 
+           RAISE EXCEPTION '%',
+		missatge;
+END;
+$$LANGUAGE plpgsql;
+-----EX3
+CREATE TYPE lloguertreballador AS (
+	DNI_Treballador char(8),
+		Nom_Treballador char(30),
+		Sou_base real,
+		plus real,
+		Matricula char(10)
+);
+CREATE OR REPLACE FUNCTION llistat_treb(dni1 char(8),
+		dni2 char(8)) RETURNS SETOF lloguertreballador AS $$
+DECLARE
+	m varchar(50);
+	d lloguertreballador;
+BEGIN
+FOR d IN SELECT t.dni,
+		t.nom,
+		t.sou_base,
+		t.plus FROM treballadors t WHERE dni1<=t.dni AND t.dni<=dni2 ORDER BY t.dni,
+		t.nom ASC
+	LOOP
+		IF (SELECT COUNT(*) FROM lloguers_actius l WHERE l.dni=d.DNI_Treballador)>=5 THEN
+			FOR d.Matricula IN SELECT l2.matricula FROM lloguers_actius l2 WHERE l2.dni=d.DNI_Treballador
+			LOOP
+				RETURN NEXT d;
+			END LOOP;
+		ELSE
+			RETURN NEXT d;
+		END IF;
+	END LOOP;
+IF (NOT FOUND) THEN
+	SELECT texte INTO m FROM missatgesExcepcions WHERE num=1;
+	RAISE EXCEPTION '%',
+		m;
+END IF;
+RETURN;
+EXCEPTION
+   WHEN raise_exception THEN
+           RAISE EXCEPTION '%',
+		SQLERRM;
+   WHEN OTHERS THEN
+           SELECT texte INTO m FROM missatgesExcepcions WHERE num=2; 
+           RAISE EXCEPTION '%',
+		m;
+END;
+$$LANGUAGE plpgsql;
+-----EX4
+CREATE OR REPLACE FUNCTION assignar_individual(soci char(10),
+		club char(10)) RETURNS VOID AS $$
+DECLARE
+	missatge varchar(50);
+BEGIN
+	IF ((SELECT COUNT(*) FROM socisclubs sc1 WHERE sc1.nclub=club)>=10) THEN
+		SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=1;
+		RAISE EXCEPTION '%',
+		missatge;
+	END IF;
+	IF((SELECT sexe FROM socis s2 WHERE s2.nsoci=soci)='M' AND 
+	(SELECT COUNT(*) FROM socis s3,
+		socisclubs sc3 WHERE sc3.nclub=club and s3.sexe='F' AND sc3.nsoci=s3.nsoci) < 
+	(SELECT COUNT(*) FROM socis s3,
+		socisclubs sc3 WHERE sc3.nclub=club and s3.sexe='M' AND sc3.nsoci=s3.nsoci)+1) THEN
+		SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=2;
+		RAISE EXCEPTION '%',
+		missatge;
+	END IF;
+	IF (EXISTS(SELECT * FROM socisclubs sc2 WHERE sc2.nclub=club AND sc2.nsoci=soci)) THEN
+		SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=3;
+		RAISE EXCEPTION '%',
+		missatge;
+	END IF;
+	IF (NOT EXISTS(SELECT * FROM socis s1 WHERE s1.nsoci=soci)) OR
+	   (NOT EXISTS(SELECT * FROM clubs c1 WHERE c1.nclub=club)) THEN
+		select texte INTO missatge FROM missatgesExcepcions WHERE num=4;
+		RAISE EXCEPTION '%',
+		missatge;
+	END IF;
+INSERT INTO socisclubs VALUES (soci,
+		club);
+IF (NOT EXISTS(SELECT * FROM clubs_amb_mes_de_5_socis where nclub=club)
+AND (SELECT COUNT(*) FROM socisclubs WHERE nclub=club)>=5) THEN
+	INSERT INTO clubs_amb_mes_de_5_socis VALUES (club);
+END IF;
+EXCEPTION
+	WHEN raise_exception THEN
+		RAISE EXCEPTION '%',
+		SQLERRM;
+	WHEN OTHERS THEN
+		SELECT texte INTO missatge FROM missatgesExcepcions WHERE num=5;
+		RAISE EXCEPTION '%',
+		missatge;
+END;
+$$LANGUAGE plpgsql;

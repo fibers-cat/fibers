@@ -1,0 +1,27 @@
+M2
+Sin duda la asignatura que menos tiene que ver con la carrera de la fase inicial. Calculo puro y duro, especialmente difícil para las personas que vienen de grado y no tienen la base matemática de bachillerato. Natalia S. la mejor profesora que te puede toca, muy dispuesta a resolver dudas y consultas fuera de clase, no le gusta que hablen en sus clases nada. No hay secreto más que practicar y practicar. Más adelante tenéis todos los apuntes del temario, excelentes!
+
+XC
+Mi recomendación es que si vas justo de tiempo te imprimas el libro de la asignatura y no vayas a clase, esta todo explicado hasta el último detalle. Además tendrás que volvértelo a mirar todo al llegar a casa desde 0 así que es tiempo "perdido". Si te ha tocado D.C como profesor preparate para escuchar la palabra OKAY unas 10 veces por minuto, aveces hasta mas..
+En cuanto a los laboratorios exámenes tipo test retorcidos, como todos los test de la asignatura. Normalmente se empieza con notas altas y se va bajando lo importante es el examen final de laboratorio.
+
+AC
+Continuacon de IC, EC, CI, aquien haya "gustado" estas anteriores tambien lo hará AC. La concentración de ejercicios para hacer en casa es mayor al inicio del cuatri. Normalmente ponen el primer examen muy asequible, el segundo lo ponen bastante chungo para compensar las buenas notas del primero y que nadie pueda tener la asignatura aprobada sin tener que ir al final, por tener buenas todas de los dos primeros examenes y el laboratorio. Los examenes son acumulativos. El tercero no lo suelen regalar pero tampoco se ceban tanto como en el segundo, almenos no consientemente...
+
+EEE
+Asignatura de relleno y asequible por cualquiera. Interesante sobretodo al principio pero el interés cae en picado a medida que avanza el curso, puedes enviar las PECS de otros compañeros solo cambiando el nombre o hasta medio vacía que no pasa nada, son demasiadas.. no se las miran. Mejor aprobarla lo antes posible con los exámenes continuos, pero ojo la nota de la transversal es la media de los tres últimos exámenes!
+
+PROP
+Si te ha tocado de profesor del proyecto Rosa Gimenez desmatricula en la primera semana (te devuelven el dinero) o preparate para conocer un nuevo nivel de esclavitud jamas visto y que no tiene nada que ver con el de otros grupos, si pasas por su aro acabarás el cuatri con un nivel de Java y orientación a objetos bastante decente o avanzado. No le gusta que le lleven la contraria ni que redundes en la misma pregunta.. no tendrá ningún problema en que notes que no le agradas.
+
+IDI
+Asignatura de esclavitud, carga de trabajo que no tiene nada que ver con los creditos que vale. La única forma de sacarla es currando bastante/mucho. Esta divida en dos partes OpenGl que es la que mas trabajo practico tiene y la segunda de diseño de interficies. Mi recomendación es que saqueis buena nota en el juego (del cual no te van a dar ninguna clase de programación ni introducción a android es en plan "buscate la vida") y en el examen práctico de openGL de las practicas de lab, para no necesitar notaza del final. Como profesor "destacar" a P.P se pienza que el aula es su pequeño feudo en el que no puedes hacer nada, absolutamente nada aparte de prestarle atención y alabar con risas su "gran sentido del humor": desagradable y claro complejo de inferioridad.
+
+IES
+La calidad de las diapositivas aumenta según avanza el cuatri, las de los primeros temas casi que te lo inventas. Si te ha tocado Claudia Patricia de profesora enhorabuena tienes mucho hecho es excelente, el resto de profes a gusto... Evaluación continua sin examen final y 10% de participación si trabajas con regularidad esta hecho.
+
+GPS
+"Sin comentarios" asignatura de relleno por excelencia, se podría reducir en dos semanas o menos. Justamente esa sensación de que es de relleno y facil es tu peor enemigo porque trabajas bajo mínimos cuando podrias tener notaza dedicando la tercera parte del tiempo que le dedicas a las otras.
+
+DBD
+Terrible, así como BD es unas asginatura interesante y necesaria DBD es una continuación que nunca devió existir. Las primeras partes son de consultas avanzas y nuevas funciones del SQL, hasta aquí aceptable el resto del curso se base en hacer de gesto de SQL tu, por lo que tienes que saber que "hace" el gesto para resolver tu consulta. Esto incluye calculo de bloques leidos, algoritmos empleados, indices en tablas y así un monton de etc que no vas a utilizar nunca en la vida real a menos que trabajes diseñando bases de datos a un nivel muy detallado y quizas ni así. El lab vale un 70% y el final 20%... 

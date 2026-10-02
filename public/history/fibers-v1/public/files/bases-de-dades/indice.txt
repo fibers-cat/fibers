@@ -1,0 +1,18 @@
+SQL y Algebra relacional
+	SQL1
+		SQL ejercicios -> sql1ejercicios.txt
+		Tr. Autónomo -> sql1autonom.png
+	SQL2
+		Tr. Autónomo -> autonomssql2.txt
+		SQL ejercicios  -> ejerciciossql2.txt
+Java Database Connectivity
+	Questionario de teoría JDBC -> LINK ROTO
+	Práctica JDBC 1 -> practicajdbc1.txt
+	Questionario sobre el entorno de correción de JDBC del LearnSQL -> LINK ROTO
+	Práctica JDBC 2 -> practicajdbc2.txt
+	Nuevo ejercicio JDBC -> nuevo_ejercicio_jdbc.txt
+Segunda entrega: Procedimientos / Disparadores
+	Repaso Procedimientos -> repaso_procedimientos.txt
+	Repaso Disparadores -> repaso_disparadores.txt
+Práctica de procedimientos y disparadores -> practica_procedimientos_y_disparadores.txt
+Aprendizaje Autónomo de Procedimientos/Disparadores -> aprendizaje_autonomo_procedimientos_y_disparadores.txt

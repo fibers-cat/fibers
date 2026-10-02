@@ -1,0 +1,61 @@
+﻿#include <teoremamestre>
+
+
+Costes de algoritmos recursivos: 
+
+Recurrencia para las sustractoras : En cada llamada recursiva, se reduce el tamaño de entrada.
+
+Formula general : T(n)= 0(n^k) + a*T(n - b);
+
+Siendo: 
+
+Cota Media de n^k = es coste de caso base 
+a: numero de llamadas recursivas
+b : lo que se reduce el tamaño de la entrada entre dos llamadas recursivas(factor de decrecimiento)
+
+Teorema mestre 1: 
+
+			0(n^k) si a < 1
+		T1{ 0(n^k + 1) si a = 0;
+			0(a^n / b) si a > 1;
+
+
+
+Recurrencia para las divisoras: en cada llamada recursiva se divide el tamaño de la entrada.
+
+Formula general : T(n) = 0(n^k) + a*T(n/b);
+
+Cota Media de n^k = es coste de caso base
+a : numero de llamadas recursivas
+b : lo que se reduce el tamaño de la entrada entre dos llamadas recursivas(factor de decrecimiento).
+
+
+Teorema Mestre 2 :
+
+			0(n^k) si alfa < k
+		T2{ 0(n^k logn) si alfa = k
+			0(n^alfa) si alfa > k; 
+
+
+k = coste de lo que esta elevado g(n) :
+alfa = logb alfa; 
+
+
+
+A NIVELL D'EXAMEN!!!!!
+
+Poden succeeir 3 coses: 
+
+1.Plasmar un teorema tal qual l'hem estudiat, ja sigui subtractor o divisor(Si veiem en el parentesis una resta, o una divisio)
+
+2.0. Que et donin la formula general, del pal, T(n) = 3T(n / 3) + Θ(n ^ 2) i et demanen la cota igual, si mirem el resum anterior
+es tracta de una recurrencia divisora on, si comparem, a = 3 i b = 3 tambe, per a trobar alfa fem log3 de 3 = 1; 
+tenim que alfa val 1, per a poder veure de quina "formula" es tracta, necessitem k.K es troba igualant la part de 0,
+amb n^k(com veiem a la formula) aleshores tindriem que n ^ 2 = n^k, per tant, aillant, tenim que k = 2.
+Mirant el teorema metres amb alfa i k, on alfga = 1 i k = 2; tenim que es mes petit alfa, aleshores n^2 es la solucio.
+
+2.1.El mateix pero al reves, et donen la cota igual i tu has de trobar la formula general, es fa invertin els pasos que he fet al 2.0
+
+3 Dona el cost general d'una funcio.// sin(n) + 10 + n en aquest cas, tambe et demanen el cost de fita igual, per tant
+s'ha d'agafar el mes gran que vegis, saps que el sin va de 0 a 1, 10 es constant per tant cost 1, i n es laltre,
+entre 0 - 1, 1 i n, el cost mes gran es n, (sabente l'escala de costos(1<logn<nlogn...explicat al arxiu de costos.)

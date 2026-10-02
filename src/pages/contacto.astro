@@ -1,0 +1,53 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+---
+
+<SiteLayout title="Contacte" description="Contacta amb l’equip de Fibers per resoldre dubtes, compartir idees o demanar ajuda amb els materials d’estudi de la FIB.">
+  <div class="page-content inner-page contact-page">
+    <nav class="breadcrumbs" aria-label="Fil d’Ariadna"><a href="/">Inici</a><span>/</span><span>Contacte</span></nav>
+    <div class="contact-layout">
+      <header class="page-heading form-heading">
+        <span class="eyebrow">PARLEM</span>
+        <h1>En què et<br />podem ajudar?</h1>
+        <p>Tens un dubte, una idea o necessites ajuda amb Fibers? Envia’ns un missatge i et respondrem al correu que ens indiquis.</p>
+      </header>
+
+      <section class="form-card contact-form-card" aria-labelledby="contact-form-title">
+        <h2 id="contact-form-title">Envia’ns un missatge</h2>
+        <p>Els camps amb * són obligatoris.</p>
+        <form
+          class="contact-form"
+          name="contacte"
+          method="POST"
+          action="/contacto/gracias/"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+        >
+          <input type="hidden" name="form-name" value="contacte" />
+          <div class="contact-honeypot" aria-hidden="true">
+            <label>No emplenis aquest camp: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <div class="contact-fields">
+            <label class="contact-field" for="contact-name">
+              <span>Nom *</span>
+              <input id="contact-name" name="name" type="text" autocomplete="name" required />
+            </label>
+            <label class="contact-field" for="contact-email">
+              <span>Correu electrònic *</span>
+              <input id="contact-email" name="email" type="email" autocomplete="email" required />
+            </label>
+            <label class="contact-field" for="contact-subject">
+              <span>Assumpte *</span>
+              <input id="contact-subject" name="subject" type="text" required />
+            </label>
+            <label class="contact-field" for="contact-message">
+              <span>Missatge *</span>
+              <textarea id="contact-message" name="message" rows="6" required></textarea>
+            </label>
+          </div>
+          <button class="button-primary contact-submit" type="submit">Envia el missatge <span aria-hidden="true">↗</span></button>
+        </form>
+      </section>
+    </div>
+  </div>
+</SiteLayout>

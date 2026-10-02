@@ -1,0 +1,41 @@
+﻿----1ra Parte
+1. Els efectes han sigut nulls donat que hem acabat amb un rollback desfen totes les modificaciones fetes.
+2. S'ha afegit un nou professor a la taula: 333 ninna 3333 
+3. Sha produït la seguent excepció, es un error de clau primaria. No produeix cap efecte a la taula professors.
+Excepcio: 
+El getSQLState es: 23505
+El getMessage es: ERROR: duplicate key violates unique constraint "professors_pk
+ey"
+Podriam fer comprobar el tipus de error donat amb getSqlState() i si es el codi 23505 vol dir que hem comes un error d'aquest tipus: 
+catch (SQLException se)
+{
+			if (se.getSQLState().equals("23505"))
+System.out.println("El professor ja existeix");
+		}----2nda Parte
+/* Imports de la classe */
+import java.sql.*; 
+import java.io.*;
+/* Capa de Control de Dades */
+class CtrlDadesPublic extends CtrlDadesPrivat {
+			public ConjuntTuples consulta(Connection c,
+			Tuple params) throws BDException {
+				try {
+					ConjuntTuples ct = new ConjuntTuples();
+		ResultSet rs = null;
+		PreparedStatement ps = c.prepareStatement("select count(*) from assignacions a where  a.dni=?;");
+		int i=1; 
+		while (!(params.consulta(i).equals("-999"))){
+						ps.setString(1,
+						params.consulta(i));
+			rs= ps.executeQuery();
+			rs.next();
+			Tuple t=new Tuple(); t.afegir(params.consulta(i)); t.afegir(rs.getString(1));
+			ct.afegir(t);
+			++i;
+					}return ct;
+				}catch(SQLException se) 
+	     {
+					throw new BDException(11);
+				}
+			}
+		}

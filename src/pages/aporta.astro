@@ -1,0 +1,26 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import ContributionForm from '../components/ContributionForm';
+import { subjects } from '../data/subjects';
+
+const initialSubject = Astro.url.searchParams.get('assignatura') ?? '';
+---
+
+<SiteLayout title="Comparteix material d’estudi" description="Aporta apunts, exercicis resolts i guies pròpies perquè altres estudiants de la FIB puguin aprofitar-los.">
+  <div class="page-content inner-page contribution-page">
+    <nav class="breadcrumbs" aria-label="Fil d’Ariadna"><a href="/">Inici</a><span>/</span><span>Aporta material</span></nav>
+    <div class="form-layout">
+      <header class="page-heading form-heading">
+        <span class="eyebrow">FEM-HO ENTRE TOTHOM</span>
+        <h1>Comparteix el que<br />t’ha ajudat a aprendre.</h1>
+        <p>Els apunts personals, els exercicis resolts i les guies creades per estudiants fan més fàcil el camí de les persones que venen darrere.</p>
+        <div class="contribution-rules"><h2>Abans d’enviar</h2><ul><li>Comparteix només material propi o amb permís.</li><li>No s’accepten apunts facilitats pel professorat.</li><li>No adjuntis llibres ni contingut protegit per drets d’autor.</li></ul></div>
+      </header>
+      <section class="form-card" aria-labelledby="form-title">
+        <h2 id="form-title">Detalls de l’aportació</h2>
+        <p>Indica’ns què vols compartir amb la comunitat.</p>
+        <ContributionForm client:load subjects={subjects} initialSubject={initialSubject} />
+      </section>
+    </div>
+  </div>
+</SiteLayout>
