@@ -1,0 +1,25 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../../components/SiteBreadcrumbs';
+import SubjectStatus from '../../components/SubjectStatus';
+import { subjects } from '../../data/subjects';
+
+export function getStaticPaths() {
+  return subjects.map((subject) => ({ params: { slug: subject.slug }, props: { subject } }));
+}
+
+const { subject } = Astro.props;
+const subjectDescription = `Explora els recursos d’estudi de ${subject.name} (${subject.code}) al catàleg de la FIB. Consulta els materials recuperats i comprova’n la vigència abans d’utilitzar-los.`;
+---
+
+<SiteLayout title={`${subject.name} (${subject.code})`} description={subjectDescription}>
+  <div class="page-content inner-page subject-page">
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { href: '/assignatures/', label: 'Assignatures' }, { label: subject.code }]} /> -->
+    <header class="subject-title-panel">
+      <span class="subject-code subject-code-large">{subject.code}</span>
+      <div><span class="eyebrow">ESPAI D’ESTUDI</span><h1>{subject.name}</h1><p>Materials compartits per la comunitat Fibers.</p></div>
+    </header>
+    <SubjectStatus client:load subjectName={subject.name} subjectCode={subject.code} />
+    <a class="back-link" href="/assignatures/">← Torna a totes les assignatures</a>
+  </div>
+</SiteLayout>

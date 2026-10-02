@@ -1,0 +1,19 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../components/SiteBreadcrumbs';
+import ResourceCollection from '../components/ResourceCollection';
+import { generalMaterials } from '../data/materials';
+---
+
+<SiteLayout title="Recursos generals de la FIB" description="Consulta documents generals, guies i recursos de recuperació recuperats del fons històric de Fibers per a estudiants de la FIB.">
+  <div class="page-content inner-page">
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Recursos generals' }]} /> -->
+    <header class="page-heading">
+      <span class="eyebrow">FONS RECUPERAT</span>
+      <h1>Recursos generals</h1>
+      <p>Documents de consulta, orientació i recuperació que no pertanyen a una única assignatura.</p>
+    </header>
+    <ResourceCollection client:load materials={generalMaterials} />
+    <p class="data-note">Fitxers importats de la web anterior. Revisa’n el contingut i la vigència abans d’utilitzar-los.</p>
+  </div>
+</SiteLayout>

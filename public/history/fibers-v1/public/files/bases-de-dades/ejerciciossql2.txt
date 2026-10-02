@@ -1,0 +1,17 @@
+Doneu una sentència SQL per obtenir el número i el nom dels departaments que no tenen cap empleat que visqui a MADRID. 
+
+select d.num_dpt, d.nom_dpt from departaments d where not exists (select e.ciutat_empl from empleats e where e.ciutat_empl='MADRID' and e.num_dpt=d.num_dpt)
+
+
+Doneu una sentència SQL per obtenir les ciutats on hi viuen empleats però no hi ha cap departament.
+
+select distinct ciutat_empl from empleats e where not exists (select d.ciutat_dpt from departaments d where e.ciutat_empl=d.ciutat_dpt)
+
+
+Doneu una sentència SQL per obtenir el número i nom dels departaments que tenen dos o més empleats que viuen a ciutats diferents. 
+
+select d.num_dpt, d.nom_dpt 
+from departaments d, empleats e 
+where e.num_dpt=d.num_dpt 
+group by d.num_dpt, d.nom_dpt 
+having 2  <= count(distinct e.ciutat_empl)

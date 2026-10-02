@@ -1,0 +1,14 @@
+Doneu una sentència SQL per obtenir el nom dels empleats que guanyen el sou més alt. Cal ordenar el resultat descendenment per nom de l'empleat. 
+select distinct e.nom_empl from EMPLEATS e where e.sou >= (select max(sou) from EMPLEATS) order by e.nom_empl desc
+
+
+Doneu una sentència SQL per obtenir els números i els noms dels projectes que tenen assignats dos o més empleats.
+Cal ordenar el resultat descendement per número de projecte.
+
+select distinct p.num_proj, p.nom_proj  from PROJECTES p where (select count(*) from EMPLEATS e where e.num_proj=p.num_proj) >= 2 order by p.num_proj desc
+
+
+Doneu una sentència SQL per incrementar en 500000 el pressupost dels projectes que tenen algun empleat que treballa a BARCELONA. 
+Pel joc de proves que trobareu al fitxer adjunt, el pressupost del projecte que hi ha d'haver després de l'execució de la sentència és 1100000 
+
+update PROJECTES set pressupost=pressupost+500000 where (select count(*) from EMPLEATS e, DEPARTAMENTS d where PROJECTES.num_proj=e.num_proj and e.num_dpt=d.num_dpt and d.ciutat_dpt='BARCELONA') >= 1

@@ -1,0 +1,32 @@
+Doneu una sentència SQL per obtenir el nom i el sou dels empleats que treballen als departaments 1 o 2. Ordeneu el resultat ascencentment, primerament per sou dels empleats, i dins dels que tenen el mateix sou, per nom d'empleat. 
+Pel joc de proves que trobareu al fitxer adjunt, la sortida seria:
+
+NOM_EMPL		SOU
+MIQUEL		 25000
+ROBERTO		 25000
+
+select distinct nom_empl, sou from empleats where num_dpt=1 or num_dpt=2 order by sou, nom_empl
+
+Doneu una sentència SQL per obtenir els números i els noms dels departament situats a MADRID, que tenen empleats que guanyen més de 200000. 
+Pel joc de proves que trobareu al fitxer adjunt, la sortida ha de ser: 
+
+NUM_DPT		NOM_DPT
+5		VENDES
+
+select distinct d.num_dpt , d.nom_dpt from departaments d, empleats e where d.ciutat_dpt='MADRID' and e.sou > 200000 and d.num_dpt=e.num_dpt
+
+
+Obtenir per cada departament situat a MADRID la mitjana dels sous dels seus empleats. Concretament, cal donar el número de departament, el nom de departament i la mitjana del sou. 
+
+
+Pel joc de proves que trobareu al fitxer adjunt, la sortida ha de ser: 
+
+NUM_DPT		NOM_DPT		SOU
+5		VENDES		250000.00
+
+select d.num_dpt , d.nom_dpt, avg(e.sou) from departaments d, empleats e where e.num_dpt=d.num_dpt and ciutat_dpt='MADRID' group by d.num_dpt, d.nom_dpt
+
+
+
+
+

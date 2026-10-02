@@ -1,0 +1,25 @@
+
+Ordenacio de magnitut mes habitual.
+
+1 < log n < nlogn < n^2 < n^3 < n^k < 2^n < 3^n < k^n < n! < n^n;
+
+Iteratius sudo, 0 important
+
+Recursius:
+
+int factorial() = 0(n);
+int bsearch() = 0(nlogn);
+int selection() = 0(n^2);
+int insertion() = Caso peor i medio = n^2;
+				  Caso mejor 0(n);
+int bubble() = Caso peor i medio = 0(n^2)
+			   Caso mejor 0(n);
+int MergeSort() = 0(nlogn);
+int QuickSort() = Caso mejor i medio = 0(1);
+				  Caso peor = 0(n^2);
+int Quickselect() = 0(n);
+
+KARATSUBA CON 4 LLAMADAS 0(n^2); log en base 2 de 4
+KARATSUBA CON 3 LLAMADAS 0(n^1,58); log en base 2 de 3
+STRASSEN CON 8 LLAMADAS 0(n^3); log de base 2 de 8
+STRASSEN CON 7 LLAMADAS 0(n^2,81) log en base 2 d 7

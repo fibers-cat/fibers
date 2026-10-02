@@ -1,0 +1,48 @@
+/* Imports de la classe */
+import java.sql.*; 
+
+/* Capa de Control de Dades */
+class CtrlDadesPublic extends CtrlDadesPrivat {
+    
+    public ConjuntTuples consulta(Connection c, Tuple params) throws BDException {
+        try{
+            //delete
+            ConjuntTuples ct = new ConjuntTuples();
+            Statement st=c.createStatement();
+            String D=params.consulta(1);
+            String S=params.consulta(2);
+            int esborrats=st.executeUpdate("delete from despatxos where modul='"+D+"' and superficie<"+S+";");
+            if (esborrats==0) throw new BDException(12);
+            //suma
+            ResultSet r=st.executeQuery("select sum(superficie) from despatxos;");
+            r.next();
+            Tuple t=new Tuple();
+            int sumasou=r.getInt(1);
+            if (r.wasNull()) t.afegir("NO");            
+            else t.afegir(String.valueOf(sumasou));
+            ct.afegir(t);
+            
+            //assignacions
+            
+            r=st.executeQuery("select p.nomProf,count(*) from professors p,assignacions a where p.dni=a.dni and a.instantFi is not null group by p.nomProf;");
+            while (r.next()){
+                t=new Tuple();
+                t.afegir(r.getString(1));
+                t.afegir(r.getString(2));
+                ct.afegir(t);
+                
+            }
+            
+            
+            
+            
+            return ct;    
+        }
+        
+        
+        catch(SQLException se){
+            if (se.getSQLState().equals("23503")) throw new BDException(13);
+            throw new BDException(14);
+        } 
+    }
+}

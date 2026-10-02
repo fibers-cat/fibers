@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Fibers | Documents, apunts i exercicis FIB</title>
+    <meta name="description" content="Tot el que necessites per aprovar, documentació, apunts i exercicis pràctics de cada assignatura."/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <meta name="theme-color" content="#ea4747"/><!-- #424242 -->
+
+    <link rel="shortcut icon" href="public/img/logo.png"/>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link href="public/css/m.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="public/css/f-a.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="public/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+    <script src="public/js/jq.min.js"></script>
+    <script src="public/js/html5shiv.js"></script>
+    <script src="public/js/m.min.js"></script>
+    <script src="public/js/init.js"></script>
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-84592115-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+</head>
+<body class="grey lighten-5">
+    <nav class="grey darken-3" role="navigation">
+        <section class="nav-wrapper container"><a id="logo-container" href="" class="brand-logo center">Fibers.cat</a>
+
+            <ul id="nav-mobile" class="side-nav">
+                <h5 class="title_q_mobile">Q1 <span class="fa fa-angle-down" aria-hidden="true"></span></h5>
+                <li><a href="#">empty</a></li>
+            <!--
+                <li><a href="#f">F</a></li>
+                <li><a href="#fm">FM</a></li>
+                <li><a href="#ic">IC</a></li>
+                <li><a href="#pro1">PRO1</a></li>
+            -->
+                <h5 class="title_q_mobile">Q2 <span class="fa fa-angle-down" aria-hidden="true"></span></h5>
+            <!--
+                <li><a href="#ec">EC</a></li>
+                <li><a href="#m1">M1</a></li>
+            -->
+                <li><a href="#m2">M2</a></li>
+            <!--
+                <li><a href="#pro2">PRO2</a></li>
+            -->
+                <h5 class="title_q_mobile">Q3 <span class="fa fa-angle-down" aria-hidden="true"></span></h5>
+                <li><a href="#bd">BD</a></li>            
+            <!--
+                <li><a href="#ci">CI</a></li>
+            -->
+                <li><a href="#eda">EDA</a></li>
+                <li><a href="#pe">PE</a></li>
+                <li><a href="#so">SO</a></li>
+
+                <h5 class="title_q_mobile">Q4 <span class="fa fa-angle-down" aria-hidden="true"></span></h5>
+            
+               
+                <li><a href="#ac">AC</a></li>
+            
+                <li><a href="#eee">EEE</a></li>            
+            <!--
+                <li><a href="#ies">IES</a></li>
+                <li><a href="#prop">PROP</a></li>
+            -->
+                <li><a href="#xc">XC</a></li>
+            <!--
+                <li class="divider"></li>
+                <li><a href="#idi">IDI</a></li>
+                <li><a href="#par">PAR</a></li>
+            -->
+                <li>.</li>
+                <li>.</li>
+
+            </ul>
+          <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        </section>
+    </nav>
+
+  
+        
+    <header class="grey darken-1">
+        <section class="container">
+            <section class="row">
+
+                <section class="col s12 m12 l12 header_top_title">
+
+                    <section style="padding-top: 20px;padding-bottom:20px;" class="margin_top">                           
+                        <h2 style="margin-top: 0px; color: #ffab40; font-family: 'notoSansB';">Participa i aporta contingut !</h2>
+
+                        <h5>Pots enviar-nos documentació que creguis necessària per afegir a la pàgina</h5>
+                            <br>
+                        <button class="btn waves-effect waves-light orange accent-2 modal-trigger" data-target="send_info">Enviar<i class="material-icons right" style="padding-left: 5px;">send</i></button>
+
+                    </section>
+                </section>
+
+                <section id="send_info" class="modal modal-fixed-footer">
+                    <section class="modal-content blue-grey darken-1">
+                        <h4><span class="modal_title">Enviar correu</span></h4>
+                            <br>
+                        <h5>Correu: <a href="mailto:fiberscat@gmail.com" style="color: #ffab40;text-decoration: underline;-moz-text-decoration-color: #fff;text-decoration-color: #fff;">fiberscat@gmail.com</a></h5>
+                            <br>
+                        <span style="font-size:18px;">Pots enviar-nos la documentació, exercicis, modificacions que creguis d'importància per afegir a la pàgina.</span>
+                    </section>
+                    <section class="modal-footer blue-grey lighten-3">
+                      <span class="modal-action modal-close waves-effect waves-orange btn-flat" style="cursor: pointer; font-weight: bold;"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Enrere</span>
+                    </section>
+                </section>
+
+            </section>
+        </section>
+    </header>
+    
+
+    <section class="container">
+        <section class="row">
+            <section class="col s12 m6 l4">
+                <section class="card blue-grey darken-1">
+                    <section class="card-content white-text">
+                      <span id="m2" class="card-title">Matemàtiques 2</span>                      
+                    </section>
+                    <section class="card-action">
+                        <ul>
+                            <li>
+                                <a href="public/files/matematiques-2/M2.zip" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Temari complet</a>
+                                <span class="file_info"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+            </section>
+            <section class="col s12 m6 l4">
+                <section class="card mobile_color_change">
+                    <section class="card-content white-text">
+                      <span id="so" class="card-title">Sistemes Operatius</span>
+                      <p>Cada .rar conté els exercicis de laboratori resolts de forma parcial o completa.</p>
+                    </section>
+                    <section class="card-action">
+                        <ul>
+                            <li>
+                                <a href="public/files/sistemes-operatius/SO1.rar" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Lab. versió 1</a>
+                                <span class="file_info"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+                            </li>
+                            <li>
+                                <a href="public/files/sistemes-operatius/SO2.rar" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Lab. versió 2</a>
+                                <span class="file_info"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+                            </li>
+                            <li>
+                                <a href="public/files/sistemes-operatius/SO3.rar" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Lab. versió 3</a>
+                                <span class="file_info"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+            </section>
+            <section class="col s12 m6 l4">
+                <section class="card blue-grey darken-1">
+                    <section class="card-content white-text">
+                      <span id="pe" class="card-title">Probabilitat i Estadística</span>
+                      <p>A vegades canvien alguns exercicis, dades, ordre, nous apartats...<br>Cada .rar conté els exercicis de E-status.</p>
+                    </section>
+                    <section class="card-action">
+                        <ul>
+                            <li>
+                                <a href="public/files/probabilitat-estadistica/PE1.rar" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>E-status complet 1</a>
+                                <span class="file_info"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+                            </li>
+                            <li>
+                                <a href="public/files/probabilitat-estadistica/PE2.rar" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>E-status complet 2</a>
+                                <span class="file_info"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+            </section>
+            <section class="col s12 m6 l4">
+                <section class="card mobile_color_change">
+                    <section class="card-content white-text">
+                      <span id="bd" class="card-title">Bases de Dades</span>
+                      <p>Tots els jocs de proves passades, en cas contrari el exercici tindrà una anotació.</p>
+                    </section>
+                    <section class="card-action">
+                        <ul>                 
+                            <li>
+                                <span class="block_sub_title">SQL i Àlgebra relacional</span>               
+                                <ul>
+                                    <li>
+                                        <span class="block_sub_title">SQL 1</span>
+                                        <li style="padding-left: 1em;">
+                                            <a href="public/files/bases-de-dades/sql1ejercicios.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>SQL exercicis</a>
+                                            <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                                        </li>
+                                        <li style="padding-left: 1em;">
+                                            <a href="public/files/bases-de-dades/sql1autonom.png" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Tr. Autònom</a>
+                                            <span class="file_info"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
+                                        </li>                           
+                                    </li>
+
+                                    <li>
+                                        <span class="block_sub_title">SQL 2</span>              
+                                        <li style="padding-left: 1em;">
+                                            <a href="public/files/bases-de-dades/autonomssql2.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Tr. Autònom</a>
+                                            <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                                        </li>
+                                        <li style="padding-left: 1em;">
+                                            <a href="public/files/bases-de-dades/ejerciciossql2.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>SQL exercicis</a>
+                                            <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>            
+                                        </li>
+                                    </li>                           
+                                </ul>
+                            </li>
+                            <li>
+                                <span class="block_sub_title">Java Database Connectivity</span>         
+                                <ul>
+                                    <!--
+                                    <li>
+                                        <a href="public/files/bases-de-dades/"><i class="fa fa-square square_icon" aria-hidden="true"></i>Questionario de teoría JDBC</a>
+                                    </li>
+                                    -->
+                                    <li>
+                                        <a href="public/files/bases-de-dades/practicajdbc1.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Pràctica JDBC 1</a>
+                                        <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <!--
+                                    <li>
+                                        <a href="public/files/bases-de-dades/"><i class="fa fa-square square_icon" aria-hidden="true"></i>Questionario sobre el entorno de correción de JDBC del LearnSQL</a>
+                                    </li>
+                                    -->
+                                    <li>
+                                        <a href="public/files/bases-de-dades/practicajdbc2.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Pràctica JDBC 2 (antiga)</a>
+                                        <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/bases-de-dades/practicajdbc2_2016.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Pràctica JDBC 2 (QT 2016)</a>
+                                        <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                                    </li>
+
+                                    
+                                    <li>
+                                        <a href="public/files/bases-de-dades/nuevo_ejercicio_jdbc.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Nou exercici JDBC</a>
+                                        <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                                    </li>                           
+                                </ul>                           
+                            </li>
+
+                            <li>
+                                <span class="block_sub_title">Segona entrega: Procediments / Disparadors</span>         
+                                <ul>                            
+                                    <li>
+                                        <a href="public/files/bases-de-dades/repaso_procedimientos.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Repàs Procediments</a>
+                                        <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/bases-de-dades/repaso_disparadores.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Repàs Disparadors</a>
+                                        <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                                    </li>           
+                                </ul>
+                            </li>
+
+                            <br>
+
+                            <li>
+                                <a href="public/files/bases-de-dades/practica_procedimientos_y_disparadores.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Pràctica de procediments i disparadors</a>
+                                <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                            </li>
+                            <li>
+                                <a href="public/files/bases-de-dades/aprendizaje_autonomo_procedimientos_y_disparadores.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Aprenentatge Autònom de Procediments / Disparadors</a>
+                                <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+            </section>
+            <section class="col s12 m6 l4">
+                <section class="card blue-grey darken-1">
+                    <section class="card-content white-text">
+                      <span id="xc" class="card-title">Xarxes de Computadors</span>
+                      
+                    </section>
+                    <section class="card-action">
+                        <ul>
+                            <li>
+                                <span class="block_sub_title">Resum capítols</span>          
+                                <ul>                            
+                                    <li>
+                                        <a href="public/files/xarxes-de-computadors/subnetting_resumen_xc_melocuenta_fib.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Subnetting</a>
+                                        <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/xarxes-de-computadors/subnetting_resumen_xc_melocuenta_fib.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>més Subnetting</a>
+                                        <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="http://jodies.de/ipcalc" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Calculadora subnetting</a>
+                                        <span class="file_info"><i class="fa fa-link" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/xarxes-de-computadors/lan_resumen_xc_melocuenta_fib.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>LANs</a>
+                                        <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/xarxes-de-computadors/tcp_aplicaciones_resumen_xc_melocuenta_fib.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>TCP i Aplicacions</a>
+                                        <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                                    </li>           
+                                </ul>
+                            </li>
+
+                            <li>
+                                <span class="block_sub_title">Exercicis de Seguimient</span>          
+                                <ul>                            
+                                    <li>
+                                        <a href="public/files/xarxes-de-computadors/ip_seguiment_xc_melocuenta_fib_2014.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>IP</a>
+                                        <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/xarxes-de-computadors/lan_resumen_xc_melocuenta_fib.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>LANs</a>
+                                        <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/xarxes-de-computadors/tcp_seguiment_xc__melocuenta_2014.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>TCP</a>
+                                        <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                                    </li>                       
+                                </ul>
+                            </li>
+
+                            <li>
+                                <span class="block_sub_title">Transversal</span>            
+                                <ul>                            
+                                    <li>
+                                        <a href="public/files/xarxes-de-computadors/xml_trans_xc_melocuenta.tar.gz" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>XML</a>
+                                        <span class="file_info"><i class="fa fa-file-archive-o" aria-hidden="true"></i></span>
+                                    </li>                   
+                                </ul>
+                            </li>
+
+                        </ul> 
+                    </section>
+                </section>
+            </section>
+            
+
+            <section class="col s12 m6 l4">
+                <section class="card mobile_color_change">
+                    <section class="card-content white-text">
+                        <span id="eee" class="card-title">Arquitectura de Computadors</span>
+
+                    </section>
+                    <section class="card-action">
+                        <ul>
+                            <li>
+                                <span class="block_sub_title"></span>
+                                <ul>
+                                    <li>
+                                        <a href="public/files/arquitectura-de-computadors/formulario-lab-ac.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Formulari lab</a>
+                                        <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/arquitectura-de-computadors/examen-lab-ac.c" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Examen de Lab</a>
+                                        <span class="file_info"><i class="fa fa-file-code-o" aria-hidden="true"></i></span>
+                                    </li>             
+                                </ul>
+                            </li>                   
+                        </ul>
+                    </section>
+                </section>
+            </section>
+
+            <section class="col s12 m6 l4">
+                <section class="card mobile_color_change">
+                    <section class="card-content white-text">
+                        <span id="eee" class="card-title">Empresa i Entorn Econòmic</span>
+
+                    </section>
+                    <section class="card-action">
+                        <ul>
+                            <li>
+                                <span class="block_sub_title">Respostes de les preguntes del manual d'economia</span>
+                                <ul>
+                                    <li>
+                                        <a href="public/files/empresa-entorn-economic/respostes-preguntes-t1.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Respostes tema 1</a>
+                                        <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                                    </li>
+
+                                    <li>
+                                        <a href="public/files/empresa-entorn-economic/respostes-preguntes-t2.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Respostes tema 2</a>
+                                        <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                                    </li>
+
+                                    <li>
+                                        <a href="public/files/empresa-entorn-economic/respostes-preguntes-t3.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Respostes tema 3</a>
+                                        <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                                    </li>                   
+                                </ul>
+                            </li>                   
+                        </ul>
+                    </section>
+                </section>
+            </section>
+
+            <section class="col s12 m6 l4">
+                <section class="card blue-grey darken-1">
+                    <section class="card-content white-text">
+                      <span id="eda" class="card-title">Estructura de Dades i Algorismes</span>                      
+                    </section>
+                    <section class="card-action">
+                        <ul>
+                            <li>
+                                <span class="block_sub_title">Algorismes d'ordenació</span>          
+                                <ul>                            
+                                    <li>
+                                        <a href="public/files/estructura-de-dades-i-algorismes/BinarySearch.cpp" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Binary Search</a>
+                                        <span class="file_info"><i class="fa fa-file-code-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/estructura-de-dades-i-algorismes/bubble.cpp" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Bubble</a>
+                                        <span class="file_info"><i class="fa fa-file-code-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/estructura-de-dades-i-algorismes/MergeSort.cpp" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Merge Sort</a>
+                                        <span class="file_info"><i class="fa fa-file-code-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/estructura-de-dades-i-algorismes/QuickSelect.cpp" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Quick Select</a>
+                                        <span class="file_info"><i class="fa fa-file-code-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/estructura-de-dades-i-algorismes/QuickSort.cpp" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Quick Sort</a>
+                                        <span class="file_info"><i class="fa fa-file-code-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/estructura-de-dades-i-algorismes/selectInsert.cpp" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Select & Insert</a>
+                                        <span class="file_info"><i class="fa fa-file-code-o" aria-hidden="true"></i></span>
+                                    </li>
+                                             
+                                </ul>
+                            </li>
+                            <ul>
+                            <li>
+                                <span class="block_sub_title">Miscelánea</span>          
+                                <ul>                            
+                                    <li>
+                                        <a href="public/files/estructura-de-dades-i-algorismes/tempsenmillorpitjorcas.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Temps en millor / pitjor cas</a>
+                                        <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                                    </li>
+                                    <li>
+                                        <a href="public/files/estructura-de-dades-i-algorismes/TeoremaMestre.txt" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Teorema Mestre</a>
+                                        <span class="file_info"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>
+                                    </li>                                              
+                                </ul>
+                            </li>
+                    </section>
+                </section>
+            </section>
+
+            <section class="col s12 m6 l4">
+                <section class="card mobile_color_change">
+                    <section class="card-content white-text">
+                      <span id="documentacio-ajuda" class="card-title">Documentació d'Ajuda</span>
+                      
+                    </section>
+                    <section class="card-action">
+                        <ul>
+                            <li>
+                                <a href="public/files/documentacio-ajuda/ComoEnfrentarseALosJetasYALosMantas.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Treballs en equip: com enfrentar-se als 'jetas' i als 'mantes'</a>
+                                <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                            </li>
+                                            
+                        </ul>                    
+                    </section>
+                </section>
+            </section>
+
+
+
+            <section class="col s12 m6 l4">
+                <section class="card mobile_color_change">
+                    <section class="card-content white-text">
+                        <span id="recuperacions" class="card-title">Recuperacions</span>
+                        <p>Des del curs 2012-2013, a la FIB s'han començat a fer recuperacions. A continuació teniu documents amb la informació que es va donar als participants sobre el mètode d'evaluació i el guió de classe que es seguia de algunes assignatures.</p>
+                    </section>
+                    <section class="card-action">
+                        <ul>
+                            <li>
+                                <a href="public/files/recuperacions/Reavaluacio_FM.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Fonaments Matemàtics</a>
+                                <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                            </li>
+
+                            <li>
+                                <a href="public/files/recuperacions/Reavaluacio_M2.pdf" target="blank"><i class="fa fa-square square_icon" aria-hidden="true"></i>Matemàtiques 2</a>
+                                <span class="file_info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                            </li>                   
+                        </ul>
+                    </section>
+                </section>
+            </section>
+            
+        <!--
+            <section class="col s12 m6 l4">
+                <section class="card blue-grey darken-1">
+                    <section class="card-content white-text">
+                      <span id="convalidacions" class="card-title">Convalidaciones</span>
+                      
+                    </section>
+                    <section class="card-action">
+
+                    </section>
+                </section>
+            </section>
+        -->
+            
+        <!--
+            <section class="col s12 m6 l4">
+                <section class="card blue-grey darken-1">
+                    <section class="card-content white-text">
+                      <span id="opinio-consells" class="card-title">Opiniones y consejos</span>
+                      
+                    </section>
+                    <section class="card-action">
+                                            
+                    </section>
+                </section>
+            </section>
+        -->    
+        </section>        
+    </section>
+
+    <a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+
+    <footer class="page-footer">          
+          <section class="footer-copyright grey darken-3">
+            <section class="container">
+                <section class="row" style="margin-bottom: 0px; text-align:center;">
+                    <section class="col s12 m12 l12 footer_cop">                    
+                        2016 &copy; Fibers.cat | <span data-target="assignatures" class="version modal-trigger">Llistat d'assignatures</span> | <span data-target="users" class="version modal-trigger">Usuaris col·laboradors</span> | <span data-target="bitacora" class="version modal-trigger">v.0.204.24</span> | <a href="https://www.facebook.com/fibers.cat/" style="color: #8b9dc3;" target="_blank">Facebook</a>
+                    </section>
+
+                        <section id="bitacora" class="modal modal-fixed-footer">
+                            <section class="modal-content blue-grey darken-1">
+                                <h4><span class="modal_title">Canvis recents</span></h4>
+                                    <br>                                
+                                <h6>v.0.204.24</h6>
+                                <u>Afegit bloc</u>:
+                                    <br>
+                                    <ul>
+                                        <li>
+                                            <span class="bold_bit">Estructura de Dades i Algorismes</span>
+                                        </li>                                        
+                                    </ul>
+
+                                    <br>                             
+                                <h6>v.0.12.21</h6>
+                                <u>Afegit contingut al bloc</u>:
+                                    <br>
+                                    <ul>
+                                        <li>
+                                            <span class="bold_bit">Bases de Dades</span>
+                                        </li>                                        
+                                    </ul>
+
+                                    <br>
+                                <h6>v.0.10.18</h6>
+                                <u>Afegit bloc</u>:
+                                    <br>
+                                    <ul>
+                                        <li>
+                                            <span class="bold_bit">Empresa i Entorn Economic</span>
+                                        </li>                                        
+                                    </ul>
+
+                                    <br>                                
+                                <h6>v.0.10.07</h6>
+                                <u>Afegit blocs</u>:
+                                    <br>
+                                    <ul>
+                                        <li>
+                                            <span class="bold_bit">Recuperacions</span>
+                                        </li>
+                                        <li>
+                                            <span class="bold_bit">Documentació d'ajuda</span>
+                                        </li>
+                                    </ul>
+
+                                    <br>
+
+                                <h6>v.0.09.23</h6>
+                                <u>Afegit blocs</u>:
+                                    <br>
+                                    <ul>
+                                        <li>
+                                            <span class="bold_bit">Matemàtiques 2</span>
+                                        </li>
+                                        <li>
+                                            <span class="bold_bit">Sistemes Operatius</span>
+                                        </li>
+                                        <li>
+                                            <span class="bold_bit">Probabilitat i Estadística</span>
+                                        </li>
+                                        <li>
+                                            <span class="bold_bit">Base de dades</span>
+                                        </li>
+                                        <li>
+                                            <span class="bold_bit">Xarxes de Computadors</span>
+                                        </li>
+                                    </ul>
+                            </section>
+                            <section class="modal-footer blue-grey lighten-3">
+                              <span class="modal-action modal-close waves-effect waves-orange btn-flat" style="cursor: pointer; font-weight: bold;"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Enrere</span>
+                            </section>
+                        </section>
+
+                        <section id="users" class="modal modal-fixed-footer">
+                            <section class="modal-content blue-grey darken-1">
+                                <h4><span class="modal_title">Han aportat</span></h4>
+                                <br>
+<pre style="">
++ - - - - - - +
+<span style="color:#ffab40;">|    <b>Alcore</b>   |</span>
++ - - - - - - +
+
++ - - - - - - - +
+<span style="color:#ffab40;">|    <b>Welcius</b>    |</span>
++ - - - - - - - +
+
++ - - - - - - - +
+<span style="color:#ffab40;">|     <b>Chechi</b>    |</span>
++ - - - - - - - +
+
++ - - - - - - - - +
+<span style="color:#ffab40;">|     <b>Pau Risa</b>    |</span>
++ - - - - - - - - +
+
++ - - - - - - - - - - +
+<span style="color:#ffab40;">|     <b>Jeison Melo</b>     |</span>
++ - - - - - - - - - - +
+</pre>
+                            </section>
+                            <section class="modal-footer blue-grey lighten-3">
+                              <span class="modal-action modal-close waves-effect waves-orange btn-flat" style="cursor: pointer; font-weight: bold;"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Enrere</span>
+                            </section>
+                        </section>
+
+                        <section id="assignatures" class="modal modal-fixed-footer blue-grey darken-1">
+                            <section class="modal-content">
+                                <h4><span class="modal_title">Assignatures</span></h4>
+                                <br>
+                                <h6>Obligatories</h6>
+                                <table class="centered">
+                                    <thead>
+                                        <tr>
+                                            <th data-field="abrv">Abreviació</th>
+                                            <th data-field="nom">Nom complet</th>
+                                            <th data-field="quadri">Quadrimestre</th>
+                                            <th data-field="doc">Documentació</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                        
+                                        <tr>
+                                            <td><a href="#f">F</a></td>
+                                            <td><a href="#f">Física</a></td>
+                                            <td>Q1</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#fm">FM</a></td>
+                                            <td><a href="#fm">Fundaments Matematics</a></td>
+                                            <td>Q1</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#ic">IC</a></td>
+                                            <td><a href="#ic">Introducció als Computadors</a></td>
+                                            <td>Q1</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#pro1">PRO1</a></td>
+                                            <td><a href="#pro1">Programació 1</a></td>
+                                            <td>Q1</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>                                        
+                                        <tr>
+                                            <td class="space"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#ec">EC</a></td>
+                                            <td><a href="#ec">Estructura de Computadors</a></td>
+                                            <td>Q2</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#m1">M1</a></td>
+                                            <td><a href="#m1">Matemàtiques 1</a></td>
+                                            <td>Q2</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#m2">M2</a></td>
+                                            <td><a href="#m2">Matemàtiques 2</a></td>
+                                            <td>Q2</td>
+                                            <td><i class="fa fa-circle" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#pro2">PRO2</a></td>
+                                            <td><a href="#pr02">Programació 2</a></td>
+                                            <td>Q2</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="space"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#bd">BD</a></td>
+                                            <td><a href="#bd">Base de dades</a></td>
+                                            <td>Q3</td>
+                                            <td><i class="fa fa-circle" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#ci">CI</a></td>
+                                            <td><a href="#ci">Interfaces de Computadors</a></td>
+                                            <td>Q3</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#eda">EDA</a></td>
+                                            <td><a href="#eda">Estructura de Dades i Algorismes</a></td>
+                                            <td>Q3</td>
+                                            <td><i class="fa fa-circle" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#pe">PE</a></td>
+                                            <td><a href="#pe">Probabilitat i Estadistica</a></td>
+                                            <td>Q3</td>
+                                            <td><i class="fa fa-circle" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#so">SO</a></td>
+                                            <td><a href="#so">Sistemes Operatius</a></td>
+                                            <td>Q3</td>
+                                            <td><i class="fa fa-circle" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="space"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#ac">AC</a></td>
+                                            <td><a href="#ac">Arquitectura de Computadors</a></td>
+                                            <td>Q4</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#eee">EEE</a></td>
+                                            <td><a href="#eee">Empresa i Entorn Economic</a></td>
+                                            <td>Q4</td>
+                                            <td><i class="fa fa-circle" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#ies">IES</a></td>
+                                            <td><a href="#ies">Introducció a la Ingenieria del Software</a></td>
+                                            <td>Q4</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#prop">PROP</a></td>
+                                            <td><a href="#prop">Projectes de Programació</a></td>
+                                            <td>Q4</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#xc">XC</a></td>
+                                            <td><a href="#xc">Xarxes de Computadors</a></td>
+                                            <td>Q4</td>
+                                            <td><i class="fa fa-circle" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="space"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#idi">IDI</a></td>
+                                            <td><a href="#idi">Interacció i Diseny d'Interficies</a></td>
+                                            <td>Q4</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#par">PAR</a></td>
+                                            <td><a href="#par">Paralelisme</a></td>
+                                            <td>Q4</td>
+                                            <td><i class="fa fa-circle-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            <!--
+                                    <br>
+                                <h6>Obligatories i complementaries d'especialitat</h6>
+                                
+                                <table class="centered">
+                                    <thead>
+                                        <tr>
+                                            <th data-field="abrv">Abreviació</th>
+                                            <th data-field="nom">Nom complet</th>
+                                            <th data-field="quadri">Quadrimestre</th>
+                                            <th data-field="doc">Documentació</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            -->                              
+                                   
+                            </section>
+                            <section class="modal-footer blue-grey lighten-3">
+                              <span class="modal-action modal-close waves-effect waves-orange btn-flat" style="cursor: pointer; font-weight: bold;"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Enrere</span>
+                            </section>
+                        </section>
+                <!--
+                    <section class="col s12 m4 l6 creadores">
+                                           
+                        <section class="chip">
+                            <img src="public/img/q.jpg" alt="Contact Person">
+                            Qu4k3
+                        </section>
+                        <section class="chip">
+                            <img src="public/img/w.jpg" alt="Contact Person">
+                            Welcius
+                        </section>                  
+                        
+                    </section>
+                -->  
+                </section>
+                        
+            </section>
+          </section>
+    </footer>
+
+      <div class="popup"  >
+  <div class="popup-content">
+    <h3>Gracies per visitar Fibers.cat!</h3>
+    <hr style="max-width:25%; margin-top:15px;">
+    <p>Estem treballant en actualitzar la web per facilitar la visualització i aportació de contingut per part dels usuaris.</p>
+  </div>  
+  <a class="button"><i class="fa fa-info-circle" aria-hidden="true"></i> </a>
+</div>
+
+    </body>
+</html>

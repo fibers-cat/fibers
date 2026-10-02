@@ -1,0 +1,17 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../../components/SiteBreadcrumbs';
+---
+
+<SiteLayout title="Missatge enviat" description="Hem rebut el teu missatge. Gràcies per contactar amb Fibers." noindex>
+  <div class="page-content inner-page">
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { href: '/contacto/', label: 'Contacte' }, { label: 'Missatge enviat' }]} /> -->
+    <section class="community-panel contact-success" aria-labelledby="success-title">
+      <div class="community-symbol" aria-hidden="true">✓</div>
+      <span class="eyebrow">MISSATGE ENVIAT</span>
+      <h1 id="success-title">Gràcies per escriure’ns.</h1>
+      <p>Hem rebut el teu missatge. Et respondrem al correu electrònic que ens has indicat.</p>
+      <a class="button-primary" href="/">Torna a l’inici <span aria-hidden="true">↗</span></a>
+    </section>
+  </div>
+</SiteLayout>

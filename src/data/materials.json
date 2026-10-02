@@ -1,0 +1,380 @@
+[
+    {
+        "path":  "arquitectura-de-computadors/examen-lab-ac.c",
+        "title":  "Examen de Lab",
+        "extension":  "c",
+        "sizeBytes":  928,
+        "subjectCode":  "AC"
+    },
+    {
+        "path":  "arquitectura-de-computadors/formulario-lab-ac.pdf",
+        "title":  "Formulari lab",
+        "extension":  "pdf",
+        "sizeBytes":  1040720,
+        "subjectCode":  "AC"
+    },
+    {
+        "path":  "bases-de-dades/aprendizaje_autonomo_procedimientos_y_disparadores.txt",
+        "title":  "Aprenentatge Autònom de Procediments / Disparadors",
+        "extension":  "txt",
+        "sizeBytes":  2165,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/autonomssql2.txt",
+        "title":  "Tr. Autònom",
+        "extension":  "txt",
+        "sizeBytes":  1083,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/ejerciciossql2.txt",
+        "title":  "SQL exercicis",
+        "extension":  "txt",
+        "sizeBytes":  829,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/indice.txt",
+        "title":  "indice",
+        "extension":  "txt",
+        "sizeBytes":  819,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/nuevo_ejercicio_jdbc.txt",
+        "title":  "Nou exercici JDBC",
+        "extension":  "txt",
+        "sizeBytes":  1620,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/practica_procedimientos_y_disparadores.txt",
+        "title":  "Pràctica de procediments i disparadors",
+        "extension":  "txt",
+        "sizeBytes":  2006,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/practicajdbc1.txt",
+        "title":  "Pràctica JDBC 1",
+        "extension":  "txt",
+        "sizeBytes":  1488,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/practicajdbc2.txt",
+        "title":  "Pràctica JDBC 2 (antiga)",
+        "extension":  "txt",
+        "sizeBytes":  1364,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/practicajdbc2_2016.txt",
+        "title":  "Pràctica JDBC 2 (QT 2016)",
+        "extension":  "txt",
+        "sizeBytes":  1664,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/preview.png",
+        "title":  "preview",
+        "extension":  "png",
+        "sizeBytes":  23475,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/repaso_disparadores.txt",
+        "title":  "Repàs Disparadors",
+        "extension":  "txt",
+        "sizeBytes":  5288,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/repaso_procedimientos.txt",
+        "title":  "Repàs Procediments",
+        "extension":  "txt",
+        "sizeBytes":  4393,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/sql1autonom.png",
+        "title":  "Tr. Autònom",
+        "extension":  "png",
+        "sizeBytes":  80989,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "bases-de-dades/sql1ejercicios.txt",
+        "title":  "SQL exercicis",
+        "extension":  "txt",
+        "sizeBytes":  1317,
+        "subjectCode":  "BD"
+    },
+    {
+        "path":  "convalidacions.txt",
+        "title":  "convalidacions",
+        "extension":  "txt",
+        "sizeBytes":  1325,
+        "subjectCode":  null
+    },
+    {
+        "path":  "documentacio-ajuda/ComoEnfrentarseALosJetasYALosMantas.pdf",
+        "title":  "Treballs en equip: com enfrentar-se als \u0027jetas\u0027 i als \u0027mantes\u0027",
+        "extension":  "pdf",
+        "sizeBytes":  102592,
+        "subjectCode":  null
+    },
+    {
+        "path":  "documentacio-ajuda/indice.txt",
+        "title":  "indice",
+        "extension":  "txt",
+        "sizeBytes":  106,
+        "subjectCode":  null
+    },
+    {
+        "path":  "empresa-entorn-economic/respostes-preguntes-t1.pdf",
+        "title":  "Respostes tema 1",
+        "extension":  "pdf",
+        "sizeBytes":  518280,
+        "subjectCode":  "EEE"
+    },
+    {
+        "path":  "empresa-entorn-economic/respostes-preguntes-t2.pdf",
+        "title":  "Respostes tema 2",
+        "extension":  "pdf",
+        "sizeBytes":  497247,
+        "subjectCode":  "EEE"
+    },
+    {
+        "path":  "empresa-entorn-economic/respostes-preguntes-t3.pdf",
+        "title":  "Respostes tema 3",
+        "extension":  "pdf",
+        "sizeBytes":  480118,
+        "subjectCode":  "EEE"
+    },
+    {
+        "path":  "estructura-de-dades-i-algorismes/BinarySearch.cpp",
+        "title":  "Binary Search",
+        "extension":  "cpp",
+        "sizeBytes":  1026,
+        "subjectCode":  "EDA"
+    },
+    {
+        "path":  "estructura-de-dades-i-algorismes/bubble.cpp",
+        "title":  "Bubble",
+        "extension":  "cpp",
+        "sizeBytes":  892,
+        "subjectCode":  "EDA"
+    },
+    {
+        "path":  "estructura-de-dades-i-algorismes/MergeSort.cpp",
+        "title":  "Merge Sort",
+        "extension":  "cpp",
+        "sizeBytes":  1653,
+        "subjectCode":  "EDA"
+    },
+    {
+        "path":  "estructura-de-dades-i-algorismes/QuickSelect.cpp",
+        "title":  "Quick Select",
+        "extension":  "cpp",
+        "sizeBytes":  979,
+        "subjectCode":  "EDA"
+    },
+    {
+        "path":  "estructura-de-dades-i-algorismes/QuickSort.cpp",
+        "title":  "Quick Sort",
+        "extension":  "cpp",
+        "sizeBytes":  1440,
+        "subjectCode":  "EDA"
+    },
+    {
+        "path":  "estructura-de-dades-i-algorismes/selectInsert.cpp",
+        "title":  "Select \u0026 Insert",
+        "extension":  "cpp",
+        "sizeBytes":  820,
+        "subjectCode":  "EDA"
+    },
+    {
+        "path":  "estructura-de-dades-i-algorismes/tempsenmillorpitjorcas.txt",
+        "title":  "Temps en millor / pitjor cas",
+        "extension":  "txt",
+        "sizeBytes":  714,
+        "subjectCode":  "EDA"
+    },
+    {
+        "path":  "estructura-de-dades-i-algorismes/TeoremaMestre.txt",
+        "title":  "Teorema Mestre",
+        "extension":  "txt",
+        "sizeBytes":  2279,
+        "subjectCode":  "EDA"
+    },
+    {
+        "path":  "matematiques-2/indice.txt",
+        "title":  "indice",
+        "extension":  "txt",
+        "sizeBytes":  28,
+        "subjectCode":  "M2"
+    },
+    {
+        "path":  "matematiques-2/M2.zip",
+        "title":  "Temari complet",
+        "extension":  "zip",
+        "sizeBytes":  13833414,
+        "subjectCode":  "M2"
+    },
+    {
+        "path":  "opinions i consells.txt",
+        "title":  "opinions i consells",
+        "extension":  "txt",
+        "sizeBytes":  4649,
+        "subjectCode":  null
+    },
+    {
+        "path":  "probabilitat-estadistica/indice.txt",
+        "title":  "indice",
+        "extension":  "txt",
+        "sizeBytes":  62,
+        "subjectCode":  "PE"
+    },
+    {
+        "path":  "probabilitat-estadistica/PE1.rar",
+        "title":  "E-status complet 1",
+        "extension":  "rar",
+        "sizeBytes":  9319490,
+        "subjectCode":  "PE"
+    },
+    {
+        "path":  "probabilitat-estadistica/PE2.rar",
+        "title":  "E-status complet 2",
+        "extension":  "rar",
+        "sizeBytes":  244071,
+        "subjectCode":  "PE"
+    },
+    {
+        "path":  "probabilitat-estadistica/texto.txt",
+        "title":  "texto",
+        "extension":  "txt",
+        "sizeBytes":  115,
+        "subjectCode":  "PE"
+    },
+    {
+        "path":  "recuperacions/indice.txt",
+        "title":  "indice",
+        "extension":  "txt",
+        "sizeBytes":  84,
+        "subjectCode":  null
+    },
+    {
+        "path":  "recuperacions/Reavaluacio_FM.pdf",
+        "title":  "Fonaments Matemàtics",
+        "extension":  "pdf",
+        "sizeBytes":  19675,
+        "subjectCode":  "FM"
+    },
+    {
+        "path":  "recuperacions/Reavaluacio_M2.pdf",
+        "title":  "Matemàtiques 2",
+        "extension":  "pdf",
+        "sizeBytes":  15547,
+        "subjectCode":  "M2"
+    },
+    {
+        "path":  "recuperacions/texto.txt",
+        "title":  "texto",
+        "extension":  "txt",
+        "sizeBytes":  248,
+        "subjectCode":  null
+    },
+    {
+        "path":  "sistemes-operatius/indice.txt",
+        "title":  "indice",
+        "extension":  "txt",
+        "sizeBytes":  84,
+        "subjectCode":  "SO"
+    },
+    {
+        "path":  "sistemes-operatius/SO1.rar",
+        "title":  "Lab. versió 1",
+        "extension":  "rar",
+        "sizeBytes":  52965,
+        "subjectCode":  "SO"
+    },
+    {
+        "path":  "sistemes-operatius/SO2.rar",
+        "title":  "Lab. versió 2",
+        "extension":  "rar",
+        "sizeBytes":  21034,
+        "subjectCode":  "SO"
+    },
+    {
+        "path":  "sistemes-operatius/SO3.rar",
+        "title":  "Lab. versió 3",
+        "extension":  "rar",
+        "sizeBytes":  216136,
+        "subjectCode":  "SO"
+    },
+    {
+        "path":  "sistemes-operatius/texto.txt",
+        "title":  "texto",
+        "extension":  "txt",
+        "sizeBytes":  87,
+        "subjectCode":  "SO"
+    },
+    {
+        "path":  "xarxes-de-computadors/indice.txt",
+        "title":  "indice",
+        "extension":  "txt",
+        "sizeBytes":  531,
+        "subjectCode":  "XC"
+    },
+    {
+        "path":  "xarxes-de-computadors/ip_seguiment_xc_melocuenta_fib_2014.pdf",
+        "title":  "IP",
+        "extension":  "pdf",
+        "sizeBytes":  244960,
+        "subjectCode":  "XC"
+    },
+    {
+        "path":  "xarxes-de-computadors/lan_resumen_xc_melocuenta_fib.pdf",
+        "title":  "LANs",
+        "extension":  "pdf",
+        "sizeBytes":  265243,
+        "subjectCode":  "XC"
+    },
+    {
+        "path":  "xarxes-de-computadors/subnetting_resumen_xc_melocuenta_fib.pdf",
+        "title":  "Subnetting",
+        "extension":  "pdf",
+        "sizeBytes":  296139,
+        "subjectCode":  "XC"
+    },
+    {
+        "path":  "xarxes-de-computadors/subnetting_resumen_xc_melocuenta_fib.txt",
+        "title":  "més Subnetting",
+        "extension":  "txt",
+        "sizeBytes":  2233,
+        "subjectCode":  "XC"
+    },
+    {
+        "path":  "xarxes-de-computadors/tcp_aplicaciones_resumen_xc_melocuenta_fib.pdf",
+        "title":  "TCP i Aplicacions",
+        "extension":  "pdf",
+        "sizeBytes":  295443,
+        "subjectCode":  "XC"
+    },
+    {
+        "path":  "xarxes-de-computadors/tcp_seguiment_xc__melocuenta_2014.pdf",
+        "title":  "TCP",
+        "extension":  "pdf",
+        "sizeBytes":  243986,
+        "subjectCode":  "XC"
+    },
+    {
+        "path":  "xarxes-de-computadors/xml_trans_xc_melocuenta.tar.gz",
+        "title":  "XML",
+        "extension":  "gz",
+        "sizeBytes":  47215,
+        "subjectCode":  "XC"
+    }
+]

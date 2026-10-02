@@ -1,0 +1,19 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../../components/SiteBreadcrumbs';
+import SubjectExplorer from '../../components/SubjectExplorer';
+import { subjects } from '../../data/subjects';
+---
+
+<SiteLayout title="Assignatures de la FIB" description="Explora les assignatures de la FIB per nom o codi i troba els materials d’estudi recuperats per a cada matèria al catàleg de Fibers.">
+  <div class="page-content inner-page">
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Assignatures' }]} /> -->
+    <header class="page-heading">
+      <span class="eyebrow">CATÀLEG FIB</span>
+      <h1>Assignatures</h1>
+      <p>Busca per nom o codi i entra a cada assignatura per consultar els fitxers recuperats.</p>
+    </header>
+    <SubjectExplorer client:load subjects={subjects} />
+    <div class="catalog-disclaimer"><strong>Catàleg històric</strong><span>Les categories provenen de la web anterior. Els fitxers disponibles estan vinculats a la seva assignatura i la vigència encara s’ha de confirmar.</span></div>
+  </div>
+</SiteLayout>
