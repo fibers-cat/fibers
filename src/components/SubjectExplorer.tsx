@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -11,13 +11,35 @@ import ArrowForwardRounded from '@mui/icons-material/ArrowForwardRounded';
 import SearchRounded from '@mui/icons-material/SearchRounded';
 import { ThemeProvider } from '@mui/material/styles';
 import type { Subject } from '../data/subjects';
-import { materialCountForSubject } from '../data/materials';
+import { supabase } from '../lib/supabase';
 import { fibersTheme } from './theme';
 
-type Props = { subjects: Subject[] };
+type Props = { featured?: boolean };
 
-export default function SubjectExplorer({ subjects }: Props) {
+const featuredCodes = new Set(['F', 'FM', 'M2', 'BD', 'EDA', 'PE', 'SO', 'EEE', 'XC']);
+
+export default function SubjectExplorer({ featured = false }: Props) {
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [materialCounts, setMaterialCounts] = useState<Record<string, number>>({});
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [query, setQuery] = useState('');
+  useEffect(() => {
+    if (!supabase) { setLoading(false); return; }
+    Promise.all([
+      supabase.from('subjects').select('id,slug,code,name,category,description').order('code'),
+      supabase.from('approved_material_counts').select('subject_id,file_count'),
+    ]).then(([subjectResult, contributionResult]) => {
+      if (subjectResult.error) setLoadError('No s’han pogut carregar les assignatures. Revisa la configuració de Supabase.');
+      let results = (subjectResult.data ?? []) as Subject[];
+      if (featured) results = results.filter((subject) => featuredCodes.has(subject.code));
+      setSubjects(results);
+      const counts: Record<string, number> = {};
+      for (const contribution of contributionResult.data ?? []) counts[contribution.subject_id] = Number(contribution.file_count);
+      setMaterialCounts(counts);
+      setLoading(false);
+    }).catch(() => { setLoadError('No s’ha pogut connectar amb Supabase.'); setLoading(false); });
+  }, [featured]);
   const visibleSubjects = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase('ca');
     if (!normalized) return subjects;
@@ -42,13 +64,13 @@ export default function SubjectExplorer({ subjects }: Props) {
             }}
           />
           <Typography className="results-count" aria-live="polite">
-            {visibleSubjects.length} {visibleSubjects.length === 1 ? 'assignatura' : 'assignatures'}
+            {loading ? 'Carregant…' : `${visibleSubjects.length} ${visibleSubjects.length === 1 ? 'assignatura' : 'assignatures'}`}
           </Typography>
         </div>
-        {visibleSubjects.length > 0 ? (
+        {!supabase ? <div className="empty-search"><Typography>No s’ha configurat la connexió amb Supabase.</Typography></div> : loading ? <div className="empty-search"><Typography>Carregant assignatures…</Typography></div> : loadError ? <div className="empty-search"><Typography>{loadError}</Typography></div> : visibleSubjects.length > 0 ? (
           <div className="subject-grid">
             {visibleSubjects.map((subject) => {
-              const materialCount = materialCountForSubject(subject.code);
+              const materialCount = materialCounts[subject.id] ?? 0;
               return <Card className="subject-card" key={subject.slug} elevation={0}>
                 <CardActionArea component="a" href={`/assignatures/${subject.slug}/`} className="subject-card-action">
                   <CardContent className="subject-card-content">

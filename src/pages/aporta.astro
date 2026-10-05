@@ -2,7 +2,6 @@
 import SiteLayout from "../layouts/SiteLayout.astro";
 // import SiteBreadcrumbs from '../components/SiteBreadcrumbs';
 import ContributionForm from "../components/ContributionForm";
-import { subjects } from "../data/subjects";
 
 const initialSubject = Astro.url.searchParams.get("assignatura") ?? "";
 ---
@@ -34,7 +33,6 @@ const initialSubject = Astro.url.searchParams.get("assignatura") ?? "";
         <p>Indica’ns què vols compartir amb la comunitat.</p>
         <ContributionForm
           client:load
-          subjects={subjects}
           initialSubject={initialSubject}
         />
       </section>

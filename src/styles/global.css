@@ -125,6 +125,8 @@ textarea {
   margin-top: auto;
   padding: 14px 14px 0px;
   border-top: 1px solid rgba(255, 255, 255, .1);
+  display: flex;  
+  justify-content: space-between;
 }
 
 .sidebar-mail {
@@ -1484,7 +1486,6 @@ textarea {
 
 .profile-link.MuiIconButton-root {
   display: flex;
-  margin: 0 auto 8px;
   color: #fff;
   border: 1px solid rgba(255, 255, 255, .22);
 }
