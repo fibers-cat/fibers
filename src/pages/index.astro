@@ -2,6 +2,9 @@
 import SiteLayout from "../layouts/SiteLayout.astro";
 import SubjectExplorer from "../components/SubjectExplorer";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
+import { fetchSubjects } from "../lib/subjects";
+
+const subjects = await fetchSubjects();
 ---
 
 <SiteLayout
@@ -65,10 +68,9 @@ import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
           >Veure el catàleg <span aria-hidden="true">→</span></a
         >
       </div>
-      <SubjectExplorer client:load featured />
+      <SubjectExplorer client:load subjects={subjects} featured />
       <p class="data-note">
-        Els fitxers provenen del fons de la web anterior; comprova si el
-        material continua vigent.
+        Comprova la data i la vigència del contingut abans d'utilitzar-lo.
       </p>
     </section>
 

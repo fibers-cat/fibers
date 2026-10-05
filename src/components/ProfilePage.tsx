@@ -29,6 +29,26 @@ export default function ProfilePage({ returnTo }: Props) {
     let active = true;
     const load = async () => {
       const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+      if (!active) return;
+      if (sessionError) {
+        console.error("Could not load the current authentication session.", sessionError);
+        setMessage("No s’ha pogut carregar la sessió.");
+        setMessageIsError(true);
+        return;
+      }
+      if (!session) {
+        setUserEmail("");
+        setAlias("");
+        setAvatarUrl(null);
+        setMessage("");
+        setMessageIsError(false);
+        return;
+      }
+
+      const {
         data: { user },
         error: userError,
       } = await supabase.auth.getUser();

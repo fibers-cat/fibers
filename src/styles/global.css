@@ -1486,6 +1486,11 @@ textarea {
 
 .profile-link.MuiIconButton-root {
   display: flex;
+  box-sizing: border-box;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  overflow: hidden;
   color: #fff;
   border: 1px solid rgba(255, 255, 255, .22);
 }

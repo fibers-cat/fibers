@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import InputAdornment from '@mui/material/InputAdornment';
+import Skeleton from '@mui/material/Skeleton';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import ArrowForwardRounded from '@mui/icons-material/ArrowForwardRounded';
@@ -14,32 +16,53 @@ import type { Subject } from '../data/subjects';
 import { supabase } from '../lib/supabase';
 import { fibersTheme } from './theme';
 
-type Props = { featured?: boolean };
+type Props = { subjects: Subject[]; featured?: boolean };
 
 const featuredCodes = new Set(['F', 'FM', 'M2', 'BD', 'EDA', 'PE', 'SO', 'EEE', 'XC']);
 
-export default function SubjectExplorer({ featured = false }: Props) {
-  const [subjects, setSubjects] = useState<Subject[]>([]);
+export default function SubjectExplorer({ subjects: allSubjects, featured = false }: Props) {
   const [materialCounts, setMaterialCounts] = useState<Record<string, number>>({});
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState('');
+  const [loadingCounts, setLoadingCounts] = useState(true);
+  const [countLoadError, setCountLoadError] = useState(false);
   const [query, setQuery] = useState('');
+  const subjects = useMemo(
+    () => featured ? allSubjects.filter((subject) => featuredCodes.has(subject.code)) : allSubjects,
+    [allSubjects, featured],
+  );
+
   useEffect(() => {
-    if (!supabase) { setLoading(false); return; }
-    Promise.all([
-      supabase.from('subjects').select('id,slug,code,name,category,description').order('code'),
-      supabase.from('approved_material_counts').select('subject_id,file_count'),
-    ]).then(([subjectResult, contributionResult]) => {
-      if (subjectResult.error) setLoadError('No s’han pogut carregar les assignatures. Revisa la configuració de Supabase.');
-      let results = (subjectResult.data ?? []) as Subject[];
-      if (featured) results = results.filter((subject) => featuredCodes.has(subject.code));
-      setSubjects(results);
-      const counts: Record<string, number> = {};
-      for (const contribution of contributionResult.data ?? []) counts[contribution.subject_id] = Number(contribution.file_count);
-      setMaterialCounts(counts);
-      setLoading(false);
-    }).catch(() => { setLoadError('No s’ha pogut connectar amb Supabase.'); setLoading(false); });
-  }, [featured]);
+    let active = true;
+    const loadMaterialCounts = async () => {
+      if (!supabase) {
+        setCountLoadError(true);
+        setLoadingCounts(false);
+        return;
+      }
+      try {
+        const { data, error } = await supabase
+          .from('approved_material_counts')
+          .select('subject_id,file_count');
+        if (error) {
+          console.error('Could not load approved material counts from Supabase.', error);
+          if (active) setCountLoadError(true);
+          return;
+        }
+        if (active) {
+          const counts: Record<string, number> = {};
+          for (const item of data ?? []) counts[item.subject_id] = Number(item.file_count);
+          setMaterialCounts(counts);
+        }
+      } catch (error) {
+        console.error('Could not connect to Supabase while loading material counts.', error);
+        if (active) setCountLoadError(true);
+      } finally {
+        if (active) setLoadingCounts(false);
+      }
+    };
+    void loadMaterialCounts();
+    return () => { active = false; };
+  }, []);
+
   const visibleSubjects = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase('ca');
     if (!normalized) return subjects;
@@ -64,10 +87,11 @@ export default function SubjectExplorer({ featured = false }: Props) {
             }}
           />
           <Typography className="results-count" aria-live="polite">
-            {loading ? 'Carregant…' : `${visibleSubjects.length} ${visibleSubjects.length === 1 ? 'assignatura' : 'assignatures'}`}
+            {`${visibleSubjects.length} ${visibleSubjects.length === 1 ? 'assignatura' : 'assignatures'}`}
           </Typography>
         </div>
-        {!supabase ? <div className="empty-search"><Typography>No s’ha configurat la connexió amb Supabase.</Typography></div> : loading ? <div className="empty-search"><Typography>Carregant assignatures…</Typography></div> : loadError ? <div className="empty-search"><Typography>{loadError}</Typography></div> : visibleSubjects.length > 0 ? (
+        {countLoadError && <Alert severity="error">No s’han pogut carregar els comptadors de fitxers.</Alert>}
+        {visibleSubjects.length > 0 ? (
           <div className="subject-grid">
             {visibleSubjects.map((subject) => {
               const materialCount = materialCounts[subject.id] ?? 0;
@@ -78,11 +102,17 @@ export default function SubjectExplorer({ featured = false }: Props) {
                       <span className="subject-code">{subject.code}</span>
                       <div className="subject-card-tags">
                         <Chip className="category-chip" label={subject.category} size="small" />
-                        <Chip
-                          className={materialCount > 0 ? 'resource-count-chip' : 'resource-empty-chip'}
-                          label={materialCount > 0 ? `${materialCount} ${materialCount === 1 ? 'fitxer' : 'fitxers'}` : 'Sense fitxers'}
-                          size="small"
-                        />
+                        {loadingCounts ? (
+                          <Skeleton variant="rounded" width={88} height={24} aria-label="Carregant comptador de fitxers" />
+                        ) : countLoadError ? (
+                          <Chip className="resource-empty-chip" label="No disponible" size="small" />
+                        ) : (
+                          <Chip
+                            className={materialCount > 0 ? 'resource-count-chip' : 'resource-empty-chip'}
+                            label={materialCount > 0 ? `${materialCount} ${materialCount === 1 ? 'fitxer' : 'fitxers'}` : 'Sense fitxers'}
+                            size="small"
+                          />
+                        )}
                       </div>
                     </div>
                     <Typography component="h3" variant="h6" className="subject-name">{subject.name}</Typography>
