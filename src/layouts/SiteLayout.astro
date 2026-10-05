@@ -95,12 +95,14 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
     <meta name="twitter:image" content={imageUrl} />
     <meta name="twitter:image:alt" content="Fibers, materials d’estudi compartits per a la FIB" />
     {structuredDataJson && <script type="application/ld+json" set:html={structuredDataJson} />}
-    <script
-      defer
-      src="/scripts/umami.js"
-      data-website-id="78833c4a-67ac-4ac3-8172-899db82a84f9"
-      data-host-url="https://umami.qu4k3.com"
-    ></script>
+    {import.meta.env.PROD && (
+      <script
+        defer
+        src="/scripts/umami.js"
+        data-website-id="78833c4a-67ac-4ac3-8172-899db82a84f9"
+        data-host-url="https://umami.qu4k3.com"
+      ></script>
+    )}
   </head>
   <body>
     <SiteNavigation client:load currentPath={currentPath} />
