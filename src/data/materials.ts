@@ -1,4 +1,4 @@
-import fileManifest from './materials.json';
+import fileManifest from '@/data/materials.json';
 
 export type Material = {
   path: string;

@@ -9,9 +9,9 @@ import Typography from "@mui/material/Typography";
 import GitHub from "@mui/icons-material/GitHub";
 import PersonOutlineRounded from "@mui/icons-material/PersonOutlineRounded";
 import { ThemeProvider } from "@mui/material/styles";
-import { supabase } from "../lib/supabase";
-import { getSocialAvatar } from "../lib/socialAvatar";
-import { fibersTheme } from "./theme";
+import { supabase } from "@/lib/supabase";
+import { getSocialAvatar } from "@/lib/socialAvatar";
+import { fibersTheme } from "@/components/theme";
 
 type Props = { returnTo: string };
 
@@ -28,6 +28,26 @@ export default function ProfilePage({ returnTo }: Props) {
     if (!supabase) return;
     let active = true;
     const load = async () => {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+      if (!active) return;
+      if (sessionError) {
+        console.error("Could not load the current authentication session.", sessionError);
+        setMessage("No s’ha pogut carregar la sessió.");
+        setMessageIsError(true);
+        return;
+      }
+      if (!session) {
+        setUserEmail("");
+        setAlias("");
+        setAvatarUrl(null);
+        setMessage("");
+        setMessageIsError(false);
+        return;
+      }
+
       const {
         data: { user },
         error: userError,
@@ -215,7 +235,16 @@ export default function ProfilePage({ returnTo }: Props) {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
               />
-              <Button type="submit" variant="contained" disabled={busy}>
+              <Button
+                className="profile-email-submit"
+                type="submit"
+                variant="contained"
+                disabled={busy}
+                sx={{
+                  minHeight: 40,
+                  borderRadius: "50px",
+                }}
+              >
                 Envia’m un enllaç
               </Button>
             </Stack>

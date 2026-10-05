@@ -50,7 +50,7 @@ textarea {
   display: flex;
   width: 264px;
   flex-direction: column;
-  padding: 28px 18px 22px;
+  padding: 28px 18px 12px;
   color: #fff;
   background: var(--sidebar);
 }
@@ -562,8 +562,39 @@ textarea {
   margin-bottom: 18px;
 }
 
+.explorer-filters {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+}
+
 .subject-search {
   width: min(100%, 430px);
+}
+
+.subject-filter-button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #d5d9df !important;
+  border-radius: 12px !important;
+  background: #fff !important;
+}
+
+.subject-filter-button:hover {
+  background: #f5f6f8 !important;
+}
+
+.subject-filter-popover {
+  min-width: 220px;
+  padding: 12px 16px;
+}
+
+.subject-filter-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
 }
 
 .subject-search .MuiOutlinedInput-root {
@@ -628,6 +659,21 @@ textarea {
   background: #eff1f4 !important;
   font-size: 12px !important;
   font-weight: 700 !important;
+}
+
+.category-chip--obligatories {
+  color: #1d4ed8 !important;
+  background: #eaf1ff !important;
+}
+
+.category-chip--specialty {
+  color: #6d28d9 !important;
+  background: #f1eaff !important;
+}
+
+.category-chip--electives {
+  color: #a34b08 !important;
+  background: #fff1df !important;
 }
 
 .resource-count-chip {
@@ -840,6 +886,44 @@ textarea {
   padding: 25px !important;
   border: 1px solid var(--line);
   border-radius: 18px !important;
+}
+
+.approved-materials {
+  min-width: 0;
+  margin-top: 25px;
+}
+
+.approved-contribution-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 15px;
+}
+
+.approved-contribution {
+  display: grid;
+  min-width: 0;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.legacy-code-content {
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  border: 1px solid #303844;
+  border-radius: 10px;
+  background: #20242c;
+  color: #e6edf3;
+  font-family: Consolas, "SFMono-Regular", Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  tab-size: 4;
+  white-space: pre;
 }
 
 .status-heading {
@@ -1340,6 +1424,12 @@ textarea {
     flex-direction: column;
   }
 
+  .explorer-filters {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .subject-search {
     width: 100%;
   }
@@ -1486,6 +1576,11 @@ textarea {
 
 .profile-link.MuiIconButton-root {
   display: flex;
+  box-sizing: border-box;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  overflow: hidden;
   color: #fff;
   border: 1px solid rgba(255, 255, 255, .22);
 }

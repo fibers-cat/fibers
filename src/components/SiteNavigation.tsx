@@ -10,6 +10,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
 import SvgIcon from '@mui/material/SvgIcon';
 import type { User } from '@supabase/supabase-js';
 import MenuRounded from '@mui/icons-material/MenuRounded';
@@ -23,9 +24,9 @@ import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import PersonOutlineRounded from '@mui/icons-material/PersonOutlineRounded';
 import { siDiscord, siFacebook, siGithub } from 'simple-icons';
 import { ThemeProvider } from '@mui/material/styles';
-import { fibersTheme } from './theme';
-import { supabase } from '../lib/supabase';
-import { getSocialAvatar } from '../lib/socialAvatar';
+import { fibersTheme } from '@/components/theme';
+import { supabase } from '@/lib/supabase';
+import { getSocialAvatar } from '@/lib/socialAvatar';
 
 const links = [
   { href: '/', label: 'Inici', icon: <HomeRounded /> },
@@ -146,13 +147,15 @@ export default function SiteNavigation({ currentPath }: Props) {
         <NavigationLinks currentPath={currentPath} />
         <div className="sidebar-bottom">          
           <SocialLinks className="desktop-socials" />
-          <IconButton component="a" href="/perfil/" className="profile-link" aria-label={signedIn ? 'El teu perfil' : 'Inicia sessió'} title={signedIn ? 'El teu perfil' : 'Inicia sessió'}>
-            {signedIn ? (
-              <Avatar src={avatarUrl ?? undefined} sx={{ width: 30, height: 30, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
-                <PersonOutlineRounded fontSize="small" />
-              </Avatar>
-            ) : <PersonOutlineRounded />}
-          </IconButton>
+          <Tooltip title={signedIn ? 'El teu perfil' : 'Inicia sessió'} arrow>
+            <IconButton component="a" href="/perfil/" className="profile-link" aria-label={signedIn ? 'El teu perfil' : 'Inicia sessió'}>
+              {signedIn ? (
+                <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
+                  <PersonOutlineRounded fontSize="small" />
+                </Avatar>
+              ) : <PersonOutlineRounded />}
+            </IconButton>
+          </Tooltip>
         </div>
       </aside>
 

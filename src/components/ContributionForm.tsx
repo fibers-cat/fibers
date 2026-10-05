@@ -10,8 +10,8 @@ import Typography from '@mui/material/Typography';
 import AttachFileRounded from '@mui/icons-material/AttachFileRounded';
 import SendRounded from '@mui/icons-material/SendRounded';
 import { ThemeProvider } from '@mui/material/styles';
-import { supabase, type Subject } from '../lib/supabase';
-import { fibersTheme } from './theme';
+import { supabase, type Subject } from '@/lib/supabase';
+import { fibersTheme } from '@/components/theme';
 
 type Props = { initialSubject?: string };
 const maxFileSize = 50 * 1024 * 1024;

@@ -1,6 +1,6 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
-import ProfilePage from '../components/ProfilePage';
+import SiteLayout from '@/layouts/SiteLayout.astro';
+import ProfilePage from '@/components/ProfilePage';
 const requestedReturn = Astro.url.searchParams.get('returnTo') ?? '/';
 const returnTo = requestedReturn.startsWith('/') && !requestedReturn.startsWith('//') ? requestedReturn : '/';
 ---

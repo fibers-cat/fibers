@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
-import { supabase } from "../lib/supabase";
+import { supabase } from "@/lib/supabase";
 
 type Props = { subjectId: string };
 type ApprovedFile = {
@@ -151,7 +151,7 @@ export default function ApprovedMaterials({ subjectId }: Props) {
               </a>
             )}
             {item.content_text && (
-              <pre className="legacy-code-content">{item.content_text}</pre>
+              <pre className="legacy-code-content">{item.content_text.trim()}</pre>
             )}
           </article>
         ))}
