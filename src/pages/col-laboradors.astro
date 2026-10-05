@@ -1,17 +1,16 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-// import SiteBreadcrumbs from '../components/SiteBreadcrumbs';
+import ContributorRanking from '../components/ContributorRanking';
 ---
-
-<SiteLayout title="Col·laboradors de Fibers" description="Descobreix com les aportacions de la comunitat d’estudiants fan créixer el projecte Fibers." noindex>
+<SiteLayout title="Col·laboradors de Fibers" description="Rànquing de les persones que han aportat materials aprovats a Fibers." noindex>
   <div class="page-content inner-page">
-    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Col·laboradors' }]} /> -->
-    <section class="community-panel">
+    <section class="community-panel ranking-panel">
       <span class="community-symbol" aria-hidden="true">✳</span>
       <span class="eyebrow">FET ENTRE ESTUDIANTS</span>
-      <h1>Fibers creix amb<br />cada aportació.</h1>
-      <p>Les persones que comparteixen apunts i recursos són el cor del projecte. La llista històrica de col·laboracions encara s’ha de revisar abans de tornar-la a publicar.</p>
-      <a class="button-primary" href="/aporta/">Fes la teva aportació <span aria-hidden="true">→</span></a>
+      <h1>Qui fa créixer<br />Fibers?</h1>
+      <p>Rànquing de persones segons els materials publicats i les aportacions que han superat la revisió.</p>
+      <ContributorRanking client:load />
+      <a class="button-primary" href="/aporta/">Fes una aportació <span aria-hidden="true">→</span></a>
     </section>
   </div>
 </SiteLayout>

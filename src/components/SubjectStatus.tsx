@@ -8,12 +8,13 @@ import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import VolunteerActivismOutlined from '@mui/icons-material/VolunteerActivismOutlined';
 import { ThemeProvider } from '@mui/material/styles';
 import ResourceCollection from './ResourceCollection';
+import ApprovedMaterials from './ApprovedMaterials';
 import { materialsForSubject } from '../data/materials';
 import { fibersTheme } from './theme';
 
-type Props = { subjectName: string; subjectCode: string };
+type Props = { subjectId: string; subjectName: string; subjectCode: string };
 
-export default function SubjectStatus({ subjectName, subjectCode }: Props) {
+export default function SubjectStatus({ subjectId, subjectName, subjectCode }: Props) {
   const materials = materialsForSubject(subjectCode);
   return (
     <ThemeProvider theme={fibersTheme}>
@@ -42,6 +43,7 @@ export default function SubjectStatus({ subjectName, subjectCode }: Props) {
         <Button href={`/aporta/?assignatura=${encodeURIComponent(subjectCode)}`} variant="contained" startIcon={<VolunteerActivismOutlined />}>
           Aporta material
         </Button>
+        <ApprovedMaterials subjectId={subjectId} />
       </Paper>
     </ThemeProvider>
   );

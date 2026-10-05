@@ -154,6 +154,20 @@
         "subjectCode":  "EEE"
     },
     {
+        "path":  "empresa-entorn-economic/Preguntes_Tema1_Tema2.docx",
+        "title":  "Preguntes Tema 1 i Tema 2",
+        "extension":  "docx",
+        "sizeBytes":  20765,
+        "subjectCode":  "EEE"
+    },
+    {
+        "path":  "empresa-entorn-economic/Preguntes_Tema3.docx",
+        "title":  "Preguntes Tema 3",
+        "extension":  "docx",
+        "sizeBytes":  18861,
+        "subjectCode":  "EEE"
+    },
+    {
         "path":  "estructura-de-dades-i-algorismes/BinarySearch.cpp",
         "title":  "Binary Search",
         "extension":  "cpp",

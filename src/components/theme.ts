@@ -10,7 +10,7 @@ export const fibersTheme = createTheme({
   },
   shape: { borderRadius: 14 },
   typography: {
-    fontFamily: 'Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontFamily: '"Roboto Variable", "Helvetica Neue", Arial, sans-serif',
     button: { textTransform: 'none', fontWeight: 700 },
   },
   components: {

@@ -95,16 +95,21 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
     <meta name="twitter:image" content={imageUrl} />
     <meta name="twitter:image:alt" content="Fibers, materials d’estudi compartits per a la FIB" />
     {structuredDataJson && <script type="application/ld+json" set:html={structuredDataJson} />}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    {import.meta.env.PROD && (
+      <script
+        defer
+        src="/scripts/umami.js"
+        data-website-id="78833c4a-67ac-4ac3-8172-899db82a84f9"
+        data-host-url="https://umami.qu4k3.com"
+      ></script>
+    )}
   </head>
   <body>
     <SiteNavigation client:load currentPath={currentPath} />
     <main class="site-main">
       <slot />
       <footer class="site-footer">
-        <div><span>© {new Date().getFullYear()} Fibers</span><span>Recursos compartits per a la comunitat FIB</span></div>
+        <div><span>© 2016-{new Date().getFullYear()} Fibers</span><span>Recursos compartits per a la comunitat FIB</span></div>
         <nav aria-label="Enllaços del peu de pàgina">
           <a href="/guia/">Com funciona</a>
           <a href="/recursos/">Recursos generals</a>

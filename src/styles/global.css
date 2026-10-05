@@ -1,6 +1,8 @@
+@import "@fontsource-variable/roboto";
+
 :root {
   color-scheme: light;
-  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Roboto Variable", "Helvetica Neue", Arial, sans-serif;
   color: #20242c;
   background: #f6f7f9;
   font-synthesis: none;
@@ -121,8 +123,10 @@ textarea {
 
 .sidebar-bottom {
   margin-top: auto;
-  padding: 7px 14px 7px;
+  padding: 14px 14px 0px;
   border-top: 1px solid rgba(255, 255, 255, .1);
+  display: flex;  
+  justify-content: space-between;
 }
 
 .sidebar-mail {
@@ -1479,6 +1483,24 @@ textarea {
     margin-top: 20px;
   }
 }
+
+.profile-link.MuiIconButton-root {
+  display: flex;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .22);
+}
+
+.profile-link.MuiIconButton-root:hover { background: rgba(255, 255, 255, .12); }
+.profile-panel { max-width: 620px; margin: 42px auto; }
+.profile-card { margin-top: 20px; }
+.ranking-panel { max-width: 820px; }
+.ranking-panel .contributor-ranking { width: 100%; margin: 30px 0; padding: 0; list-style: none; text-align: left; }
+.contributor-ranking li { display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 14px; padding: 15px 4px; border-bottom: 1px solid rgba(24, 36, 52, .12); }
+.ranking-position { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; background: #eef1f5; font-weight: 700; }
+.ranking-alias { font-weight: 700; }
+.ranking-count { color: #667085; font-size: .9rem; }
+.ranking-loading { display: flex; justify-content: center; align-items: center; gap: 12px; margin: 32px 0; }
+@media (max-width: 540px) { .contributor-ranking li { grid-template-columns: 36px 1fr; } .ranking-count { grid-column: 2; } }
 
 @media (prefers-reduced-motion: reduce) {
 

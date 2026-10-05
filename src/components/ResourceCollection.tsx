@@ -1,58 +1,92 @@
-import { useEffect, useState } from 'react';
-import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CircularProgress from '@mui/material/CircularProgress';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseRounded from '@mui/icons-material/CloseRounded';
-import OpenInNewRounded from '@mui/icons-material/OpenInNewRounded';
-import VisibilityRounded from '@mui/icons-material/VisibilityRounded';
-import { ThemeProvider } from '@mui/material/styles';
-import type { Material } from '../data/materials';
-import { formatFileSize, getMaterialGroups, materialUrl } from '../data/materials';
-import { fibersTheme } from './theme';
+import { useEffect, useState } from "react";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CircularProgress from "@mui/material/CircularProgress";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import CloseRounded from "@mui/icons-material/CloseRounded";
+import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded";
+import VisibilityRounded from "@mui/icons-material/VisibilityRounded";
+import { ThemeProvider } from "@mui/material/styles";
+import type { Material } from "../data/materials";
+import {
+  formatFileSize,
+  getMaterialGroups,
+  materialUrl,
+} from "../data/materials";
+import { fibersTheme } from "./theme";
+import { supabase } from "../lib/supabase";
 
 type Props = { materials: Material[] };
 
-const textExtensions = new Set(['txt', 'c', 'cpp']);
-const imageExtensions = new Set(['gif', 'jpeg', 'jpg', 'png', 'svg', 'webp']);
+const textExtensions = new Set(["txt", "c", "cpp"]);
+const imageExtensions = new Set(["gif", "jpeg", "jpg", "png", "svg", "webp"]);
 
 function supportsPreview(material: Material) {
-  return textExtensions.has(material.extension.toLowerCase())
-    || imageExtensions.has(material.extension.toLowerCase())
-    || material.extension.toLowerCase() === 'pdf';
+  return (
+    textExtensions.has(material.extension.toLowerCase()) ||
+    imageExtensions.has(material.extension.toLowerCase()) ||
+    material.extension.toLowerCase() === "pdf"
+  );
 }
 
 function Collection({ materials }: Props) {
   const groups = getMaterialGroups(materials);
-  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
-  const [textContent, setTextContent] = useState('');
+  const [attributions, setAttributions] = useState<Record<string, string>>({});
+  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(
+    null,
+  );
+  const [textContent, setTextContent] = useState("");
   const [loadingText, setLoadingText] = useState(false);
   const [textError, setTextError] = useState(false);
 
   useEffect(() => {
-    if (!selectedMaterial || !textExtensions.has(selectedMaterial.extension.toLowerCase())) return;
+    if (!supabase || materials.length === 0) return;
+    supabase
+      .from("legacy_materials")
+      .select("path,contributed_at,profiles(alias)")
+      .in(
+        "path",
+        materials.map((material) => material.path),
+      )
+      .then(({ data }) => {
+        const next: Record<string, string> = {};
+        for (const item of data ?? []) {
+          if (item.path)
+            next[item.path] =
+              `Aportat per ${item.profiles?.alias ?? "Estudiant"} · ${new Intl.DateTimeFormat("ca-ES").format(new Date(`${item.contributed_at}T00:00:00`))}`;
+        }
+        setAttributions(next);
+      });
+  }, [materials]);
+
+  useEffect(() => {
+    if (
+      !selectedMaterial ||
+      !textExtensions.has(selectedMaterial.extension.toLowerCase())
+    )
+      return;
 
     let cancelled = false;
     setLoadingText(true);
     setTextError(false);
-    setTextContent('');
+    setTextContent("");
 
     fetch(materialUrl(selectedMaterial))
       .then((response) => {
-        if (!response.ok) throw new Error('No s’ha pogut carregar el fitxer.');
+        if (!response.ok) throw new Error("No s’ha pogut carregar el fitxer.");
         return response.arrayBuffer();
       })
       .then((bytes) => {
         let content: string;
         try {
-          content = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+          content = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
         } catch {
-          content = new TextDecoder('windows-1252').decode(bytes);
+          content = new TextDecoder("windows-1252").decode(bytes);
         }
         if (!cancelled) setTextContent(content);
       })
@@ -63,11 +97,15 @@ function Collection({ materials }: Props) {
         if (!cancelled) setLoadingText(false);
       });
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [selectedMaterial]);
 
   const selectedExtension = selectedMaterial?.extension.toLowerCase();
-  const isText = Boolean(selectedExtension && textExtensions.has(selectedExtension));
+  const isText = Boolean(
+    selectedExtension && textExtensions.has(selectedExtension),
+  );
   const closePreview = () => setSelectedMaterial(null);
 
   return (
@@ -76,19 +114,37 @@ function Collection({ materials }: Props) {
         {groups.map((group) => (
           <section className="resource-group" key={group.title}>
             <div className="resource-group-heading">
-              <Typography component="h3" variant="subtitle1">{group.title}</Typography>
+              <Typography component="h3" variant="subtitle1">
+                {group.title}
+              </Typography>
               <span>{group.materials.length}</span>
             </div>
             <div className="resource-list">
               {group.materials.map((material) => {
                 const previewable = supportsPreview(material);
                 return (
-                  <Card className="resource-card" key={material.path} elevation={0}>
+                  <Card
+                    className="resource-card"
+                    key={material.path}
+                    elevation={0}
+                  >
                     <CardContent className="resource-card-content">
-                      <span className="resource-extension">{material.extension.toUpperCase()}</span>
+                      <span className="resource-extension">
+                        {material.extension.toUpperCase()}
+                      </span>
                       <div className="resource-copy">
-                        <Typography component="h4" variant="body1">{material.title}</Typography>
-                        <Typography className="resource-meta">{material.extension.toUpperCase()} · {formatFileSize(material.sizeBytes)}</Typography>
+                        <Typography component="h4" variant="body1">
+                          {material.title}
+                        </Typography>
+                        <Typography className="resource-meta">
+                          {material.extension.toUpperCase()} ·{" "}
+                          {formatFileSize(material.sizeBytes)}
+                        </Typography>
+                        {attributions[material.path] && (
+                          <Typography className="resource-meta">
+                            {attributions[material.path]}
+                          </Typography>
+                        )}
                       </div>
                       {previewable ? (
                         <Button
@@ -129,23 +185,42 @@ function Collection({ materials }: Props) {
         slotProps={{
           paper: {
             sx: {
-              display: 'flex',
-              width: { xs: '100vw', sm: 'min(760px, 94vw)' },
-              maxWidth: '100vw',
-              height: '100dvh',
+              display: "flex",
+              width: { xs: "100vw", sm: "min(760px, 94vw)" },
+              maxWidth: "100vw",
+              height: "100dvh",
             },
           },
         }}
       >
         {selectedMaterial && (
           <>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, px: { xs: 2, sm: 3 }, py: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                px: { xs: 2, sm: 3 },
+                py: 2,
+                borderBottom: "1px solid",
+                borderColor: "divider",
+              }}
+            >
               <Box sx={{ minWidth: 0, flex: 1 }}>
-                <Typography component="h2" variant="h6" sx={{ overflowWrap: 'anywhere', fontSize: 17, fontWeight: 700 }}>
+                <Typography
+                  component="h2"
+                  variant="h6"
+                  sx={{
+                    overflowWrap: "anywhere",
+                    fontSize: 17,
+                    fontWeight: 700,
+                  }}
+                >
                   {selectedMaterial.title}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  {selectedMaterial.extension.toUpperCase()} · {formatFileSize(selectedMaterial.sizeBytes)}
+                  {selectedMaterial.extension.toUpperCase()} ·{" "}
+                  {formatFileSize(selectedMaterial.sizeBytes)}
                 </Typography>
               </Box>
               <Button
@@ -159,31 +234,106 @@ function Collection({ materials }: Props) {
               >
                 Abrir aparte
               </Button>
-              <IconButton onClick={closePreview} aria-label="Tanca la vista prèvia" edge="end">
+              <IconButton
+                onClick={closePreview}
+                aria-label="Tanca la vista prèvia"
+                edge="end"
+              >
                 <CloseRounded />
               </IconButton>
             </Box>
 
-            <Box sx={{ flex: 1, minHeight: 0, overflow: 'auto', bgcolor: '#f6f7f9' }}>
+            <Box
+              sx={{
+                flex: 1,
+                minHeight: 0,
+                overflow: "auto",
+                bgcolor: "#f6f7f9",
+              }}
+            >
               {isText && (
                 <Box sx={{ p: { xs: 2, sm: 3 } }}>
-                  {loadingText && <Box sx={{ display: 'grid', minHeight: 180, placeItems: 'center' }}><CircularProgress size={28} /></Box>}
-                  {textError && <Alert severity="error">No s’ha pogut carregar aquest fitxer. Pots obrir-lo en una pestanya nova.</Alert>}
+                  {loadingText && (
+                    <Box
+                      sx={{
+                        display: "grid",
+                        minHeight: 180,
+                        placeItems: "center",
+                      }}
+                    >
+                      <CircularProgress size={28} />
+                    </Box>
+                  )}
+                  {textError && (
+                    <Alert severity="error">
+                      No s’ha pogut carregar aquest fitxer. Pots obrir-lo en una
+                      pestanya nova.
+                    </Alert>
+                  )}
                   {!loadingText && !textError && (
-                    <Box component="pre" sx={{ m: 0, p: { xs: 2, sm: 3 }, overflowX: 'auto', border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.paper', color: 'text.primary', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace', fontSize: 14, lineHeight: 1.65, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
-                      {textContent || 'Aquest fitxer no conté text.'}
+                    <Box
+                      component="pre"
+                      sx={{
+                        m: 0,
+                        p: { xs: 2, sm: 3 },
+                        overflowX: "auto",
+                        border: "1px solid",
+                        borderColor: "divider",
+                        borderRadius: 2,
+                        bgcolor: "background.paper",
+                        color: "text.primary",
+                        fontFamily:
+                          "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+                        fontSize: 14,
+                        lineHeight: 1.65,
+                        whiteSpace: "pre-wrap",
+                        overflowWrap: "anywhere",
+                      }}
+                    >
+                      {textContent || "Aquest fitxer no conté text."}
                     </Box>
                   )}
                 </Box>
               )}
 
-              {selectedExtension === 'pdf' && (
-                <Box component="iframe" src={materialUrl(selectedMaterial)} title={selectedMaterial.title} sx={{ display: 'block', width: '100%', height: '100%', minHeight: '70vh', border: 0, bgcolor: 'background.paper' }} />
+              {selectedExtension === "pdf" && (
+                <Box
+                  component="iframe"
+                  src={materialUrl(selectedMaterial)}
+                  title={selectedMaterial.title}
+                  sx={{
+                    display: "block",
+                    width: "100%",
+                    height: "100%",
+                    minHeight: "70vh",
+                    border: 0,
+                    bgcolor: "background.paper",
+                  }}
+                />
               )}
 
               {selectedExtension && imageExtensions.has(selectedExtension) && (
-                <Box sx={{ display: 'grid', minHeight: '100%', p: { xs: 2, sm: 3 }, placeItems: 'center' }}>
-                  <Box component="img" src={materialUrl(selectedMaterial)} alt={selectedMaterial.title} sx={{ display: 'block', maxWidth: '100%', maxHeight: 'calc(100dvh - 110px)', objectFit: 'contain', borderRadius: 1, bgcolor: 'background.paper' }} />
+                <Box
+                  sx={{
+                    display: "grid",
+                    minHeight: "100%",
+                    p: { xs: 2, sm: 3 },
+                    placeItems: "center",
+                  }}
+                >
+                  <Box
+                    component="img"
+                    src={materialUrl(selectedMaterial)}
+                    alt={selectedMaterial.title}
+                    sx={{
+                      display: "block",
+                      maxWidth: "100%",
+                      maxHeight: "calc(100dvh - 110px)",
+                      objectFit: "contain",
+                      borderRadius: 1,
+                      bgcolor: "background.paper",
+                    }}
+                  />
                 </Box>
               )}
             </Box>

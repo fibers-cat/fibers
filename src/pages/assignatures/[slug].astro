@@ -2,9 +2,10 @@
 import SiteLayout from '../../layouts/SiteLayout.astro';
 // import SiteBreadcrumbs from '../../components/SiteBreadcrumbs';
 import SubjectStatus from '../../components/SubjectStatus';
-import { subjects } from '../../data/subjects';
+import { fetchSubjects } from '../../lib/subjects';
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const subjects = await fetchSubjects();
   return subjects.map((subject) => ({ params: { slug: subject.slug }, props: { subject } }));
 }
 
@@ -19,7 +20,7 @@ const subjectDescription = `Explora els recursos d’estudi de ${subject.name} (
       <span class="subject-code subject-code-large">{subject.code}</span>
       <div><span class="eyebrow">ESPAI D’ESTUDI</span><h1>{subject.name}</h1><p>Materials compartits per la comunitat Fibers.</p></div>
     </header>
-    <SubjectStatus client:load subjectName={subject.name} subjectCode={subject.code} />
+    <SubjectStatus client:load subjectId={subject.id} subjectName={subject.name} subjectCode={subject.code} />
     <a class="back-link" href="/assignatures/">← Torna a totes les assignatures</a>
   </div>
 </SiteLayout>
