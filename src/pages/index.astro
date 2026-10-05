@@ -3,8 +3,10 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 import SubjectExplorer from "@/components/SubjectExplorer";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import { fetchSubjects } from "@/lib/subjects";
+import { fetchSubjectMaterialCounts } from "@/lib/subjectMaterialCounts";
 
 const subjects = await fetchSubjects();
+const materialCounts = await fetchSubjectMaterialCounts();
 ---
 
 <SiteLayout
@@ -68,7 +70,7 @@ const subjects = await fetchSubjects();
           >Veure el catàleg <span aria-hidden="true">→</span></a
         >
       </div>
-      <SubjectExplorer client:load subjects={subjects} featured />
+      <SubjectExplorer client:load subjects={subjects} featured initialMaterialCounts={materialCounts} />
       <p class="data-note">
         Comprova la data i la vigència del contingut abans d'utilitzar-lo.
       </p>

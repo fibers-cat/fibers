@@ -3,6 +3,9 @@ import SiteLayout from '@/layouts/SiteLayout.astro';
 // import SiteBreadcrumbs from '../components/SiteBreadcrumbs';
 import ResourceCollection from '@/components/ResourceCollection';
 import { generalMaterials } from '@/data/materials';
+import { fetchMaterialAttributions } from '@/lib/materialAttributions';
+
+const attributions = await fetchMaterialAttributions(generalMaterials);
 ---
 
 <SiteLayout title="Recursos generals de la FIB" description="Consulta documents generals, guies i recursos de recuperació recuperats del fons històric de Fibers per a estudiants de la FIB.">
@@ -13,7 +16,7 @@ import { generalMaterials } from '@/data/materials';
       <h1>Recursos generals</h1>
       <p>Documents de consulta, orientació i recuperació que no pertanyen a una única assignatura.</p>
     </header>
-    <ResourceCollection client:load materials={generalMaterials} />
-    <p class="data-note">Fitxers importats de la web anterior. Revisa’n el contingut i la vigència abans d’utilitzar-los.</p>
+    <ResourceCollection client:load materials={generalMaterials} attributions={attributions} />
+    <p class="data-note">Comprova la data i la vigència del contingut abans d'utilitzar-lo.</p>
   </div>
 </SiteLayout>

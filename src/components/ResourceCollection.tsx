@@ -21,7 +21,10 @@ import {
 import { fibersTheme } from "@/components/theme";
 import { supabase } from "@/lib/supabase";
 
-type Props = { materials: Material[] };
+type Props = {
+  materials: Material[];
+  attributions?: Record<string, string>;
+};
 
 const textExtensions = new Set(["txt", "c", "cpp"]);
 const imageExtensions = new Set(["gif", "jpeg", "jpg", "png", "svg", "webp"]);
@@ -34,9 +37,11 @@ function supportsPreview(material: Material) {
   );
 }
 
-function Collection({ materials }: Props) {
+function Collection({ materials, attributions: initialAttributions }: Props) {
   const groups = getMaterialGroups(materials);
-  const [attributions, setAttributions] = useState<Record<string, string>>({});
+  const [attributions, setAttributions] = useState<Record<string, string>>(
+    initialAttributions ?? {},
+  );
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(
     null,
   );
@@ -45,7 +50,7 @@ function Collection({ materials }: Props) {
   const [textError, setTextError] = useState(false);
 
   useEffect(() => {
-    if (!supabase || materials.length === 0) return;
+    if (initialAttributions || !supabase || materials.length === 0) return;
     supabase
       .from("legacy_materials")
       .select("path,contributed_at,profiles(alias)")
@@ -62,7 +67,7 @@ function Collection({ materials }: Props) {
         }
         setAttributions(next);
       });
-  }, [materials]);
+  }, [initialAttributions, materials]);
 
   useEffect(() => {
     if (

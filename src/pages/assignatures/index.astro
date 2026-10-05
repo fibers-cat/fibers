@@ -3,8 +3,10 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 // import SiteBreadcrumbs from '../../components/SiteBreadcrumbs';
 import SubjectExplorer from "@/components/SubjectExplorer";
 import { fetchSubjects } from "@/lib/subjects";
+import { fetchSubjectMaterialCounts } from "@/lib/subjectMaterialCounts";
 
 const subjects = await fetchSubjects();
+const materialCounts = await fetchSubjectMaterialCounts();
 ---
 
 <SiteLayout
@@ -21,7 +23,7 @@ const subjects = await fetchSubjects();
         fitxers recuperats.
       </p>
     </header>
-    <SubjectExplorer client:load subjects={subjects} />
+    <SubjectExplorer client:load subjects={subjects} initialMaterialCounts={materialCounts} showCategoryFilter />
     <div class="catalog-disclaimer">
       <strong>Catàleg històric</strong>
       <span

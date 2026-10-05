@@ -151,7 +151,7 @@ export default function ApprovedMaterials({ subjectId }: Props) {
               </a>
             )}
             {item.content_text && (
-              <pre className="legacy-code-content">{item.content_text}</pre>
+              <pre className="legacy-code-content">{item.content_text.trim()}</pre>
             )}
           </article>
         ))}

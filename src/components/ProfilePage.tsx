@@ -235,7 +235,16 @@ export default function ProfilePage({ returnTo }: Props) {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
               />
-              <Button type="submit" variant="contained" disabled={busy}>
+              <Button
+                className="profile-email-submit"
+                type="submit"
+                variant="contained"
+                disabled={busy}
+                sx={{
+                  minHeight: 40,
+                  borderRadius: "50px",
+                }}
+              >
                 Envia’m un enllaç
               </Button>
             </Stack>
