@@ -12,9 +12,9 @@ import Typography from '@mui/material/Typography';
 import ArrowForwardRounded from '@mui/icons-material/ArrowForwardRounded';
 import SearchRounded from '@mui/icons-material/SearchRounded';
 import { ThemeProvider } from '@mui/material/styles';
-import type { Subject } from '../data/subjects';
-import { supabase } from '../lib/supabase';
-import { fibersTheme } from './theme';
+import type { Subject } from '@/data/subjects';
+import { supabase } from '@/lib/supabase';
+import { fibersTheme } from '@/components/theme';
 
 type Props = { subjects: Subject[]; featured?: boolean };
 

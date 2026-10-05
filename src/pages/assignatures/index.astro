@@ -1,8 +1,8 @@
 ---
-import SiteLayout from "../../layouts/SiteLayout.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
 // import SiteBreadcrumbs from '../../components/SiteBreadcrumbs';
-import SubjectExplorer from "../../components/SubjectExplorer";
-import { fetchSubjects } from "../../lib/subjects";
+import SubjectExplorer from "@/components/SubjectExplorer";
+import { fetchSubjects } from "@/lib/subjects";
 
 const subjects = await fetchSubjects();
 ---

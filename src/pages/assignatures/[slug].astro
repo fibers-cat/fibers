@@ -1,8 +1,8 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';
+import SiteLayout from '@/layouts/SiteLayout.astro';
 // import SiteBreadcrumbs from '../../components/SiteBreadcrumbs';
-import SubjectStatus from '../../components/SubjectStatus';
-import { fetchSubjects } from '../../lib/subjects';
+import SubjectStatus from '@/components/SubjectStatus';
+import { fetchSubjects } from '@/lib/subjects';
 
 export async function getStaticPaths() {
   const subjects = await fetchSubjects();

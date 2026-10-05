@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
-import { supabase } from "../lib/supabase";
+import { supabase } from "@/lib/supabase";
 
 type Props = { subjectId: string };
 type ApprovedFile = {

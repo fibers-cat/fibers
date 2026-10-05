@@ -1,8 +1,8 @@
 ---
-import SiteLayout from "../layouts/SiteLayout.astro";
-import SubjectExplorer from "../components/SubjectExplorer";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import SubjectExplorer from "@/components/SubjectExplorer";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
-import { fetchSubjects } from "../lib/subjects";
+import { fetchSubjects } from "@/lib/subjects";
 
 const subjects = await fetchSubjects();
 ---

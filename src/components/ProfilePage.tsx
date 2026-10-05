@@ -9,9 +9,9 @@ import Typography from "@mui/material/Typography";
 import GitHub from "@mui/icons-material/GitHub";
 import PersonOutlineRounded from "@mui/icons-material/PersonOutlineRounded";
 import { ThemeProvider } from "@mui/material/styles";
-import { supabase } from "../lib/supabase";
-import { getSocialAvatar } from "../lib/socialAvatar";
-import { fibersTheme } from "./theme";
+import { supabase } from "@/lib/supabase";
+import { getSocialAvatar } from "@/lib/socialAvatar";
+import { fibersTheme } from "@/components/theme";
 
 type Props = { returnTo: string };
 

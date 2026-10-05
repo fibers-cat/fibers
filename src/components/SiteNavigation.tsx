@@ -24,9 +24,9 @@ import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import PersonOutlineRounded from '@mui/icons-material/PersonOutlineRounded';
 import { siDiscord, siFacebook, siGithub } from 'simple-icons';
 import { ThemeProvider } from '@mui/material/styles';
-import { fibersTheme } from './theme';
-import { supabase } from '../lib/supabase';
-import { getSocialAvatar } from '../lib/socialAvatar';
+import { fibersTheme } from '@/components/theme';
+import { supabase } from '@/lib/supabase';
+import { getSocialAvatar } from '@/lib/socialAvatar';
 
 const links = [
   { href: '/', label: 'Inici', icon: <HomeRounded /> },

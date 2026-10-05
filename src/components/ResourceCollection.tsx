@@ -12,14 +12,14 @@ import CloseRounded from "@mui/icons-material/CloseRounded";
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded";
 import VisibilityRounded from "@mui/icons-material/VisibilityRounded";
 import { ThemeProvider } from "@mui/material/styles";
-import type { Material } from "../data/materials";
+import type { Material } from "@/data/materials";
 import {
   formatFileSize,
   getMaterialGroups,
   materialUrl,
-} from "../data/materials";
-import { fibersTheme } from "./theme";
-import { supabase } from "../lib/supabase";
+} from "@/data/materials";
+import { fibersTheme } from "@/components/theme";
+import { supabase } from "@/lib/supabase";
 
 type Props = { materials: Material[] };
 

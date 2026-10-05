@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import VolunteerActivismOutlined from '@mui/icons-material/VolunteerActivismOutlined';
 import { ThemeProvider } from '@mui/material/styles';
-import ResourceCollection from './ResourceCollection';
-import ApprovedMaterials from './ApprovedMaterials';
-import { materialsForSubject } from '../data/materials';
-import { fibersTheme } from './theme';
+import ResourceCollection from '@/components/ResourceCollection';
+import ApprovedMaterials from '@/components/ApprovedMaterials';
+import { materialsForSubject } from '@/data/materials';
+import { fibersTheme } from '@/components/theme';
 
 type Props = { subjectId: string; subjectName: string; subjectCode: string };
 
