@@ -647,6 +647,14 @@ textarea {
   padding: 12px 16px;
 }
 
+.subject-sort-popover .MuiFormControlLabel-root {
+  margin: 0;
+}
+
+.subject-sort-popover .MuiFormControlLabel-label {
+  font-size: 14px;
+}
+
 .subject-filter-label {
   display: block;
   margin-top: 8px !important;
@@ -663,6 +671,20 @@ textarea {
 .subject-search .MuiOutlinedInput-root {
   border-radius: 12px;
   background: #fff;
+}
+
+.subject-search .MuiOutlinedInput-notchedOutline {
+  border-color: #d5d9df;
+}
+
+.subject-search .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #d5d9df;
+}
+
+.subject-search .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--coral);
+  border-width: 1px;
+  box-shadow: none;
 }
 
 .results-count {
