@@ -7,3 +7,7 @@ dist/
 .sass-cache/
 
 /supabase
+!/supabase/
+supabase/*
+!/supabase/migrations/
+!/supabase/migrations/*.sql

@@ -22,10 +22,13 @@ import FolderOpenRounded from '@mui/icons-material/FolderOpenRounded';
 import GroupsRounded from '@mui/icons-material/GroupsRounded';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import PersonOutlineRounded from '@mui/icons-material/PersonOutlineRounded';
+import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
+import ManageAccountsRounded from '@mui/icons-material/ManageAccountsRounded';
 import { siDiscord, siFacebook, siGithub } from 'simple-icons';
 import { ThemeProvider } from '@mui/material/styles';
 import { fibersTheme } from '@/components/theme';
 import { supabase } from '@/lib/supabase';
+import { isAppRole, type AppRole } from '@/lib/roles';
 import { getSocialAvatar } from '@/lib/socialAvatar';
 
 const links = [
@@ -65,10 +68,19 @@ function SocialLinks({ className }: { className: string }) {
   );
 }
 
-function NavigationLinks({ currentPath, onNavigate }: Props & { onNavigate?: () => void }) {
+function NavigationLinks({ currentPath, onNavigate, role }: Props & { onNavigate?: () => void; role: AppRole | null }) {
+  const visibleLinks = [
+    ...links,
+    ...(role === 'admin' || role === 'superadmin'
+      ? [{ href: '/admin/aportacions/', label: 'Revisió d’aportacions', icon: <FactCheckRounded /> }]
+      : []),
+    ...(role === 'superadmin'
+      ? [{ href: '/admin/usuaris/', label: 'Gestió d’usuaris', icon: <ManageAccountsRounded /> }]
+      : []),
+  ];
   return (
     <List className="navigation-links" aria-label="Navegació principal">
-      {links.map((link) => {
+      {visibleLinks.map((link) => {
         const selected = link.href === '/' ? currentPath === '/' : currentPath.startsWith(link.href);
         return (
           <ListItemButton
@@ -93,26 +105,34 @@ export default function SiteNavigation({ currentPath }: Props) {
   const [open, setOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [role, setRole] = useState<AppRole | null>(null);
   useEffect(() => {
     if (!supabase) return;
     let active = true;
     const loadAvatar = async (user: User | null) => {
       if (!user) {
-        if (active) setAvatarUrl(null);
+        if (active) {
+          setAvatarUrl(null);
+          setRole(null);
+        }
         return;
       }
       const socialAvatar = getSocialAvatar(user);
       if (active) setAvatarUrl(socialAvatar);
       const { data: profile, error } = await supabase
         .from('profiles')
-        .select('avatar_url')
+        .select('avatar_url,role')
         .eq('id', user.id)
         .maybeSingle();
       if (error) {
         console.error('Could not load the profile avatar for navigation.', error);
+        if (active) setRole(null);
         return;
       }
-      if (active) setAvatarUrl(socialAvatar ?? profile?.avatar_url ?? null);
+      if (active) {
+        setAvatarUrl(socialAvatar ?? profile?.avatar_url ?? null);
+        setRole(isAppRole(profile?.role) ? profile.role : null);
+      }
     };
     supabase.auth.getSession().then(({ data, error }) => {
       if (error) {
@@ -144,7 +164,7 @@ export default function SiteNavigation({ currentPath }: Props) {
       <aside className="desktop-sidebar">
         <div className="sidebar-brand">{brand}</div>
         <div className="sidebar-label">ESPAI D’ESTUDI</div>
-        <NavigationLinks currentPath={currentPath} />
+        <NavigationLinks currentPath={currentPath} role={role} />
         <div className="sidebar-bottom">          
           <SocialLinks className="desktop-socials" />
           <Tooltip title={signedIn ? 'El teu perfil' : 'Inicia sessió'} arrow>
@@ -173,10 +193,27 @@ export default function SiteNavigation({ currentPath }: Props) {
         <Box className="mobile-drawer">
           <div className="drawer-heading">
             {brand}
-            <IconButton aria-label="Tanca el menú" onClick={() => setOpen(false)}><CloseRounded /></IconButton>
+            <IconButton color="inherit" aria-label="Tanca el menú" onClick={() => setOpen(false)}><CloseRounded /></IconButton>
           </div>
-          <NavigationLinks currentPath={currentPath} onNavigate={() => setOpen(false)} />
-          <SocialLinks className="drawer-socials" />
+          <div className="sidebar-label">ESPAI D’ESTUDI</div>
+          <NavigationLinks currentPath={currentPath} role={role} onNavigate={() => setOpen(false)} />
+          <div className="drawer-bottom">
+            <SocialLinks className="drawer-socials" />
+            <Tooltip title={signedIn ? 'El teu perfil' : 'Inicia sessió'} arrow>
+              <IconButton
+                component="a"
+                href="/perfil/"
+                className="profile-link"
+                aria-label={signedIn ? 'El teu perfil' : 'Inicia sessió'}
+              >
+                {signedIn ? (
+                  <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
+                    <PersonOutlineRounded fontSize="small" />
+                  </Avatar>
+                ) : <PersonOutlineRounded />}
+              </IconButton>
+            </Tooltip>
+          </div>
         </Box>
       </Drawer>
     </ThemeProvider>

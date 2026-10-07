@@ -7,7 +7,7 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) => !page.includes('/404') && !page.includes('/contacto/gracias') && !page.includes('/col-laboradors'),
+      filter: (page) => !page.includes('/404') && !page.includes('/col-laboradors') && !page.includes('/admin/'),
     }),
   ],
 });

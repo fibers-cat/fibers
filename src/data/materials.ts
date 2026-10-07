@@ -5,7 +5,7 @@ export type Material = {
   title: string;
   extension: string;
   sizeBytes: number;
-  subjectCode: string | null;
+  subjectAcronym: string | null;
 };
 
 export type MaterialGroup = { title: string; materials: Material[] };
@@ -26,21 +26,24 @@ const displayTitles: Record<string, string> = {
   'opinions i consells.txt': 'Opinions i consells',
 };
 
-const fileManifestTyped = fileManifest as Material[];
+const fileManifestTyped = fileManifest as Array<Omit<Material, 'subjectAcronym'> & { subjectCode: string | null }>;
 
 export const materials: Material[] = fileManifestTyped.map((material) => ({
-  ...material,
+  path: material.path,
+  extension: material.extension,
+  sizeBytes: material.sizeBytes,
+  subjectAcronym: material.subjectCode,
   title: displayTitles[material.path] ?? material.title,
 }));
 
-export function materialsForSubject(code: string): Material[] {
-  return materials.filter((material) => material.subjectCode === code);
+export function materialsForSubject(acronym: string): Material[] {
+  return materials.filter((material) => material.subjectAcronym === acronym);
 }
 
-export const generalMaterials = materials.filter((material) => material.subjectCode === null);
+export const generalMaterials = materials.filter((material) => material.subjectAcronym === null);
 
-export function materialCountForSubject(code: string): number {
-  return materials.filter((material) => material.subjectCode === code).length;
+export function materialCountForSubject(acronym: string): number {
+  return materials.filter((material) => material.subjectAcronym === acronym).length;
 }
 
 export function getMaterialGroups(items: Material[]): MaterialGroup[] {
@@ -57,30 +60,30 @@ export function getMaterialSection(material: Material): string {
   const folder = material.path.split('/')[0];
 
   if (folder === 'recuperacions') return 'Recuperacions';
-  if (material.subjectCode === null) {
+  if (material.subjectAcronym === null) {
     if (folder === 'documentacio-ajuda') return 'Documentació d’ajuda';
     if (folder === 'recuperacions') return 'Recuperacions';
     return 'Documents generals';
   }
   if (fileName === 'indice.txt' || fileName === 'texto.txt' || fileName === 'preview.png') return 'Material complementari';
-  if (material.subjectCode === 'BD') {
+  if (material.subjectAcronym === 'BD') {
     if (/procedimientos|disparadores/i.test(fileName)) return 'Procediments i disparadors';
     if (/jdbc/i.test(fileName)) return 'Java Database Connectivity';
     return 'SQL i àlgebra relacional';
   }
-  if (material.subjectCode === 'XC') {
+  if (material.subjectAcronym === 'XC') {
     if (/seguiment/i.test(fileName)) return 'Exercicis de seguiment';
     if (/xml/i.test(fileName)) return 'Transversal';
     return 'Resums de capítols';
   }
-  if (material.subjectCode === 'EDA') {
+  if (material.subjectAcronym === 'EDA') {
     return /\.(cpp|c)$/i.test(fileName) ? 'Algorismes d’ordenació' : 'Anàlisi d’algorismes';
   }
-  if (material.subjectCode === 'SO') return 'Laboratoris';
-  if (material.subjectCode === 'PE') return 'E-status';
-  if (material.subjectCode === 'AC') return 'Materials de laboratori';
-  if (material.subjectCode === 'EEE') return 'Respostes del manual d’economia';
-  if (material.subjectCode === 'M2') return 'Temari i recuperacions';
+  if (material.subjectAcronym === 'SO') return 'Laboratoris';
+  if (material.subjectAcronym === 'PE') return 'E-status';
+  if (material.subjectAcronym === 'AC') return 'Materials de laboratori';
+  if (material.subjectAcronym === 'EEE') return 'Respostes del manual d’economia';
+  if (material.subjectAcronym === 'M2') return 'Temari i recuperacions';
   return 'Materials de l’assignatura';
 }
 

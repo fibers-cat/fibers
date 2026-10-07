@@ -12,10 +12,10 @@ import ApprovedMaterials from '@/components/ApprovedMaterials';
 import { materialsForSubject } from '@/data/materials';
 import { fibersTheme } from '@/components/theme';
 
-type Props = { subjectId: string; subjectName: string; subjectCode: string };
+type Props = { subjectId: string; subjectName: string; subjectAcronym: string };
 
-export default function SubjectStatus({ subjectId, subjectName, subjectCode }: Props) {
-  const materials = materialsForSubject(subjectCode);
+export default function SubjectStatus({ subjectId, subjectName, subjectAcronym }: Props) {
+  const materials = materialsForSubject(subjectAcronym);
   return (
     <ThemeProvider theme={fibersTheme}>
       <Paper className="subject-status-panel" elevation={0}>
@@ -36,11 +36,11 @@ export default function SubjectStatus({ subjectId, subjectName, subjectCode }: P
               No s’han recuperat fitxers per a aquesta assignatura de la web anterior.
             </Alert>
             <Typography className="status-copy">
-              Si tens apunts propis o exercicis resolts, pots ajudar a completar l’espai de {subjectName} ({subjectCode}).
+              Si tens apunts propis o exercicis resolts, pots ajudar a completar l’espai de {subjectName} ({subjectAcronym}).
             </Typography>
           </>
         )}
-        <Button href={`/aporta/?assignatura=${encodeURIComponent(subjectCode)}`} variant="contained" startIcon={<VolunteerActivismOutlined />}>
+        <Button href={`/aporta/?assignatura=${encodeURIComponent(subjectAcronym)}`} variant="contained" startIcon={<VolunteerActivismOutlined />}>
           Aporta material
         </Button>
         <ApprovedMaterials subjectId={subjectId} />

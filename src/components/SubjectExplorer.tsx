@@ -17,6 +17,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import ArrowForwardRounded from '@mui/icons-material/ArrowForwardRounded';
 import FilterListRounded from '@mui/icons-material/FilterListRounded';
+import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
 import SearchRounded from '@mui/icons-material/SearchRounded';
 import { ThemeProvider } from '@mui/material/styles';
 import type { Subject } from '@/data/subjects';
@@ -53,18 +54,32 @@ export default function SubjectExplorer({
   const [query, setQuery] = useState('');
   const [categoryAnchor, setCategoryAnchor] = useState<HTMLElement | null>(null);
   const subjects = useMemo(
-    () => featured ? allSubjects.filter((subject) => featuredCodes.has(subject.code)) : allSubjects,
+    () => featured ? allSubjects.filter((subject) => featuredCodes.has(subject.acronym)) : allSubjects,
     [allSubjects, featured],
   );
   const categories = useMemo(
     () => [...new Set(subjects.map((subject) => subject.category))].sort((a, b) => a.localeCompare(b, 'ca')),
     [subjects],
   );
+  const specialties = useMemo(
+    () => [...new Set(subjects.flatMap((subject) => subject.specialty ? [subject.specialty] : []))]
+      .sort((a, b) => a.localeCompare(b, 'ca')),
+    [subjects],
+  );
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     () => [...new Set(allSubjects
-      .filter((subject) => !featured || featuredCodes.has(subject.code))
+      .filter((subject) => !featured || featuredCodes.has(subject.acronym))
       .map((subject) => subject.category))],
   );
+  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>(() => [
+    ...new Set(allSubjects
+      .filter((subject) => !featured || featuredCodes.has(subject.acronym))
+      .flatMap((subject) => subject.specialty ? [subject.specialty] : [])),
+  ]);
+  const [selectedStatuses, setSelectedStatuses] = useState<('current' | 'historical')[]>([
+    'current',
+    'historical',
+  ]);
 
   useEffect(() => {
     if (initialMaterialCounts !== undefined) return;
@@ -103,16 +118,33 @@ export default function SubjectExplorer({
   const visibleSubjects = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase('ca');
     return subjects.filter((subject) =>
-      (!normalized || `${subject.code} ${subject.name}`.toLocaleLowerCase('ca').includes(normalized)) &&
-      selectedCategories.includes(subject.category),
+      (!normalized || `${subject.acronym} ${subject.name}`.toLocaleLowerCase('ca').includes(normalized)) &&
+      selectedCategories.includes(subject.category) &&
+      (selectedSpecialties.length === specialties.length ||
+        (subject.specialty !== null && selectedSpecialties.includes(subject.specialty))) &&
+      selectedStatuses.includes(subject.is_current ? 'current' : 'historical'),
     );
-  }, [query, selectedCategories, subjects]);
+  }, [query, selectedCategories, selectedSpecialties, selectedStatuses, specialties.length, subjects]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((current) =>
       current.includes(category)
         ? current.filter((item) => item !== category)
         : [...current, category],
+    );
+  };
+  const toggleSpecialty = (specialty: string) => {
+    setSelectedSpecialties((current) =>
+      current.includes(specialty)
+        ? current.filter((item) => item !== specialty)
+        : [...current, specialty],
+    );
+  };
+  const toggleStatus = (status: 'current' | 'historical') => {
+    setSelectedStatuses((current) =>
+      current.includes(status)
+        ? current.filter((item) => item !== status)
+        : [...current, status],
     );
   };
 
@@ -124,21 +156,23 @@ export default function SubjectExplorer({
             <TextField
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              label="Busca per nom o codi"
-              placeholder="Busca per nom o codi"
+              label="Busca per nom o acrònim"
+              placeholder="Busca per nom o acrònim"
               size="small"
               aria-label="Busca una assignatura"
               className="subject-search"
-              InputProps={{
-                startAdornment: <InputAdornment position="start"><SearchRounded color="action" /></InputAdornment>,
+              slotProps={{
+                input: {
+                  startAdornment: <InputAdornment position="start"><SearchRounded color="action" /></InputAdornment>,
+                },
               }}
             />
             {showCategoryFilter && (
               <>
-                <Tooltip title="Filtra per categoria" arrow>
+                <Tooltip title="Filtra assignatures" arrow>
                   <IconButton
                     className="subject-filter-button"
-                    aria-label="Filtra per categoria"
+                    aria-label="Filtra assignatures"
                     aria-haspopup="true"
                     aria-expanded={Boolean(categoryAnchor)}
                     onClick={(event) => setCategoryAnchor(event.currentTarget)}
@@ -155,15 +189,24 @@ export default function SubjectExplorer({
                 >
                   <div className="subject-filter-popover">
                     <div className="subject-filter-heading">
-                      <Typography variant="subtitle2">Categories</Typography>
+                      <Typography variant="subtitle2">Filtres</Typography>
                       <Button
                         size="small"
-                        onClick={() => setSelectedCategories(categories)}
-                        disabled={selectedCategories.length === categories.length}
+                        onClick={() => {
+                          setSelectedCategories(categories);
+                          setSelectedSpecialties(specialties);
+                          setSelectedStatuses(['current', 'historical']);
+                        }}
+                        disabled={
+                          selectedCategories.length === categories.length &&
+                          selectedSpecialties.length === specialties.length &&
+                          selectedStatuses.length === 2
+                        }
                       >
                         Totes
                       </Button>
                     </div>
+                    <Typography className="subject-filter-label" variant="caption" color="text.secondary">Categories</Typography>
                     <FormGroup>
                       {categories.map((category) => (
                         <FormControlLabel
@@ -178,6 +221,45 @@ export default function SubjectExplorer({
                           label={category}
                         />
                       ))}
+                    </FormGroup>
+                    <Typography className="subject-filter-label" variant="caption" color="text.secondary">Especialitats</Typography>
+                    <FormGroup>
+                      {specialties.map((specialty) => (
+                        <FormControlLabel
+                          key={specialty}
+                          control={
+                            <Checkbox
+                              checked={selectedSpecialties.includes(specialty)}
+                              onChange={() => toggleSpecialty(specialty)}
+                              size="small"
+                            />
+                          }
+                          label={specialty}
+                        />
+                      ))}
+                    </FormGroup>
+                    <Typography className="subject-filter-label" variant="caption" color="text.secondary">Vigència</Typography>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={selectedStatuses.includes('current')}
+                            onChange={() => toggleStatus('current')}
+                            size="small"
+                          />
+                        }
+                        label="Vigents"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={selectedStatuses.includes('historical')}
+                            onChange={() => toggleStatus('historical')}
+                            size="small"
+                          />
+                        }
+                        label="Històriques"
+                      />
                     </FormGroup>
                   </div>
                 </Popover>
@@ -197,7 +279,7 @@ export default function SubjectExplorer({
                 <CardActionArea component="a" href={`/assignatures/${subject.slug}/`} className="subject-card-action">
                   <CardContent className="subject-card-content">
                     <div className="subject-card-top">
-                      <span className="subject-code">{subject.code}</span>
+                      <span className="subject-code">{subject.acronym}</span>
                       <div className="subject-card-tags">
                         {loadingCounts ? (
                           <Skeleton variant="rounded" width={88} height={24} aria-label="Carregant comptador de fitxers" />
@@ -210,13 +292,31 @@ export default function SubjectExplorer({
                             size="small"
                           />
                         )}
-                        <Chip
-                          className={`category-chip ${categoryClasses[subject.category] ?? ''}`}
-                          label={subject.category}
-                          size="small"
-                        />
+                        {subject.specialty ? (
+                          <Tooltip title={subject.specialty} arrow>
+                            <Chip
+                              className={`category-chip ${categoryClasses[subject.category] ?? ''}`}
+                              label={subject.category}
+                              size="small"
+                            />
+                          </Tooltip>
+                        ) : (
+                          <Chip
+                            className={`category-chip ${categoryClasses[subject.category] ?? ''}`}
+                            label={subject.category}
+                            size="small"
+                          />
+                        )}
+                        {!subject.is_current && (
+                          <Tooltip title="Assignatura històrica" arrow describeChild>
+                            <span className="historical-indicator" role="img" aria-label="Assignatura històrica">
+                              <Inventory2Outlined sx={{ fontSize: 14 }} aria-hidden="true" />
+                            </span>
+                          </Tooltip>
+                        )}
                       </div>
                     </div>
+                  
                     <Typography component="h3" variant="h6" className="subject-name">{subject.name}</Typography>
                     <Typography className="subject-description">Materials compartits de l’assignatura.</Typography>
                     <Button className="subject-open" size="small" endIcon={<ArrowForwardRounded />}>Veure assignatura</Button>
@@ -228,7 +328,7 @@ export default function SubjectExplorer({
         ) : (
           <div className="empty-search">
             <Typography variant="h6">No hem trobat cap assignatura</Typography>
-            <Typography>Prova amb un altre nom o codi.</Typography>
+            <Typography>Prova amb un altre nom o acrònim, o canvia els filtres.</Typography>
           </div>
         )}
       </div>
