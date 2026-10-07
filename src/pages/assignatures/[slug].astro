@@ -10,10 +10,10 @@ export async function getStaticPaths() {
 }
 
 const { subject } = Astro.props;
-const subjectDescription = `Explora els recursos d’estudi de ${subject.name} (${subject.code}) al catàleg de la FIB. Consulta els materials recuperats i comprova’n la vigència abans d’utilitzar-los.`;
+const subjectDescription = `Apunts i recursos d’estudi de ${subject.name} (${subject.code}), assignatura de la Facultat d’Informàtica de Barcelona (FIB). Troba materials compartits per estudiants.`;
 ---
 
-<SiteLayout title={`${subject.name} (${subject.code})`} description={subjectDescription}>
+<SiteLayout title={`${subject.code}: ${subject.name}`} description={subjectDescription}>
   <div class="page-content inner-page subject-page">
     <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { href: '/assignatures/', label: 'Assignatures' }, { label: subject.code }]} /> -->
     <header class="subject-title-panel">
