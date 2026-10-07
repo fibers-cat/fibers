@@ -11,6 +11,8 @@ import FormGroup from '@mui/material/FormGroup';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Popover from '@mui/material/Popover';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import Skeleton from '@mui/material/Skeleton';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
@@ -19,6 +21,7 @@ import ArrowForwardRounded from '@mui/icons-material/ArrowForwardRounded';
 import FilterListRounded from '@mui/icons-material/FilterListRounded';
 import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
 import SearchRounded from '@mui/icons-material/SearchRounded';
+import SwapVertRounded from '@mui/icons-material/SwapVertRounded';
 import { ThemeProvider } from '@mui/material/styles';
 import type { Subject } from '@/data/subjects';
 import { supabase } from '@/lib/supabase';
@@ -38,6 +41,8 @@ const categoryClasses: Record<string, string> = {
   'Optatives': 'category-chip--electives',
 };
 
+type SubjectSortOrder = 'acronym' | 'acronym-desc' | 'newest' | 'oldest';
+
 export default function SubjectExplorer({
   subjects: allSubjects,
   featured = false,
@@ -51,8 +56,13 @@ export default function SubjectExplorer({
     initialMaterialCounts === undefined,
   );
   const [countLoadError, setCountLoadError] = useState(false);
+  const [latestMaterialDates, setLatestMaterialDates] = useState<Record<string, string>>({});
+  const [loadingDates, setLoadingDates] = useState(true);
+  const [dateLoadError, setDateLoadError] = useState(false);
   const [query, setQuery] = useState('');
   const [categoryAnchor, setCategoryAnchor] = useState<HTMLElement | null>(null);
+  const [sortAnchor, setSortAnchor] = useState<HTMLElement | null>(null);
+  const [sortOrder, setSortOrder] = useState<SubjectSortOrder>('acronym');
   const subjects = useMemo(
     () => featured ? allSubjects.filter((subject) => featuredCodes.has(subject.acronym)) : allSubjects,
     [allSubjects, featured],
@@ -115,16 +125,81 @@ export default function SubjectExplorer({
     return () => { active = false; };
   }, [initialMaterialCounts]);
 
+  useEffect(() => {
+    if (!showCategoryFilter) return;
+    let active = true;
+    const loadLatestMaterialDates = async () => {
+      if (!supabase) {
+        setDateLoadError(true);
+        setLoadingDates(false);
+        return;
+      }
+      try {
+        const [contributionsResult, legacyResult] = await Promise.all([
+          supabase
+            .from('contributions')
+            .select('subject_id,reviewed_at')
+            .eq('status', 'approved')
+            .not('reviewed_at', 'is', null),
+          supabase
+            .from('legacy_material_subjects')
+            .select('subject_id,legacy_materials!inner(contributed_at)'),
+        ]);
+        if (contributionsResult.error) throw contributionsResult.error;
+        if (legacyResult.error) throw legacyResult.error;
+
+        const latestDates: Record<string, string> = {};
+        const recordDate = (subjectId: string, date: string | null | undefined) => {
+          if (date && (!latestDates[subjectId] || date > latestDates[subjectId])) {
+            latestDates[subjectId] = date;
+          }
+        };
+        for (const item of contributionsResult.data ?? []) {
+          recordDate(item.subject_id, item.reviewed_at);
+        }
+        for (const item of legacyResult.data ?? []) {
+          const material = item.legacy_materials;
+          const contributedAt = Array.isArray(material)
+            ? material[0]?.contributed_at
+            : material?.contributed_at;
+          recordDate(item.subject_id, contributedAt);
+        }
+        if (active) setLatestMaterialDates(latestDates);
+      } catch (error) {
+        console.error('Could not load latest published material dates.', error);
+        if (active) setDateLoadError(true);
+      } finally {
+        if (active) setLoadingDates(false);
+      }
+    };
+    void loadLatestMaterialDates();
+    return () => { active = false; };
+  }, [showCategoryFilter]);
+
   const visibleSubjects = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase('ca');
-    return subjects.filter((subject) =>
+    const filteredSubjects = subjects.filter((subject) =>
       (!normalized || `${subject.acronym} ${subject.name}`.toLocaleLowerCase('ca').includes(normalized)) &&
       selectedCategories.includes(subject.category) &&
       (selectedSpecialties.length === specialties.length ||
         (subject.specialty !== null && selectedSpecialties.includes(subject.specialty))) &&
       selectedStatuses.includes(subject.is_current ? 'current' : 'historical'),
     );
-  }, [query, selectedCategories, selectedSpecialties, selectedStatuses, specialties.length, subjects]);
+    return filteredSubjects.sort((a, b) => {
+      if (sortOrder === 'newest' || sortOrder === 'oldest') {
+        const aDate = latestMaterialDates[a.id] ?? '';
+        const bDate = latestMaterialDates[b.id] ?? '';
+        const dateComparison = aDate.localeCompare(bDate);
+        if (dateComparison !== 0) {
+          if (!aDate) return 1;
+          if (!bDate) return -1;
+          return sortOrder === 'newest' ? -dateComparison : dateComparison;
+        }
+      }
+      const acronymComparison = a.acronym.localeCompare(b.acronym, 'ca');
+      return sortOrder === 'acronym-desc' ? -acronymComparison : acronymComparison;
+    });
+  }, [query, selectedCategories, selectedSpecialties, selectedStatuses, specialties.length, subjects, sortOrder, latestMaterialDates]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((current) =>
@@ -157,9 +232,7 @@ export default function SubjectExplorer({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               label="Busca per nom o acrònim"
-              placeholder="Busca per nom o acrònim"
               size="small"
-              aria-label="Busca una assignatura"
               className="subject-search"
               slotProps={{
                 input: {
@@ -261,6 +334,68 @@ export default function SubjectExplorer({
                         label="Històriques"
                       />
                     </FormGroup>
+                  </div>
+                </Popover>
+                <Tooltip title="Ordena assignatures" arrow>
+                  <IconButton
+                    className="subject-filter-button"
+                    aria-label="Ordena assignatures"
+                    aria-haspopup="true"
+                    aria-expanded={Boolean(sortAnchor)}
+                    onClick={(event) => setSortAnchor(event.currentTarget)}
+                  >
+                    <SwapVertRounded />
+                  </IconButton>
+                </Tooltip>
+                <Popover
+                  open={Boolean(sortAnchor)}
+                  anchorEl={sortAnchor}
+                  onClose={() => setSortAnchor(null)}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                >
+                  <div className="subject-filter-popover subject-sort-popover">
+                    <Typography variant="subtitle2">Ordena per</Typography>
+                    <RadioGroup
+                      value={sortOrder}
+                      onChange={(event) => {
+                        const value = event.target.value;
+                        if (
+                          value === 'acronym' ||
+                          value === 'acronym-desc' ||
+                          value === 'newest' ||
+                          value === 'oldest'
+                        ) {
+                          setSortOrder(value);
+                          setSortAnchor(null);
+                        }
+                      }}
+                    >
+                      <FormControlLabel value="acronym" control={<Radio size="small" />} label="Acrònim (A-Z)" />
+                      <FormControlLabel value="acronym-desc" control={<Radio size="small" />} label="Acrònim (Z-A)" />
+                      <FormControlLabel
+                        value="newest"
+                        control={<Radio size="small" />}
+                        label="Contingut més recent"
+                        disabled={loadingDates || dateLoadError}
+                      />
+                      <FormControlLabel
+                        value="oldest"
+                        control={<Radio size="small" />}
+                        label="Contingut més antic"
+                        disabled={loadingDates || dateLoadError}
+                      />
+                    </RadioGroup>
+                    {loadingDates && (
+                      <Typography variant="caption" color="text.secondary">
+                        Carregant dates de publicació…
+                      </Typography>
+                    )}
+                    {dateLoadError && (
+                      <Typography variant="caption" color="error">
+                        No s’han pogut carregar les dates de publicació.
+                      </Typography>
+                    )}
                   </div>
                 </Popover>
               </>
