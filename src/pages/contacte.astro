@@ -1,0 +1,24 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../components/SiteBreadcrumbs';
+import ContactForm from '@/components/ContactForm';
+---
+
+<SiteLayout title="Contacte" description="Contacta amb l’equip de Fibers per resoldre dubtes, compartir idees o demanar ajuda amb els materials d’estudi de la FIB.">
+  <div class="page-content inner-page contact-page">
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Contacte' }]} /> -->
+    <div class="contact-layout">
+      <header class="page-heading form-heading">
+        <span class="eyebrow">PARLEM</span>
+        <h1>En què et<br />podem ajudar?</h1>
+        <p>Tens un dubte, una idea o necessites ajuda amb Fibers? Envia’ns un missatge i et respondrem al correu que ens indiquis.</p>
+      </header>
+
+      <section class="form-card contact-form-card" aria-labelledby="contact-form-title">
+        <h2 id="contact-form-title">Envia’ns un missatge</h2>
+        <p>Omple el formulari i et respondrem tan aviat com puguem.</p>
+        <ContactForm client:load />
+      </section>
+    </div>
+  </div>
+</SiteLayout>

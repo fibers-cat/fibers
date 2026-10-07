@@ -7,6 +7,7 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import GitHub from "@mui/icons-material/GitHub";
+import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
 import PersonOutlineRounded from "@mui/icons-material/PersonOutlineRounded";
 import { ThemeProvider } from "@mui/material/styles";
 import { supabase } from "@/lib/supabase";
@@ -236,14 +237,11 @@ export default function ProfilePage({ returnTo }: Props) {
                 onChange={(event) => setEmail(event.target.value)}
               />
               <Button
-                className="profile-email-submit"
+                className="primary-action-button"
                 type="submit"
                 variant="contained"
                 disabled={busy}
-                sx={{
-                  minHeight: 40,
-                  borderRadius: "50px",
-                }}
+                endIcon={<ArrowForwardRounded />}
               >
                 Envia’m un enllaç
               </Button>

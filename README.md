@@ -43,6 +43,8 @@ npm run preview
 
 Les pàgines d’assignatura i la llista inicial del catàleg es generen durant la compilació amb les dades de Supabase; els canvis en aquestes dades es reflecteixen després de tornar a compilar i desplegar. La disponibilitat dels materials recuperats es mostra com a pendent de revisió.
 
+El catàleg conserva l’acrònim que s’utilitza als enllaços i als materials, i també registra el codi oficial UPC (`code`), els idiomes d’impartició, l’especialitat i la vigència de cada assignatura, segons el [pla d’estudis oficial de la FIB](https://www.fib.upc.edu/ca/graus/grau-en-enginyeria-informatica/pla-destudis/assignatures). Les assignatures que la FIB identifica com a no vigents es mantenen com a referència històrica.
+
 ## Desplegament
 
 El domini canònic es configura a `astro.config.mjs`. Astro genera el sitemap durant la compilació i `public/robots.txt` n’indica l’adreça. Perquè el formulari de contacte funcioni a Netlify, activa **Form detection** a la configuració del lloc i torna’l a desplegar. El formulari d’aportacions obre el programa de correu; els fitxers s’han d’adjuntar manualment.

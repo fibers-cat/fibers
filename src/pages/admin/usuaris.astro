@@ -1,0 +1,10 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+import AdminUsersPage from '@/components/AdminUsersPage';
+---
+
+<SiteLayout title="Gestió d’usuaris" description="Àrea privada de gestió d’usuaris de Fibers." noindex>
+  <div class="page-content inner-page">
+    <AdminUsersPage client:load />
+  </div>
+</SiteLayout>

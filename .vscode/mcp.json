@@ -1,0 +1,18 @@
+{
+  "servers": {
+    "astro-docs": {
+      "type": "http",
+      "url": "https://mcp.docs.astro.build/mcp"
+    },
+    "mui-docs": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@mui/mcp@latest"]
+    },
+    "netlify": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@netlify/mcp"]
+    }
+  }
+}

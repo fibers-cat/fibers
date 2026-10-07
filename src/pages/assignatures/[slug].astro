@@ -2,6 +2,7 @@
 import SiteLayout from '@/layouts/SiteLayout.astro';
 // import SiteBreadcrumbs from '../../components/SiteBreadcrumbs';
 import SubjectStatus from '@/components/SubjectStatus';
+import { subjectLanguageNames } from '@/data/subjects';
 import { fetchSubjects } from '@/lib/subjects';
 
 export async function getStaticPaths() {
@@ -10,17 +11,27 @@ export async function getStaticPaths() {
 }
 
 const { subject } = Astro.props;
-const subjectDescription = `Apunts i recursos d’estudi de ${subject.name} (${subject.code}), assignatura de la Facultat d’Informàtica de Barcelona (FIB). Troba materials compartits per estudiants.`;
+const subjectDescription = `Apunts i recursos d’estudi de ${subject.name} (${subject.acronym}), assignatura de la Facultat d’Informàtica de Barcelona (FIB). Troba materials compartits per estudiants.`;
 ---
 
-<SiteLayout title={`${subject.code}: ${subject.name}`} description={subjectDescription}>
+<SiteLayout title={`${subject.acronym}: ${subject.name}`} description={subjectDescription}>
   <div class="page-content inner-page subject-page">
-    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { href: '/assignatures/', label: 'Assignatures' }, { label: subject.code }]} /> -->
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { href: '/assignatures/', label: 'Assignatures' }, { label: subject.acronym }]} /> -->
     <header class="subject-title-panel">
-      <span class="subject-code subject-code-large">{subject.code}</span>
-      <div><span class="eyebrow">ESPAI D’ESTUDI</span><h1>{subject.name}</h1><p>Materials compartits per la comunitat Fibers.</p></div>
+      <span class="subject-code subject-code-large">{subject.acronym}</span>
+      <div>
+        <span class="eyebrow">ESPAI D’ESTUDI</span>
+        <h1>{subject.name}</h1>
+        <p>Codi UPC: {subject.code ?? 'No disponible'}</p>
+        {subject.languages.length > 0 && (
+          <p>Idiomes: {subject.languages.map((language) => subjectLanguageNames[language] ?? language).join(', ')}</p>
+        )}
+        {subject.specialty && <p>Especialitat: {subject.specialty}</p>}
+        {!subject.is_current && <p>Assignatura no vigent · materials històrics</p>}
+        {subject.is_current && <p>Materials compartits per la comunitat Fibers.</p>}
+      </div>
     </header>
-    <SubjectStatus client:load subjectId={subject.id} subjectName={subject.name} subjectCode={subject.code} />
+    <SubjectStatus client:load subjectId={subject.id} subjectName={subject.name} subjectAcronym={subject.acronym} />
     <a class="back-link" href="/assignatures/">← Torna a totes les assignatures</a>
   </div>
 </SiteLayout>

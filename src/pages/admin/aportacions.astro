@@ -1,0 +1,10 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+import AdminContributionsPage from '@/components/AdminContributionsPage';
+---
+
+<SiteLayout title="Revisió d’aportacions" description="Àrea privada de revisió d’aportacions de Fibers." noindex>
+  <div class="page-content inner-page">
+    <AdminContributionsPage client:load />
+  </div>
+</SiteLayout>
