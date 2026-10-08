@@ -45,7 +45,7 @@ type Props = { currentPath: string };
 const socialLinks = [
   { href: 'https://github.com/fibers-cat/fibers/', label: 'GitHub', icon: siGithub },
   { href: 'https://www.facebook.com/fibers.cat/', label: 'Facebook', icon: siFacebook },
-  { href: 'https://discord.gg/nnd2EHGZEm', label: 'Discord', icon: siDiscord },
+  { href: 'https://discord.gg/pqsbcBb', label: 'Discord', icon: siDiscord },
 ];
 
 function SocialLinks({ className }: { className: string }) {
