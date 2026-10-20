@@ -7,6 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
+import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
 import CloseRounded from "@mui/icons-material/CloseRounded";
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded";
@@ -46,6 +47,9 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
   const [attributions, setAttributions] = useState<Record<string, string>>(
     initialAttributions ?? {},
   );
+  const [attributionsLoading, setAttributionsLoading] = useState(
+    !initialAttributions && hasSupabaseConfig && materials.length > 0,
+  );
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(
     null,
   );
@@ -71,6 +75,9 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
       })
       .catch((error: unknown) => {
         console.error("Could not load material attributions.", error);
+      })
+      .finally(() => {
+        setAttributionsLoading(false);
       });
   }, [initialAttributions, materials, locale, t]);
 
@@ -150,11 +157,18 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
                           {material.extension.toUpperCase()} ·{" "}
                           {formatFileSize(material.sizeBytes)}
                         </Typography>
-                        {attributions[material.path] && (
+                        {attributions[material.path] ? (
                           <Typography className="resource-meta">
                             {attributions[material.path]}
                           </Typography>
-                        )}
+                        ) : attributionsLoading ? (
+                          <Skeleton
+                            variant="text"
+                            width={170}
+                            height={18}
+                            sx={{ mt: '3px', borderRadius: '4px' }}
+                          />
+                        ) : null}
                       </div>
                       {previewable ? (
                         <Button
