@@ -196,6 +196,7 @@ export default function SubjectExplorer({
         <div className="explorer-toolbar">
           <div className="explorer-filters">
             <TextField
+              id="subject-search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               label={t('subjectExplorer.search')}
@@ -203,7 +204,7 @@ export default function SubjectExplorer({
               className="subject-search"
               slotProps={{
                 input: {
-                  startAdornment: <InputAdornment position="start"><SearchRounded color="action" /></InputAdornment>,
+                  endAdornment: <InputAdornment position="end"><SearchRounded color="action" /></InputAdornment>,
                 },
               }}
             />

@@ -7,10 +7,19 @@ import Tooltip, { type TooltipProps } from '@mui/material/Tooltip';
  * A thin wrapper around MUI's Tooltip that applies the Fibers design language:
  * a dark ink surface, softer rounding and a subtle shadow. It accepts every
  * MUI Tooltip prop, so it works as a drop-in replacement.
+ *
+ * Use `variant="sidebar"` for tooltips triggered from the dark left navigation
+ * so the surface reads like the active menu item instead of blending into the
+ * sidebar background.
  */
-export type AppTooltipProps = TooltipProps;
+export type AppTooltipProps = TooltipProps & {
+  variant?: 'dark' | 'sidebar';
+};
 
-export default function AppTooltip({ slotProps, ...props }: AppTooltipProps): ReactElement {
+export default function AppTooltip({ slotProps, variant = 'dark', ...props }: AppTooltipProps): ReactElement {
+  const isSidebar = variant === 'sidebar';
+  const backgroundColor = isSidebar ? 'rgba(255, 255, 255, 0.88)' : 'text.primary';
+  const color = isSidebar ? 'text.primary' : 'background.paper';
   return (
     <Tooltip
       {...props}
@@ -20,8 +29,8 @@ export default function AppTooltip({ slotProps, ...props }: AppTooltipProps): Re
           ...slotProps?.tooltip,
           sx: [
             {
-              backgroundColor: 'text.primary',
-              color: 'background.paper',
+              backgroundColor,
+              color,
               borderRadius: '10px',
               padding: '7px 11px',
               fontSize: 12,
@@ -37,7 +46,7 @@ export default function AppTooltip({ slotProps, ...props }: AppTooltipProps): Re
         arrow: {
           ...slotProps?.arrow,
           sx: [
-            { color: 'text.primary' },
+            { color: backgroundColor },
             ...(Array.isArray(slotProps?.arrow?.sx) ? slotProps.arrow.sx : [slotProps?.arrow?.sx]),
           ],
         },

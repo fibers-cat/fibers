@@ -72,14 +72,14 @@ function SocialLinks({ className, locale }: { className: string; locale: Locale 
   );
 }
 
-function LocaleSwitcher({ currentPath, locale }: Props) {
+function LocaleSwitcher({ currentPath, locale, tooltipVariant = 'dark' }: Props & { tooltipVariant?: 'dark' | 'sidebar' }) {
   const t = useTranslations(locale);
   const basePath = stripLocalePrefix(currentPath);
   const target = locale === 'ca' ? 'es' : 'ca';
   const label = target === 'ca' ? t('switcher.switchToCa') : t('switcher.switchToEs');
   return (
     <Box className="locale-switcher" role="group" aria-label={t('switcher.label')}>
-      <AppTooltip title={label} arrow>
+      <AppTooltip title={label} arrow variant={tooltipVariant}>
         <a
           href={localizePath(basePath, target)}
           hrefLang={target}
@@ -195,8 +195,8 @@ export default function SiteNavigation({ currentPath, locale }: Props) {
         <NavigationLinks currentPath={currentPath} locale={locale} role={role} />
         <div className="sidebar-bottom">
           <SocialLinks className="desktop-socials" locale={locale} />
-          <LocaleSwitcher currentPath={currentPath} locale={locale} />
-          <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow>
+          <LocaleSwitcher currentPath={currentPath} locale={locale} tooltipVariant="sidebar" />
+          <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow variant="sidebar">
             <IconButton component="a" href={localizePath('/perfil/', locale)} className="profile-link" aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}>
               {signedIn ? (
                 <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
@@ -229,8 +229,8 @@ export default function SiteNavigation({ currentPath, locale }: Props) {
           <NavigationLinks currentPath={currentPath} locale={locale} role={role} onNavigate={() => setOpen(false)} />
           <div className="drawer-bottom">
             <SocialLinks className="drawer-socials" locale={locale} />
-            <LocaleSwitcher currentPath={currentPath} locale={locale} />
-            <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow>
+            <LocaleSwitcher currentPath={currentPath} locale={locale} tooltipVariant="sidebar" />
+            <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow variant="sidebar">
               <IconButton
                 component="a"
                 href={localizePath('/perfil/', locale)}

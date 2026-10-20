@@ -10,4 +10,5 @@ dist/
 !/supabase/
 supabase/*
 !/supabase/migrations/
-!/supabase/migrations/*.sql
+# !/supabase/migrations/*.sql
+/supabase/migrations/*.sql
