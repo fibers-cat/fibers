@@ -1,0 +1,17 @@
+{
+	"mcpServers": {
+		"Astro docs": {
+			"type": "http",
+			"url": "https://mcp.docs.astro.build/mcp"
+		},
+		"supabase": {
+			"type": "http",
+			"url": "https://mcp.supabase.com/mcp?project_ref=tytvxtdaafbqakskwkdu&read_only=true&features=docs,account,database,debugging,development,functions,branching"
+		},
+		"mui-mcp": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "@mui/mcp@latest" ]
+		}
+	}
+}
