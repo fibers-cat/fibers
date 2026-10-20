@@ -1,0 +1,29 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../components/SiteBreadcrumbs';
+import SubjectExplorer from '@/components/SubjectExplorer';
+import { fetchSubjects } from '@/lib/subjects';
+import { fetchSubjectMaterialCounts } from '@/lib/subjectMaterialCounts';
+import { getLocaleFromUrl, isLocale, useTranslations } from '@/i18n';
+
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const subjects = await fetchSubjects();
+const materialCounts = await fetchSubjectMaterialCounts();
+---
+
+<SiteLayout title={t('catalog.meta.title')} description={t('catalog.meta.description')}>
+  <div class="page-content inner-page">
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Assignatures' }]} /> -->
+    <header class="page-heading">
+      <span class="eyebrow">{t('catalog.eyebrow')}</span>
+      <h1>{t('catalog.title')}</h1>
+      <p>{t('catalog.lead')}</p>
+    </header>
+    <SubjectExplorer client:load subjects={subjects} initialMaterialCounts={materialCounts} showCategoryFilter locale={locale} />
+    <div class="catalog-disclaimer">
+      <strong>{t('catalog.disclaimerTitle')}</strong>
+      <span>{t('catalog.disclaimer')}</span>
+    </div>
+  </div>
+</SiteLayout>

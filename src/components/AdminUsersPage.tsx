@@ -12,6 +12,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { fibersTheme } from '@/components/theme';
 import { supabase } from '@/lib/supabase';
 import { useCurrentRole } from '@/lib/useCurrentRole';
+import { localizePath, useTranslations, type Locale } from '@/i18n';
 
 type ManagedRole = 'user' | 'admin';
 type ManagedUser = {
@@ -22,7 +23,8 @@ type ManagedUser = {
 };
 type Draft = { alias: string; role: ManagedRole };
 
-export default function AdminUsersPage() {
+export default function AdminUsersPage({ locale }: { locale: Locale }) {
+  const t = useTranslations(locale);
   const { role, loading: roleLoading, error: roleError } = useCurrentRole();
   const [users, setUsers] = useState<ManagedUser[]>([]);
   const [drafts, setDrafts] = useState<Record<string, Draft>>({});
@@ -38,7 +40,7 @@ export default function AdminUsersPage() {
     const { data, error: queryError } = await supabase.rpc('admin_list_users');
     if (queryError) {
       console.error('Could not load the user directory.', queryError);
-      setError('No s’ha pogut carregar la llista d’usuaris.');
+      setError(t('admin.users.loadError'));
       setLoading(false);
       return;
     }
@@ -59,7 +61,7 @@ export default function AdminUsersPage() {
     if (!supabase || user.role === 'superadmin') return;
     const draft = drafts[user.user_id];
     if (!draft || draft.alias.trim().length < 2 || draft.alias.trim().length > 40) {
-      setError('L’àlies ha de tenir entre 2 i 40 caràcters.');
+      setError(t('admin.users.aliasError'));
       return;
     }
 
@@ -75,14 +77,14 @@ export default function AdminUsersPage() {
 
     if (updateError) {
       console.error('Could not update the managed user.', updateError);
-      setError('No s’ha pogut desar el perfil. Pot ser que el rol ja hagi canviat.');
+      setError(t('admin.users.saveError'));
     } else if (!data) {
-      setError('No s’ha pogut trobar el perfil per actualitzar.');
+      setError(t('admin.users.notFoundError'));
     } else {
       setUsers((current) => current.map((item) => item.user_id === user.user_id
         ? { ...item, alias: draft.alias.trim(), role: draft.role }
         : item));
-      setMessage(`S’ha desat el perfil de ${user.email ?? user.user_id}.`);
+      setMessage(t('admin.users.saved', { email: user.email ?? user.user_id }));
     }
     setSavingId(null);
   };
@@ -91,27 +93,27 @@ export default function AdminUsersPage() {
     <ThemeProvider theme={fibersTheme}>
       <Stack spacing={2.5} className="admin-page">
         <header className="page-heading">
-          <span className="eyebrow">GESTIÓ</span>
-          <Typography component="h1" variant="h3">Gestió d’usuaris</Typography>
-          <Typography>Actualitza els àlies i assigna el rol d’administrador. El superadmin no es pot reassignar.</Typography>
+          <span className="eyebrow">{t('admin.eyebrow')}</span>
+          <Typography component="h1" variant="h3">{t('admin.users.title')}</Typography>
+          <Typography>{t('admin.users.lead')}</Typography>
         </header>
 
-        {roleLoading && <CircularProgress aria-label="Comprovant permisos" />}
+        {roleLoading && <CircularProgress aria-label={t('admin.checkingPermissions')} />}
         {roleError && <Alert severity="error">{roleError}</Alert>}
         {!roleLoading && !role && !roleError && (
-          <Alert severity="info">Inicia sessió amb el compte superadmin per continuar. <a href="/perfil/?returnTo=%2Fadmin%2Fusuaris%2F">Inicia sessió</a></Alert>
+          <Alert severity="info">{t('admin.users.signInPrompt')} <a href={localizePath(`/perfil/?returnTo=${encodeURIComponent('/admin/usuaris/')}`, locale)}>{t('admin.signIn')}</a></Alert>
         )}
         {!roleLoading && role === 'admin' && (
-          <Alert severity="error">Només el superadmin pot gestionar usuaris.</Alert>
+          <Alert severity="error">{t('admin.users.noPermission')}</Alert>
         )}
         {message && <Alert severity="success">{message}</Alert>}
         {error && <Alert severity="error">{error}</Alert>}
         {role === 'superadmin' && (
           <>
             <Button onClick={() => void loadUsers()} disabled={loading} variant="outlined" sx={{ alignSelf: 'flex-start' }}>
-              Actualitza la llista
+              {t('admin.refreshList')}
             </Button>
-            {loading && <CircularProgress aria-label="Carregant usuaris" />}
+            {loading && <CircularProgress aria-label={t('admin.users.loading')} />}
             {users.map((user) => {
               const draft = drafts[user.user_id];
               return (
@@ -119,15 +121,15 @@ export default function AdminUsersPage() {
                   <CardContent>
                     <Stack spacing={2}>
                       <div>
-                        <Typography component="h2" variant="h6">{user.email ?? 'Compte sans courriel'}</Typography>
+                        <Typography component="h2" variant="h6">{user.email ?? t('admin.users.noEmail')}</Typography>
                         <Typography color="text.secondary">{user.user_id}</Typography>
                       </div>
                       {user.role === 'superadmin' ? (
-                        <Alert severity="info">Superadmin protegit.</Alert>
+                        <Alert severity="info">{t('admin.users.protectedSuperadmin')}</Alert>
                       ) : (
                         <>
                           <TextField
-                            label="Àlies públic"
+                            label={t('admin.users.aliasLabel')}
                             value={draft?.alias ?? ''}
                             onChange={(event) => setDrafts((current) => {
                               const currentDraft = current[user.user_id] ?? {
@@ -143,7 +145,7 @@ export default function AdminUsersPage() {
                           />
                           <TextField
                             select
-                            label="Rol"
+                            label={t('admin.users.roleLabel')}
                             value={draft?.role ?? 'user'}
                             onChange={(event) => setDrafts((current) => {
                               const currentDraft = current[user.user_id] ?? {
@@ -159,15 +161,15 @@ export default function AdminUsersPage() {
                               };
                             })}
                           >
-                            <MenuItem value="user">Usuari</MenuItem>
-                            <MenuItem value="admin">Administrador</MenuItem>
+                            <MenuItem value="user">{t('admin.users.roleUser')}</MenuItem>
+                            <MenuItem value="admin">{t('admin.users.roleAdmin')}</MenuItem>
                           </TextField>
                           <Button
                             variant="contained"
                             disabled={savingId !== null || loading || (draft?.alias.trim() ?? '').length < 2}
                             onClick={() => void saveUser(user)}
                           >
-                            Desa canvis
+                            {t('admin.users.save')}
                           </Button>
                         </>
                       )}

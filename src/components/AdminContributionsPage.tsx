@@ -11,6 +11,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { fibersTheme } from '@/components/theme';
 import { supabase } from '@/lib/supabase';
 import { useCurrentRole } from '@/lib/useCurrentRole';
+import { intlLocale, localizePath, useTranslations, type Locale } from '@/i18n';
 
 type ContributionFile = {
   id: string;
@@ -31,7 +32,8 @@ type PendingContribution = {
   contribution_files: ContributionFile[];
 };
 
-export default function AdminContributionsPage() {
+export default function AdminContributionsPage({ locale }: { locale: Locale }) {
+  const t = useTranslations(locale);
   const { role, loading: roleLoading, error: roleError } = useCurrentRole();
   const [items, setItems] = useState<PendingContribution[]>([]);
   const [loading, setLoading] = useState(false);
@@ -52,7 +54,7 @@ export default function AdminContributionsPage() {
 
     if (queryError) {
       console.error('Could not load pending contributions.', queryError);
-      setError('No s’han pogut carregar les aportacions pendents.');
+      setError(t('admin.contributions.loadError'));
       setLoading(false);
       return;
     }
@@ -62,7 +64,7 @@ export default function AdminContributionsPage() {
         ((data ?? []) as unknown as PendingContribution[]).map(async (item) => {
           const files = await Promise.all(
             item.contribution_files.map(async (file) => {
-              if (!supabase) throw new Error('Falta configurar Supabase.');
+              if (!supabase) throw new Error(t('admin.supabaseMissing'));
               const { data: signed, error: signedError } = await supabase.storage
                 .from('contributions')
                 .createSignedUrl(file.storage_path, 60 * 60);
@@ -76,11 +78,11 @@ export default function AdminContributionsPage() {
       setItems(withSignedFiles);
     } catch (loadError) {
       console.error('Could not create review links for contribution files.', loadError);
-      setError('No s’han pogut preparar els fitxers per revisar-los.');
+      setError(t('admin.contributions.filesError'));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [locale, t]);
 
   useEffect(() => {
     if (role === 'admin' || role === 'superadmin') void loadPending();
@@ -106,12 +108,12 @@ export default function AdminContributionsPage() {
 
     if (updateError) {
       console.error('Could not review the contribution.', updateError);
-      setError('No s’ha pogut desar la revisió.');
+      setError(t('admin.contributions.saveError'));
     } else if (!data) {
-      setError('Aquesta aportació ja no està pendent de revisió. Actualitza la llista.');
+      setError(t('admin.contributions.staleError'));
     } else {
       setItems((current) => current.filter((candidate) => candidate.id !== item.id));
-      setMessage(status === 'approved' ? 'Aportació aprovada.' : 'Aportació denegada.');
+      setMessage(status === 'approved' ? t('admin.contributions.approved') : t('admin.contributions.rejected'));
     }
     setActionId(null);
   };
@@ -120,29 +122,29 @@ export default function AdminContributionsPage() {
     <ThemeProvider theme={fibersTheme}>
       <Stack spacing={2.5} className="admin-page">
         <header className="page-heading">
-          <span className="eyebrow">GESTIÓ</span>
-          <Typography component="h1" variant="h3">Revisió d’aportacions</Typography>
-          <Typography>Revisa el contingut i aprova’l o denega’l abans de publicar-lo.</Typography>
+          <span className="eyebrow">{t('admin.eyebrow')}</span>
+          <Typography component="h1" variant="h3">{t('admin.contributions.title')}</Typography>
+          <Typography>{t('admin.contributions.lead')}</Typography>
         </header>
 
-        {roleLoading && <CircularProgress aria-label="Comprovant permisos" />}
+        {roleLoading && <CircularProgress aria-label={t('admin.checkingPermissions')} />}
         {roleError && <Alert severity="error">{roleError}</Alert>}
         {!roleLoading && !role && !roleError && (
-          <Alert severity="info">Inicia sessió amb un compte autoritzat per continuar. <a href="/perfil/?returnTo=%2Fadmin%2Faportacions%2F">Inicia sessió</a></Alert>
+          <Alert severity="info">{t('admin.contributions.signInPrompt')} <a href={localizePath(`/perfil/?returnTo=${encodeURIComponent('/admin/aportacions/')}`, locale)}>{t('admin.signIn')}</a></Alert>
         )}
         {!roleLoading && role === 'user' && (
-          <Alert severity="error">No tens permisos per revisar aportacions.</Alert>
+          <Alert severity="error">{t('admin.contributions.noPermission')}</Alert>
         )}
         {message && <Alert severity="success">{message}</Alert>}
         {error && <Alert severity="error">{error}</Alert>}
         {(role === 'admin' || role === 'superadmin') && (
           <>
             <Button onClick={() => void loadPending()} disabled={loading} variant="outlined" sx={{ alignSelf: 'flex-start' }}>
-              Actualitza la llista
+              {t('admin.refreshList')}
             </Button>
-            {loading && <CircularProgress aria-label="Carregant aportacions" />}
+            {loading && <CircularProgress aria-label={t('admin.contributions.loading')} />}
             {!loading && !error && items.length === 0 && (
-              <Alert severity="info">No hi ha aportacions pendents.</Alert>
+              <Alert severity="info">{t('admin.contributions.empty')}</Alert>
             )}
             {items.map((item) => (
               <Card key={item.id} variant="outlined">
@@ -151,9 +153,9 @@ export default function AdminContributionsPage() {
                     <div>
                       <Typography component="h2" variant="h5">{item.title}</Typography>
                       <Typography color="text.secondary">
-                        {item.subjects ? `${item.subjects.acronym} — ${item.subjects.name}` : 'Assignatura no disponible'}
-                        {' · '}Aportat per {item.profiles?.alias ?? 'Estudiant'}
-                        {' · '}{new Intl.DateTimeFormat('ca-ES', { dateStyle: 'medium' }).format(new Date(item.created_at))}
+                        {item.subjects ? `${item.subjects.acronym} — ${item.subjects.name}` : t('admin.contributions.subjectUnavailable')}
+                        {' · '}{t('approvedMaterials.attributedTo', { alias: item.profiles?.alias ?? t('approvedMaterials.unknownAuthor') })}
+                        {' · '}{new Intl.DateTimeFormat(intlLocale(locale), { dateStyle: 'medium' }).format(new Date(item.created_at))}
                       </Typography>
                     </div>
                     <Typography sx={{ whiteSpace: 'pre-wrap' }}>{item.description}</Typography>
@@ -163,7 +165,7 @@ export default function AdminContributionsPage() {
                       </a>
                     ))}
                     <TextField
-                      label="Nota de revisió (opcional)"
+                      label={t('admin.contributions.noteLabel')}
                       value={notes[item.id] ?? item.review_note ?? ''}
                       onChange={(event) => setNotes((current) => ({ ...current, [item.id]: event.target.value }))}
                       multiline
@@ -172,10 +174,10 @@ export default function AdminContributionsPage() {
                     />
                     <Stack direction="row" spacing={1}>
                       <Button variant="contained" disabled={actionId !== null} onClick={() => void review(item, 'approved')}>
-                        Aprova
+                        {t('admin.contributions.approve')}
                       </Button>
                       <Button variant="outlined" color="error" disabled={actionId !== null} onClick={() => void review(item, 'rejected')}>
-                        Denega
+                        {t('admin.contributions.reject')}
                       </Button>
                     </Stack>
                   </Stack>

@@ -1,0 +1,22 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+import ContributorRanking from '@/components/ContributorRanking';
+import { fetchContributors } from '@/lib/contributors';
+import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
+
+const contributors = await fetchContributors();
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+---
+<SiteLayout title={t('contributors.meta.title')} description={t('contributors.meta.description')} noindex>
+  <div class="page-content inner-page">
+    <section class="community-panel ranking-panel">
+      <span class="community-symbol" aria-hidden="true">✳</span>
+      <span class="eyebrow">{t('contributors.eyebrow')}</span>
+      <h1>{t('contributors.titleLine1')}<br />{t('contributors.titleLine2')}</h1>
+      <p>{t('contributors.lead')}</p>
+      <ContributorRanking contributors={contributors} locale={locale} />
+      <a class="button-primary" href={localizePath('/aporta/', locale)}>{t('contributors.cta')} <span aria-hidden="true">→</span></a>
+    </section>
+  </div>
+</SiteLayout>

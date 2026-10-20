@@ -1,0 +1,38 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../../components/SiteBreadcrumbs';
+import SubjectStatus from '@/components/SubjectStatus';
+import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
+import type { Subject } from '@/lib/supabase';
+
+interface Props {
+  subject: Subject;
+}
+
+const { subject } = Astro.props;
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const subjectDescription = t('subject.metaDescription', { name: subject.name, acronym: subject.acronym });
+---
+
+<SiteLayout title={`${subject.acronym}: ${subject.name}`} description={subjectDescription}>
+  <div class="page-content inner-page subject-page">
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { href: '/assignatures/', label: 'Assignatures' }, { label: subject.acronym }]} /> -->
+    <header class="subject-title-panel">
+      <span class="subject-code subject-code-large">{subject.acronym}</span>
+      <div>
+        <span class="eyebrow">{t('subject.eyebrow')}</span>
+        <h1>{subject.name}</h1>
+        <p>{t('subject.codeLabel')}: {subject.code ?? t('subject.codeUnavailable')}</p>
+        {subject.languages.length > 0 && (
+          <p>{t('subject.languagesLabel')}: {subject.languages.map((language) => t(`subject.languages.${language}`)).join(', ')}</p>
+        )}
+        {subject.specialty && <p>{t('subject.specialtyLabel')}: {subject.specialty}</p>}
+        {!subject.is_current && <p>{t('subject.historicalNote')}</p>}
+        {subject.is_current && <p>{t('subject.currentNote')}</p>}
+      </div>
+    </header>
+    <SubjectStatus client:load subjectId={subject.id} subjectName={subject.name} subjectAcronym={subject.acronym} locale={locale} />
+    <a class="back-link" href={localizePath('/assignatures/', locale)}>← {t('subject.backLink')}</a>
+  </div>
+</SiteLayout>

@@ -3,8 +3,9 @@ import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { supabase } from "@/lib/supabase";
+import { intlLocale, useTranslations, type Locale } from "@/i18n";
 
-type Props = { subjectId: string };
+type Props = { subjectId: string; locale: Locale };
 type ApprovedFile = {
   id: string;
   original_name: string;
@@ -28,7 +29,8 @@ type LegacyMaterial = {
   profiles: { alias: string } | null;
 };
 
-export default function ApprovedMaterials({ subjectId }: Props) {
+export default function ApprovedMaterials({ subjectId, locale }: Props) {
+  const t = useTranslations(locale);
   const [items, setItems] = useState<ApprovedContribution[]>([]);
   const [legacyItems, setLegacyItems] = useState<LegacyMaterial[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,7 +60,7 @@ export default function ApprovedMaterials({ subjectId }: Props) {
       ]);
       if (approvedResult.error || legacyResult.error) {
         if (active) {
-          setError("No s’han pogut carregar els materials aprovats.");
+          setError(t("approvedMaterials.error"));
           setLoading(false);
         }
         return;
@@ -99,7 +101,7 @@ export default function ApprovedMaterials({ subjectId }: Props) {
     return () => {
       active = false;
     };
-  }, [subjectId]);
+  }, [subjectId, locale, t]);
 
   return (
     <section
@@ -107,12 +109,12 @@ export default function ApprovedMaterials({ subjectId }: Props) {
       aria-labelledby="approved-materials-title"
     >
       <Typography component="h3" variant="h6" id="approved-materials-title">
-        Aportacions de la comunitat
+        {t("approvedMaterials.heading")}
       </Typography>
       {loading && (
         <div className="ranking-loading">
           <CircularProgress size={24} />
-          <Typography>Carregant…</Typography>
+          <Typography>{t("approvedMaterials.loading")}</Typography>
         </div>
       )}
       {error && <Alert severity="error">{error}</Alert>}
@@ -124,8 +126,8 @@ export default function ApprovedMaterials({ subjectId }: Props) {
                 {item.title}
               </Typography>
               <Typography className="resource-meta">
-                Aportat per {item.profiles?.alias ?? "Estudiant"} ·{" "}
-                {new Intl.DateTimeFormat("ca-ES").format(
+                {t("approvedMaterials.attributedTo", { alias: item.profiles?.alias ?? t("approvedMaterials.unknownAuthor") })} ·{" "}
+                {new Intl.DateTimeFormat(intlLocale(locale)).format(
                   new Date(`${item.contributed_at}T00:00:00`),
                 )}
               </Typography>
@@ -137,7 +139,7 @@ export default function ApprovedMaterials({ subjectId }: Props) {
                 target="_blank"
                 rel="noreferrer"
               >
-                Descarrega el fitxer
+                {t("approvedMaterials.downloadFile")}
               </a>
             )}
             {item.external_url && (
@@ -147,7 +149,7 @@ export default function ApprovedMaterials({ subjectId }: Props) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Obre l’enllaç extern
+                {t("approvedMaterials.openExternal")}
               </a>
             )}
             {item.content_text && (
@@ -163,7 +165,7 @@ export default function ApprovedMaterials({ subjectId }: Props) {
               </Typography>
               <Typography>{item.description}</Typography>
               <Typography className="resource-meta">
-                Aportat per {item.profiles?.alias ?? "Estudiant"}
+                {t("approvedMaterials.attributedTo", { alias: item.profiles?.alias ?? t("approvedMaterials.unknownAuthor") })}
               </Typography>
             </div>
             {item.files.map(

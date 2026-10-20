@@ -1,9 +1,13 @@
 ---
 import SiteLayout from '@/layouts/SiteLayout.astro';
 import ProfilePage from '@/components/ProfilePage';
+import { getLocaleFromUrl, isLocale, useTranslations } from '@/i18n';
+
 const requestedReturn = Astro.url.searchParams.get('returnTo') ?? '/';
 const returnTo = requestedReturn.startsWith('/') && !requestedReturn.startsWith('//') ? requestedReturn : '/';
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
 ---
-<SiteLayout title="El teu perfil" description="Inicia sessió a Fibers i gestiona el teu àlies públic." noindex>
-  <div class="page-content inner-page"><section class="form-card profile-panel"><span class="eyebrow">COMUNITAT FIBERS</span><h1>El teu perfil</h1><ProfilePage client:load returnTo={returnTo} /></section></div>
+<SiteLayout title={t('profilePage.meta.title')} description={t('profilePage.meta.description')} noindex>
+  <div class="page-content inner-page"><section class="form-card profile-panel"><span class="eyebrow">{t('profilePage.eyebrow')}</span><h1>{t('profilePage.heading')}</h1><ProfilePage client:load returnTo={returnTo} locale={locale} /></section></div>
 </SiteLayout>

@@ -196,7 +196,7 @@ textarea {
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
-  padding: 14px 14px 0;
+  padding-top: 14px;
   border-top: 1px solid rgba(255, 255, 255, .1);
 }
 
@@ -224,6 +224,41 @@ textarea {
 .social-links .MuiSvgIcon-root {
   width: 18px;
   height: 18px;
+}
+
+.locale-switcher {
+  display: inline-flex;
+  align-items: center;
+}
+
+.locale-switcher .locale-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #c4cad2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-align: center;
+  text-decoration: none;
+  transition: background .15s ease, color .15s ease;
+}
+
+.locale-switcher .locale-option:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, .1);
+}
+
+.mobile-toolbar .locale-switcher .locale-option {
+  color: #69717d;
+}
+
+.mobile-toolbar .locale-switcher .locale-option:hover {
+  color: var(--sidebar);
+  background: rgba(32, 36, 44, .12);
 }
 
 .desktop-socials .MuiIconButton-root:hover {

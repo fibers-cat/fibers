@@ -1,39 +1,44 @@
 import fileManifest from '@/data/materials.json';
+import type { UIKey } from '@/i18n';
 
 export type Material = {
   path: string;
   title: string;
+  titleKey: UIKey | null;
   extension: string;
   sizeBytes: number;
   subjectAcronym: string | null;
 };
 
-export type MaterialGroup = { title: string; materials: Material[] };
+export type MaterialGroup = { titleKey: UIKey; materials: Material[] };
 
-const displayTitles: Record<string, string> = {
-  'bases-de-dades/indice.txt': 'Índex de materials',
-  'documentacio-ajuda/indice.txt': 'Índex de documentació',
-  'matematiques-2/indice.txt': 'Índex de materials',
-  'probabilitat-estadistica/indice.txt': 'Índex de materials',
-  'recuperacions/indice.txt': 'Índex de recuperacions',
-  'sistemes-operatius/indice.txt': 'Índex de materials',
-  'xarxes-de-computadors/indice.txt': 'Índex de materials',
-  'probabilitat-estadistica/texto.txt': 'Notes complementàries',
-  'recuperacions/texto.txt': 'Notes complementàries',
-  'sistemes-operatius/texto.txt': 'Notes complementàries',
-  'bases-de-dades/preview.png': 'Vista prèvia SQL',
-  'convalidacions.txt': 'Convalidacions',
-  'opinions i consells.txt': 'Opinions i consells',
+const displayTitleKeys: Record<string, UIKey> = {
+  'bases-de-dades/indice.txt': 'materials.displayTitles.index',
+  'documentacio-ajuda/indice.txt': 'materials.displayTitles.indexDocumentation',
+  'matematiques-2/indice.txt': 'materials.displayTitles.index',
+  'probabilitat-estadistica/indice.txt': 'materials.displayTitles.index',
+  'recuperacions/indice.txt': 'materials.displayTitles.indexRecoveries',
+  'sistemes-operatius/indice.txt': 'materials.displayTitles.index',
+  'xarxes-de-computadors/indice.txt': 'materials.displayTitles.index',
+  'probabilitat-estadistica/texto.txt': 'materials.displayTitles.supplementaryNotes',
+  'recuperacions/texto.txt': 'materials.displayTitles.supplementaryNotes',
+  'sistemes-operatius/texto.txt': 'materials.displayTitles.supplementaryNotes',
+  'bases-de-dades/preview.png': 'materials.displayTitles.sqlPreview',
+  'convalidacions.txt': 'materials.displayTitles.convalidations',
+  'opinions i consells.txt': 'materials.displayTitles.opinionsAndAdvice',
 };
 
-const fileManifestTyped = fileManifest as Array<Omit<Material, 'subjectAcronym'> & { subjectCode: string | null }>;
+const fileManifestTyped = fileManifest as Array<
+  Omit<Material, 'subjectAcronym' | 'titleKey'> & { subjectCode: string | null }
+>;
 
 export const materials: Material[] = fileManifestTyped.map((material) => ({
   path: material.path,
   extension: material.extension,
   sizeBytes: material.sizeBytes,
   subjectAcronym: material.subjectCode,
-  title: displayTitles[material.path] ?? material.title,
+  title: material.title,
+  titleKey: displayTitleKeys[material.path] ?? null,
 }));
 
 export function materialsForSubject(acronym: string): Material[] {
@@ -47,44 +52,44 @@ export function materialCountForSubject(acronym: string): number {
 }
 
 export function getMaterialGroups(items: Material[]): MaterialGroup[] {
-  const groups = new Map<string, Material[]>();
+  const groups = new Map<UIKey, Material[]>();
   for (const material of items) {
     const section = getMaterialSection(material);
     groups.set(section, [...(groups.get(section) ?? []), material]);
   }
-  return Array.from(groups, ([title, groupedMaterials]) => ({ title, materials: groupedMaterials }));
+  return Array.from(groups, ([titleKey, groupedMaterials]) => ({ titleKey, materials: groupedMaterials }));
 }
 
-export function getMaterialSection(material: Material): string {
+export function getMaterialSection(material: Material): UIKey {
   const fileName = material.path.split('/').at(-1) ?? '';
   const folder = material.path.split('/')[0];
 
-  if (folder === 'recuperacions') return 'Recuperacions';
+  if (folder === 'recuperacions') return 'materials.sections.recoveries';
   if (material.subjectAcronym === null) {
-    if (folder === 'documentacio-ajuda') return 'Documentació d’ajuda';
-    if (folder === 'recuperacions') return 'Recuperacions';
-    return 'Documents generals';
+    if (folder === 'documentacio-ajuda') return 'materials.sections.helpDocumentation';
+    if (folder === 'recuperacions') return 'materials.sections.recoveries';
+    return 'materials.sections.generalDocuments';
   }
-  if (fileName === 'indice.txt' || fileName === 'texto.txt' || fileName === 'preview.png') return 'Material complementari';
+  if (fileName === 'indice.txt' || fileName === 'texto.txt' || fileName === 'preview.png') return 'materials.sections.supplementary';
   if (material.subjectAcronym === 'BD') {
-    if (/procedimientos|disparadores/i.test(fileName)) return 'Procediments i disparadors';
-    if (/jdbc/i.test(fileName)) return 'Java Database Connectivity';
-    return 'SQL i àlgebra relacional';
+    if (/procedimientos|disparadores/i.test(fileName)) return 'materials.sections.proceduresAndTriggers';
+    if (/jdbc/i.test(fileName)) return 'materials.sections.jdbc';
+    return 'materials.sections.sql';
   }
   if (material.subjectAcronym === 'XC') {
-    if (/seguiment/i.test(fileName)) return 'Exercicis de seguiment';
-    if (/xml/i.test(fileName)) return 'Transversal';
-    return 'Resums de capítols';
+    if (/seguiment/i.test(fileName)) return 'materials.sections.trackingExercises';
+    if (/xml/i.test(fileName)) return 'materials.sections.transversal';
+    return 'materials.sections.chapterSummaries';
   }
   if (material.subjectAcronym === 'EDA') {
-    return /\.(cpp|c)$/i.test(fileName) ? 'Algorismes d’ordenació' : 'Anàlisi d’algorismes';
+    return /\.(cpp|c)$/i.test(fileName) ? 'materials.sections.sortingAlgorithms' : 'materials.sections.algorithmAnalysis';
   }
-  if (material.subjectAcronym === 'SO') return 'Laboratoris';
-  if (material.subjectAcronym === 'PE') return 'E-status';
-  if (material.subjectAcronym === 'AC') return 'Materials de laboratori';
-  if (material.subjectAcronym === 'EEE') return 'Respostes del manual d’economia';
-  if (material.subjectAcronym === 'M2') return 'Temari i recuperacions';
-  return 'Materials de l’assignatura';
+  if (material.subjectAcronym === 'SO') return 'materials.sections.laboratories';
+  if (material.subjectAcronym === 'PE') return 'materials.sections.estatus';
+  if (material.subjectAcronym === 'AC') return 'materials.sections.labMaterials';
+  if (material.subjectAcronym === 'EEE') return 'materials.sections.economicsManualAnswers';
+  if (material.subjectAcronym === 'M2') return 'materials.sections.syllabusAndRecoveries';
+  return 'materials.sections.subjectMaterials';
 }
 
 export function materialUrl(material: Material): string {

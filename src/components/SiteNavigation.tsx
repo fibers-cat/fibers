@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import type { ReactElement } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -30,17 +31,18 @@ import { fibersTheme } from '@/components/theme';
 import { supabase } from '@/lib/supabase';
 import { isAppRole, type AppRole } from '@/lib/roles';
 import { getSocialAvatar } from '@/lib/socialAvatar';
+import { localizePath, stripLocalePrefix, useTranslations, type Locale, type UIKey } from '@/i18n';
 
-const links = [
-  { href: '/', label: 'Inici', icon: <HomeRounded /> },
-  { href: '/assignatures/', label: 'Assignatures', icon: <MenuBookRounded /> },
-  { href: '/recursos/', label: 'Recursos generals', icon: <FolderOpenRounded /> },
-  { href: '/aporta/', label: 'Aporta material', icon: <VolunteerActivismRounded /> },
-  { href: '/col-laboradors/', label: 'Col·laboradors', icon: <GroupsRounded /> },
-  { href: '/sobre/', label: 'Sobre Fibers', icon: <InfoOutlined /> },
+const links: { path: string; labelKey: UIKey; icon: ReactElement }[] = [
+  { path: '/', labelKey: 'nav.home', icon: <HomeRounded /> },
+  { path: '/assignatures/', labelKey: 'nav.subjects', icon: <MenuBookRounded /> },
+  { path: '/recursos/', labelKey: 'nav.resources', icon: <FolderOpenRounded /> },
+  { path: '/aporta/', labelKey: 'nav.contribute', icon: <VolunteerActivismRounded /> },
+  { path: '/col-laboradors/', labelKey: 'nav.contributors', icon: <GroupsRounded /> },
+  { path: '/sobre/', labelKey: 'nav.about', icon: <InfoOutlined /> },
 ];
 
-type Props = { currentPath: string };
+type Props = { currentPath: string; locale: Locale };
 
 const socialLinks = [
   { href: 'https://github.com/fibers-cat/fibers/', label: 'GitHub', icon: siGithub },
@@ -48,9 +50,10 @@ const socialLinks = [
   { href: 'https://discord.gg/pqsbcBb', label: 'Discord', icon: siDiscord },
 ];
 
-function SocialLinks({ className }: { className: string }) {
+function SocialLinks({ className, locale }: { className: string; locale: Locale }) {
+  const t = useTranslations(locale);
   return (
-    <Box className={`social-links ${className}`} role="group" aria-label="Xarxes socials">
+    <Box className={`social-links ${className}`} role="group" aria-label={t('nav.social')}>
       {socialLinks.map((link) => (
         <IconButton
           key={link.href}
@@ -68,20 +71,49 @@ function SocialLinks({ className }: { className: string }) {
   );
 }
 
-function NavigationLinks({ currentPath, onNavigate, role }: Props & { onNavigate?: () => void; role: AppRole | null }) {
-  const visibleLinks = [
-    ...links,
+function LocaleSwitcher({ currentPath, locale }: Props) {
+  const t = useTranslations(locale);
+  const basePath = stripLocalePrefix(currentPath);
+  const target = locale === 'ca' ? 'es' : 'ca';
+  const label = target === 'ca' ? t('switcher.switchToCa') : t('switcher.switchToEs');
+  return (
+    <Box className="locale-switcher" role="group" aria-label={t('switcher.label')}>
+      <Tooltip title={label} arrow>
+        <a
+          href={localizePath(basePath, target)}
+          hrefLang={target}
+          lang={target}
+          className="locale-option"
+          aria-label={label}
+        >
+          {target.toUpperCase()}
+        </a>
+      </Tooltip>
+    </Box>
+  );
+}
+
+function NavigationLinks({ currentPath, locale, onNavigate, role }: Props & { onNavigate?: () => void; role: AppRole | null }) {
+  const t = useTranslations(locale);
+  const basePath = stripLocalePrefix(currentPath);
+  const visibleLinks: { path: string; href: string; label: string; icon: ReactElement }[] = [
+    ...links.map((link) => ({
+      path: link.path,
+      href: localizePath(link.path, locale),
+      label: t(link.labelKey),
+      icon: link.icon,
+    })),
     ...(role === 'admin' || role === 'superadmin'
-      ? [{ href: '/admin/aportacions/', label: 'Revisió d’aportacions', icon: <FactCheckRounded /> }]
+      ? [{ path: '/admin/aportacions/', href: localizePath('/admin/aportacions/', locale), label: t('nav.reviewContributions'), icon: <FactCheckRounded /> }]
       : []),
     ...(role === 'superadmin'
-      ? [{ href: '/admin/usuaris/', label: 'Gestió d’usuaris', icon: <ManageAccountsRounded /> }]
+      ? [{ path: '/admin/usuaris/', href: localizePath('/admin/usuaris/', locale), label: t('nav.manageUsers'), icon: <ManageAccountsRounded /> }]
       : []),
   ];
   return (
-    <List className="navigation-links" aria-label="Navegació principal">
+    <List className="navigation-links" aria-label={t('nav.primary')}>
       {visibleLinks.map((link) => {
-        const selected = link.href === '/' ? currentPath === '/' : currentPath.startsWith(link.href);
+        const selected = link.path === '/' ? basePath === '/' : basePath.startsWith(link.path);
         return (
           <ListItemButton
             key={link.href}
@@ -101,7 +133,8 @@ function NavigationLinks({ currentPath, onNavigate, role }: Props & { onNavigate
   );
 }
 
-export default function SiteNavigation({ currentPath }: Props) {
+export default function SiteNavigation({ currentPath, locale }: Props) {
+  const t = useTranslations(locale);
   const [open, setOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
@@ -153,7 +186,7 @@ export default function SiteNavigation({ currentPath }: Props) {
     };
   }, []);
   const brand = (
-    <a className="brand-lockup" href="/" aria-label="Fibers, inici">
+    <a className="brand-lockup" href={localizePath('/', locale)} aria-label={t('brand.home')}>
       <img src="/images/fibers-heart.svg" alt="" width="34" height="34" />
       <span>fibers<span className="brand-dot">.</span></span>
     </a>
@@ -163,12 +196,13 @@ export default function SiteNavigation({ currentPath }: Props) {
     <ThemeProvider theme={fibersTheme}>
       <aside className="desktop-sidebar">
         <div className="sidebar-brand">{brand}</div>
-        <div className="sidebar-label">ESPAI D’ESTUDI</div>
-        <NavigationLinks currentPath={currentPath} role={role} />
-        <div className="sidebar-bottom">          
-          <SocialLinks className="desktop-socials" />
-          <Tooltip title={signedIn ? 'El teu perfil' : 'Inicia sessió'} arrow>
-            <IconButton component="a" href="/perfil/" className="profile-link" aria-label={signedIn ? 'El teu perfil' : 'Inicia sessió'}>
+        <div className="sidebar-label">{t('sidebar.label')}</div>
+        <NavigationLinks currentPath={currentPath} locale={locale} role={role} />
+        <div className="sidebar-bottom">
+          <SocialLinks className="desktop-socials" locale={locale} />
+          <LocaleSwitcher currentPath={currentPath} locale={locale} />
+          <Tooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow>
+            <IconButton component="a" href={localizePath('/perfil/', locale)} className="profile-link" aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}>
               {signedIn ? (
                 <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
                   <PersonOutlineRounded fontSize="small" />
@@ -181,11 +215,12 @@ export default function SiteNavigation({ currentPath }: Props) {
 
       <AppBar className="mobile-appbar" position="fixed" elevation={0}>
         <Toolbar className="mobile-toolbar">
-          <IconButton aria-label="Obre el menú" color="inherit" edge="start" onClick={() => setOpen(true)}>
+          <IconButton aria-label={t('menu.open')} color="inherit" edge="start" onClick={() => setOpen(true)}>
             <MenuRounded />
           </IconButton>
           {brand}
-          <Button className="mobile-contribute" href="/aporta/" variant="contained" size="small">Aporta</Button>
+          <LocaleSwitcher currentPath={currentPath} locale={locale} />
+          <Button className="mobile-contribute" href={localizePath('/aporta/', locale)} variant="contained" size="small">{t('nav.contributeShort')}</Button>
         </Toolbar>
       </AppBar>
 
@@ -193,18 +228,19 @@ export default function SiteNavigation({ currentPath }: Props) {
         <Box className="mobile-drawer">
           <div className="drawer-heading">
             {brand}
-            <IconButton color="inherit" aria-label="Tanca el menú" onClick={() => setOpen(false)}><CloseRounded /></IconButton>
+            <IconButton color="inherit" aria-label={t('menu.close')} onClick={() => setOpen(false)}><CloseRounded /></IconButton>
           </div>
-          <div className="sidebar-label">ESPAI D’ESTUDI</div>
-          <NavigationLinks currentPath={currentPath} role={role} onNavigate={() => setOpen(false)} />
+          <div className="sidebar-label">{t('sidebar.label')}</div>
+          <NavigationLinks currentPath={currentPath} locale={locale} role={role} onNavigate={() => setOpen(false)} />
           <div className="drawer-bottom">
-            <SocialLinks className="drawer-socials" />
-            <Tooltip title={signedIn ? 'El teu perfil' : 'Inicia sessió'} arrow>
+            <SocialLinks className="drawer-socials" locale={locale} />
+            <LocaleSwitcher currentPath={currentPath} locale={locale} />
+            <Tooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow>
               <IconButton
                 component="a"
-                href="/perfil/"
+                href={localizePath('/perfil/', locale)}
                 className="profile-link"
-                aria-label={signedIn ? 'El teu perfil' : 'Inicia sessió'}
+                aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}
               >
                 {signedIn ? (
                   <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>

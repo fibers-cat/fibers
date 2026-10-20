@@ -1,19 +1,4 @@
 ---
-import SiteLayout from '@/layouts/SiteLayout.astro';
-import ContributorRanking from '@/components/ContributorRanking';
-import { fetchContributors } from '@/lib/contributors';
-
-const contributors = await fetchContributors();
+import ContributorsPage from '@/components/pages/ContributorsPage.astro';
 ---
-<SiteLayout title="Col·laboradors de Fibers" description="Rànquing de les persones que han aportat materials aprovats a Fibers." noindex>
-  <div class="page-content inner-page">
-    <section class="community-panel ranking-panel">
-      <span class="community-symbol" aria-hidden="true">✳</span>
-      <span class="eyebrow">FET ENTRE ESTUDIANTS</span>
-      <h1>Qui fa créixer<br />Fibers?</h1>
-      <p>Rànquing de persones segons els materials publicats i les aportacions que han superat la revisió.</p>
-      <ContributorRanking contributors={contributors} />
-      <a class="button-primary" href="/aporta/">Fes una aportació <span aria-hidden="true">→</span></a>
-    </section>
-  </div>
-</SiteLayout>
+<ContributorsPage />

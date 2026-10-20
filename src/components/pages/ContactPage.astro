@@ -1,0 +1,28 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../components/SiteBreadcrumbs';
+import ContactForm from '@/components/ContactForm';
+import { getLocaleFromUrl, isLocale, useTranslations } from '@/i18n';
+
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+---
+
+<SiteLayout title={t('contact.meta.title')} description={t('contact.meta.description')}>
+  <div class="page-content inner-page contact-page">
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Contacte' }]} /> -->
+    <div class="contact-layout">
+      <header class="page-heading form-heading">
+        <span class="eyebrow">{t('contact.eyebrow')}</span>
+        <h1>{t('contact.titleLine1')}<br />{t('contact.titleLine2')}</h1>
+        <p>{t('contact.lead')}</p>
+      </header>
+
+      <section class="form-card contact-form-card" aria-labelledby="contact-form-title">
+        <h2 id="contact-form-title">{t('contact.formTitle')}</h2>
+        <p>{t('contact.formLead')}</p>
+        <ContactForm client:load locale={locale} />
+      </section>
+    </div>
+  </div>
+</SiteLayout>

@@ -20,10 +20,12 @@ import {
 } from "@/data/materials";
 import { fibersTheme } from "@/components/theme";
 import { supabase } from "@/lib/supabase";
+import { intlLocale, useTranslations, type Locale } from "@/i18n";
 
 type Props = {
   materials: Material[];
   attributions?: Record<string, string>;
+  locale: Locale;
 };
 
 const textExtensions = new Set(["txt", "c", "cpp"]);
@@ -37,7 +39,8 @@ function supportsPreview(material: Material) {
   );
 }
 
-function Collection({ materials, attributions: initialAttributions }: Props) {
+function Collection({ materials, attributions: initialAttributions, locale }: Props) {
+  const t = useTranslations(locale);
   const groups = getMaterialGroups(materials);
   const [attributions, setAttributions] = useState<Record<string, string>>(
     initialAttributions ?? {},
@@ -62,12 +65,16 @@ function Collection({ materials, attributions: initialAttributions }: Props) {
         const next: Record<string, string> = {};
         for (const item of data ?? []) {
           if (item.path)
-            next[item.path] =
-              `Aportat per ${item.profiles?.alias ?? "Estudiant"} · ${new Intl.DateTimeFormat("ca-ES").format(new Date(`${item.contributed_at}T00:00:00`))}`;
+            next[item.path] = t("resourceCollection.attributedTo", {
+              alias: item.profiles?.alias ?? t("resourceCollection.unknownAuthor"),
+              date: new Intl.DateTimeFormat(intlLocale(locale)).format(
+                new Date(`${item.contributed_at}T00:00:00`),
+              ),
+            });
         }
         setAttributions(next);
       });
-  }, [initialAttributions, materials]);
+  }, [initialAttributions, materials, locale, t]);
 
   useEffect(() => {
     if (
@@ -83,7 +90,7 @@ function Collection({ materials, attributions: initialAttributions }: Props) {
 
     fetch(materialUrl(selectedMaterial))
       .then((response) => {
-        if (!response.ok) throw new Error("No s’ha pogut carregar el fitxer.");
+        if (!response.ok) throw new Error(t("resourceCollection.loadError"));
         return response.arrayBuffer();
       })
       .then((bytes) => {
@@ -117,10 +124,10 @@ function Collection({ materials, attributions: initialAttributions }: Props) {
     <>
       <div className="resource-groups">
         {groups.map((group) => (
-          <section className="resource-group" key={group.title}>
+          <section className="resource-group" key={group.titleKey}>
             <div className="resource-group-heading">
               <Typography component="h3" variant="subtitle1">
-                {group.title}
+                {t(group.titleKey)}
               </Typography>
               <span>{group.materials.length}</span>
             </div>
@@ -139,7 +146,7 @@ function Collection({ materials, attributions: initialAttributions }: Props) {
                       </span>
                       <div className="resource-copy">
                         <Typography component="h4" variant="body1">
-                          {material.title}
+                          {material.titleKey ? t(material.titleKey) : material.title}
                         </Typography>
                         <Typography className="resource-meta">
                           {material.extension.toUpperCase()} ·{" "}
@@ -157,9 +164,9 @@ function Collection({ materials, attributions: initialAttributions }: Props) {
                           size="small"
                           endIcon={<VisibilityRounded />}
                           onClick={() => setSelectedMaterial(material)}
-                          aria-label={`Obre la vista prèvia de ${material.title}`}
+                          aria-label={t("resourceCollection.previewAria", { title: material.titleKey ? t(material.titleKey) : material.title })}
                         >
-                          Vista prèvia
+                          {t("resourceCollection.preview")}
                         </Button>
                       ) : (
                         <Button
@@ -171,7 +178,7 @@ function Collection({ materials, attributions: initialAttributions }: Props) {
                           size="small"
                           endIcon={<OpenInNewRounded />}
                         >
-                          Obre
+                          {t("resourceCollection.open")}
                         </Button>
                       )}
                     </CardContent>
@@ -237,11 +244,11 @@ function Collection({ materials, attributions: initialAttributions }: Props) {
                 endIcon={<OpenInNewRounded />}
                 sx={{ flexShrink: 0 }}
               >
-                Abrir aparte
+                {t("resourceCollection.openSeparately")}
               </Button>
               <IconButton
                 onClick={closePreview}
-                aria-label="Tanca la vista prèvia"
+                aria-label={t("resourceCollection.closePreview")}
                 edge="end"
               >
                 <CloseRounded />
@@ -271,8 +278,7 @@ function Collection({ materials, attributions: initialAttributions }: Props) {
                   )}
                   {textError && (
                     <Alert severity="error">
-                      No s’ha pogut carregar aquest fitxer. Pots obrir-lo en una
-                      pestanya nova.
+                      {t("resourceCollection.loadError")}
                     </Alert>
                   )}
                   {!loadingText && !textError && (
@@ -295,7 +301,7 @@ function Collection({ materials, attributions: initialAttributions }: Props) {
                         overflowWrap: "anywhere",
                       }}
                     >
-                      {textContent || "Aquest fitxer no conté text."}
+                      {textContent || t("resourceCollection.emptyText")}
                     </Box>
                   )}
                 </Box>

@@ -1,0 +1,14 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+import AdminUsersPage from '@/components/AdminUsersPage';
+import { getLocaleFromUrl, isLocale, useTranslations } from '@/i18n';
+
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+---
+
+<SiteLayout title={t('admin.users.meta.title')} description={t('admin.users.meta.description')} noindex>
+  <div class="page-content inner-page">
+    <AdminUsersPage client:load locale={locale} />
+  </div>
+</SiteLayout>

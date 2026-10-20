@@ -1,0 +1,14 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+import AdminContributionsPage from '@/components/AdminContributionsPage';
+import { getLocaleFromUrl, isLocale, useTranslations } from '@/i18n';
+
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+---
+
+<SiteLayout title={t('admin.contributions.meta.title')} description={t('admin.contributions.meta.description')} noindex>
+  <div class="page-content inner-page">
+    <AdminContributionsPage client:load locale={locale} />
+  </div>
+</SiteLayout>

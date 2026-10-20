@@ -1,15 +1,16 @@
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
 import type { Contributor } from "@/lib/contributors";
+import { useTranslations, type Locale } from "@/i18n";
 
-type Props = { contributors: Contributor[] };
+type Props = { contributors: Contributor[]; locale: Locale };
 
-export default function ContributorRanking({ contributors }: Props) {
+export default function ContributorRanking({ contributors, locale }: Props) {
+  const t = useTranslations(locale);
   if (!contributors.length)
     return (
       <Alert severity="info">
-        Encara no hi ha aportacions aprovades. Sigues la primera persona a
-        compartir material.
+        {t("contributorRanking.empty")}
       </Alert>
     );
   return (
@@ -19,7 +20,10 @@ export default function ContributorRanking({ contributors }: Props) {
           <span className="ranking-position">{index + 1}</span>
           <span className="ranking-alias">{person.alias}</span>
           <span className="ranking-count">
-            {person.count} {person.count === 1 ? "material" : "materials"}
+            {person.count}{" "}
+            {person.count === 1
+              ? t("contributorRanking.materialsOne")
+              : t("contributorRanking.materialsMany")}
           </span>
         </li>
       ))}
