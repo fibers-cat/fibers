@@ -18,7 +18,7 @@ import {
   getMaterialGroups,
   materialUrl,
 } from "@/data/materials";
-import { fibersTheme } from "@/components/theme";
+import { fibersTheme } from "@/components/shared/theme";
 import { supabase } from "@/lib/supabase";
 import { intlLocale, useTranslations, type Locale } from "@/i18n";
 

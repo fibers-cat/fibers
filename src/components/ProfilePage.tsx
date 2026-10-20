@@ -12,7 +12,7 @@ import PersonOutlineRounded from "@mui/icons-material/PersonOutlineRounded";
 import { ThemeProvider } from "@mui/material/styles";
 import { supabase } from "@/lib/supabase";
 import { getSocialAvatar } from "@/lib/socialAvatar";
-import { fibersTheme } from "@/components/theme";
+import { fibersTheme } from "@/components/shared/theme";
 import { localizePath, useTranslations, type Locale } from "@/i18n";
 
 type Props = { returnTo: string; locale: Locale };

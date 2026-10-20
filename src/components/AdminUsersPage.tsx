@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
-import { fibersTheme } from '@/components/theme';
+import { fibersTheme } from '@/components/shared/theme';
 import { supabase } from '@/lib/supabase';
 import { useCurrentRole } from '@/lib/useCurrentRole';
 import { localizePath, useTranslations, type Locale } from '@/i18n';

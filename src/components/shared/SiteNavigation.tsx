@@ -11,7 +11,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
+import AppTooltip from '@/components/shared/AppTooltip';
 import SvgIcon from '@mui/material/SvgIcon';
 import type { User } from '@supabase/supabase-js';
 import MenuRounded from '@mui/icons-material/MenuRounded';
@@ -27,7 +27,7 @@ import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
 import ManageAccountsRounded from '@mui/icons-material/ManageAccountsRounded';
 import { siDiscord, siFacebook, siGithub } from 'simple-icons';
 import { ThemeProvider } from '@mui/material/styles';
-import { fibersTheme } from '@/components/theme';
+import { fibersTheme } from '@/components/shared/theme';
 import { supabase } from '@/lib/supabase';
 import { isAppRole, type AppRole } from '@/lib/roles';
 import { getSocialAvatar } from '@/lib/socialAvatar';
@@ -78,7 +78,7 @@ function LocaleSwitcher({ currentPath, locale }: Props) {
   const label = target === 'ca' ? t('switcher.switchToCa') : t('switcher.switchToEs');
   return (
     <Box className="locale-switcher" role="group" aria-label={t('switcher.label')}>
-      <Tooltip title={label} arrow>
+      <AppTooltip title={label} arrow>
         <a
           href={localizePath(basePath, target)}
           hrefLang={target}
@@ -88,7 +88,7 @@ function LocaleSwitcher({ currentPath, locale }: Props) {
         >
           {target.toUpperCase()}
         </a>
-      </Tooltip>
+      </AppTooltip>
     </Box>
   );
 }
@@ -201,7 +201,7 @@ export default function SiteNavigation({ currentPath, locale }: Props) {
         <div className="sidebar-bottom">
           <SocialLinks className="desktop-socials" locale={locale} />
           <LocaleSwitcher currentPath={currentPath} locale={locale} />
-          <Tooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow>
+          <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow>
             <IconButton component="a" href={localizePath('/perfil/', locale)} className="profile-link" aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}>
               {signedIn ? (
                 <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
@@ -209,7 +209,7 @@ export default function SiteNavigation({ currentPath, locale }: Props) {
                 </Avatar>
               ) : <PersonOutlineRounded />}
             </IconButton>
-          </Tooltip>
+          </AppTooltip>
         </div>
       </aside>
 
@@ -235,7 +235,7 @@ export default function SiteNavigation({ currentPath, locale }: Props) {
           <div className="drawer-bottom">
             <SocialLinks className="drawer-socials" locale={locale} />
             <LocaleSwitcher currentPath={currentPath} locale={locale} />
-            <Tooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow>
+            <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow>
               <IconButton
                 component="a"
                 href={localizePath('/perfil/', locale)}
@@ -248,7 +248,7 @@ export default function SiteNavigation({ currentPath, locale }: Props) {
                   </Avatar>
                 ) : <PersonOutlineRounded />}
               </IconButton>
-            </Tooltip>
+            </AppTooltip>
           </div>
         </Box>
       </Drawer>

@@ -14,7 +14,7 @@ import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
 import ErrorOutlineRounded from "@mui/icons-material/ErrorOutlineRounded";
 import { ThemeProvider } from "@mui/material/styles";
 import { supabase, type Subject } from "@/lib/supabase";
-import { fibersTheme } from "@/components/theme";
+import { fibersTheme } from "@/components/shared/theme";
 import { localizePath, useTranslations, type Locale } from "@/i18n";
 
 type Props = { initialSubject?: string; locale: Locale };

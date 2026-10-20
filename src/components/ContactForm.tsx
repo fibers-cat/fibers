@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
 import ErrorOutlineRounded from "@mui/icons-material/ErrorOutlineRounded";
 import { ThemeProvider } from "@mui/material/styles";
-import { fibersTheme } from "@/components/theme";
+import { fibersTheme } from "@/components/shared/theme";
 import { localizePath, useTranslations, type Locale } from "@/i18n";
 
 type Submission = {

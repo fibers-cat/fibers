@@ -17,7 +17,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CloseRounded from '@mui/icons-material/CloseRounded';
 import GitHub from '@mui/icons-material/GitHub';
 import VisibilityOutlined from '@mui/icons-material/VisibilityOutlined';
-import { fibersTheme } from '@/components/theme';
+import { fibersTheme } from '@/components/shared/theme';
 import { getDictionary, useTranslations, type Locale } from '@/i18n';
 
 type MilestoneLink = {

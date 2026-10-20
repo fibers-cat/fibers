@@ -15,7 +15,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Skeleton from '@mui/material/Skeleton';
 import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
+import AppTooltip from '@/components/shared/AppTooltip';
 import Typography from '@mui/material/Typography';
 import ArrowForwardRounded from '@mui/icons-material/ArrowForwardRounded';
 import FilterListRounded from '@mui/icons-material/FilterListRounded';
@@ -25,7 +25,7 @@ import SwapVertRounded from '@mui/icons-material/SwapVertRounded';
 import { ThemeProvider } from '@mui/material/styles';
 import type { Subject } from '@/data/subjects';
 import { supabase } from '@/lib/supabase';
-import { fibersTheme } from '@/components/theme';
+import { fibersTheme } from '@/components/shared/theme';
 import { intlLocale, localizePath, useTranslations, type Locale } from '@/i18n';
 
 type Props = {
@@ -247,7 +247,7 @@ export default function SubjectExplorer({
             />
             {showCategoryFilter && (
               <>
-                <Tooltip title={t('subjectExplorer.filter')} arrow>
+                <AppTooltip title={t('subjectExplorer.filter')} arrow>
                   <IconButton
                     className="subject-filter-button"
                     aria-label={t('subjectExplorer.filter')}
@@ -257,7 +257,7 @@ export default function SubjectExplorer({
                   >
                     <FilterListRounded />
                   </IconButton>
-                </Tooltip>
+                </AppTooltip>
                 <Popover
                   open={Boolean(categoryAnchor)}
                   anchorEl={categoryAnchor}
@@ -341,7 +341,7 @@ export default function SubjectExplorer({
                     </FormGroup>
                   </div>
                 </Popover>
-                <Tooltip title={t('subjectExplorer.sort')} arrow>
+                <AppTooltip title={t('subjectExplorer.sort')} arrow>
                   <IconButton
                     className="subject-filter-button"
                     aria-label={t('subjectExplorer.sort')}
@@ -351,7 +351,7 @@ export default function SubjectExplorer({
                   >
                     <SwapVertRounded />
                   </IconButton>
-                </Tooltip>
+                </AppTooltip>
                 <Popover
                   open={Boolean(sortAnchor)}
                   anchorEl={sortAnchor}
@@ -441,13 +441,13 @@ export default function SubjectExplorer({
                           />
                         )}
                         {subject.specialty ? (
-                          <Tooltip title={subject.specialty} arrow>
+                          <AppTooltip title={subject.specialty} arrow>
                             <Chip
                               className={`category-chip ${categoryClasses[subject.category] ?? ''}`}
                               label={subject.category}
                               size="small"
                             />
-                          </Tooltip>
+                          </AppTooltip>
                         ) : (
                           <Chip
                             className={`category-chip ${categoryClasses[subject.category] ?? ''}`}
@@ -456,11 +456,11 @@ export default function SubjectExplorer({
                           />
                         )}
                         {!subject.is_current && (
-                          <Tooltip title={t('subjectExplorer.historicalTooltip')} arrow describeChild>
+                          <AppTooltip title={t('subjectExplorer.historicalTooltip')} arrow describeChild>
                             <span className="historical-indicator" role="img" aria-label={t('subjectExplorer.historicalTooltip')}>
                               <Inventory2Outlined sx={{ fontSize: 14 }} aria-hidden="true" />
                             </span>
-                          </Tooltip>
+                          </AppTooltip>
                         )}
                       </div>
                     </div>
