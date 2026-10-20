@@ -1,7 +1,7 @@
 ---
 import SiteLayout from '@/layouts/SiteLayout.astro';
 import ContributorRanking from '@/components/ContributorRanking';
-import { fetchContributors } from '@/lib/contributors';
+import { fetchContributors } from '@/services/contributors';
 import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
 
 const contributors = await fetchContributors();

@@ -24,7 +24,8 @@ import SearchRounded from '@mui/icons-material/SearchRounded';
 import SwapVertRounded from '@mui/icons-material/SwapVertRounded';
 import { ThemeProvider } from '@mui/material/styles';
 import type { Subject } from '@/data/subjects';
-import { supabase } from '@/lib/supabase';
+import { hasSupabaseConfig } from '@/services/supabase';
+import { fetchSubjectMaterialCounts, fetchLatestMaterialDates } from '@/services/subjectMaterialCounts';
 import { fibersTheme } from '@/components/shared/theme';
 import { intlLocale, localizePath, useTranslations, type Locale } from '@/i18n';
 
@@ -100,27 +101,16 @@ export default function SubjectExplorer({
     if (initialMaterialCounts !== undefined) return;
     let active = true;
     const loadMaterialCounts = async () => {
-      if (!supabase) {
+      if (!hasSupabaseConfig) {
         setCountLoadError(true);
         setLoadingCounts(false);
         return;
       }
       try {
-        const { data, error } = await supabase
-          .from('approved_material_counts')
-          .select('subject_id,file_count');
-        if (error) {
-          console.error('Could not load approved material counts from Supabase.', error);
-          if (active) setCountLoadError(true);
-          return;
-        }
-        if (active) {
-          const counts: Record<string, number> = {};
-          for (const item of data ?? []) counts[item.subject_id] = Number(item.file_count);
-          setMaterialCounts(counts);
-        }
+        const counts = await fetchSubjectMaterialCounts();
+        if (active) setMaterialCounts(counts);
       } catch (error) {
-        console.error('Could not connect to Supabase while loading material counts.', error);
+        console.error('Could not load approved material counts from Supabase.', error);
         if (active) setCountLoadError(true);
       } finally {
         if (active) setLoadingCounts(false);
@@ -134,41 +124,13 @@ export default function SubjectExplorer({
     if (!showCategoryFilter) return;
     let active = true;
     const loadLatestMaterialDates = async () => {
-      if (!supabase) {
+      if (!hasSupabaseConfig) {
         setDateLoadError(true);
         setLoadingDates(false);
         return;
       }
       try {
-        const [contributionsResult, legacyResult] = await Promise.all([
-          supabase
-            .from('contributions')
-            .select('subject_id,reviewed_at')
-            .eq('status', 'approved')
-            .not('reviewed_at', 'is', null),
-          supabase
-            .from('legacy_material_subjects')
-            .select('subject_id,legacy_materials!inner(contributed_at)'),
-        ]);
-        if (contributionsResult.error) throw contributionsResult.error;
-        if (legacyResult.error) throw legacyResult.error;
-
-        const latestDates: Record<string, string> = {};
-        const recordDate = (subjectId: string, date: string | null | undefined) => {
-          if (date && (!latestDates[subjectId] || date > latestDates[subjectId])) {
-            latestDates[subjectId] = date;
-          }
-        };
-        for (const item of contributionsResult.data ?? []) {
-          recordDate(item.subject_id, item.reviewed_at);
-        }
-        for (const item of legacyResult.data ?? []) {
-          const material = item.legacy_materials;
-          const contributedAt = Array.isArray(material)
-            ? material[0]?.contributed_at
-            : material?.contributed_at;
-          recordDate(item.subject_id, contributedAt);
-        }
+        const latestDates = await fetchLatestMaterialDates();
         if (active) setLatestMaterialDates(latestDates);
       } catch (error) {
         console.error('Could not load latest published material dates.', error);

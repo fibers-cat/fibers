@@ -19,7 +19,8 @@ import {
   materialUrl,
 } from "@/data/materials";
 import { fibersTheme } from "@/components/shared/theme";
-import { supabase } from "@/lib/supabase";
+import { hasSupabaseConfig } from "@/services/supabase";
+import { fetchMaterialAttributionRows } from "@/services/materialAttributions";
 import { intlLocale, useTranslations, type Locale } from "@/i18n";
 
 type Props = {
@@ -53,17 +54,11 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
   const [textError, setTextError] = useState(false);
 
   useEffect(() => {
-    if (initialAttributions || !supabase || materials.length === 0) return;
-    supabase
-      .from("legacy_materials")
-      .select("path,contributed_at,profiles(alias)")
-      .in(
-        "path",
-        materials.map((material) => material.path),
-      )
-      .then(({ data }) => {
+    if (initialAttributions || !hasSupabaseConfig || materials.length === 0) return;
+    fetchMaterialAttributionRows(materials)
+      .then((rows) => {
         const next: Record<string, string> = {};
-        for (const item of data ?? []) {
+        for (const item of rows) {
           if (item.path)
             next[item.path] = t("resourceCollection.attributedTo", {
               alias: item.profiles?.alias ?? t("resourceCollection.unknownAuthor"),
@@ -73,6 +68,9 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
             });
         }
         setAttributions(next);
+      })
+      .catch((error: unknown) => {
+        console.error("Could not load material attributions.", error);
       });
   }, [initialAttributions, materials, locale, t]);
 

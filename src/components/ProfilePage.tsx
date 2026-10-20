@@ -10,8 +10,10 @@ import GitHub from "@mui/icons-material/GitHub";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
 import PersonOutlineRounded from "@mui/icons-material/PersonOutlineRounded";
 import { ThemeProvider } from "@mui/material/styles";
-import { supabase } from "@/lib/supabase";
-import { getSocialAvatar } from "@/lib/socialAvatar";
+import { hasSupabaseConfig } from "@/services/supabase";
+import { getSession, getCurrentUser, onAuthStateChange, signInWithEmailLink, signInWithOAuth, signOut as signOutUser } from "@/services/auth";
+import { fetchUserProfile, saveSocialAvatar, updateAlias } from "@/services/profiles";
+import { getSocialAvatar } from "@/services/socialAvatar";
 import { fibersTheme } from "@/components/shared/theme";
 import { localizePath, useTranslations, type Locale } from "@/i18n";
 
@@ -28,20 +30,21 @@ export default function ProfilePage({ returnTo, locale }: Props) {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     let active = true;
     const load = async () => {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
-      if (!active) return;
-      if (sessionError) {
+      let session;
+      try {
+        session = await getSession();
+      } catch (sessionError) {
         console.error("Could not load the current authentication session.", sessionError);
-        setMessage(t("profilePage.sessionError"));
-        setMessageIsError(true);
+        if (active) {
+          setMessage(t("profilePage.sessionError"));
+          setMessageIsError(true);
+        }
         return;
       }
+      if (!active) return;
       if (!session) {
         setUserEmail("");
         setAlias("");
@@ -51,17 +54,18 @@ export default function ProfilePage({ returnTo, locale }: Props) {
         return;
       }
 
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-      if (!active) return;
-      if (userError) {
+      let user;
+      try {
+        user = await getCurrentUser();
+      } catch (userError) {
         console.error("Could not load the signed-in user.", userError);
-        setMessage(t("profilePage.sessionError"));
-        setMessageIsError(true);
+        if (active) {
+          setMessage(t("profilePage.sessionError"));
+          setMessageIsError(true);
+        }
         return;
       }
+      if (!active) return;
       setUserEmail(user?.email ?? "");
       if (!user) {
         setAlias("");
@@ -69,28 +73,26 @@ export default function ProfilePage({ returnTo, locale }: Props) {
         return;
       }
 
-      const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("alias,avatar_url")
-        .eq("id", user.id)
-        .maybeSingle();
-      if (!active) return;
-      if (profileError) {
+      let profile;
+      try {
+        profile = await fetchUserProfile(user.id);
+      } catch (profileError) {
         console.error("Could not load the signed-in user's profile.", profileError);
-        setMessage(t("profilePage.profileError"));
-        setMessageIsError(true);
+        if (active) {
+          setMessage(t("profilePage.profileError"));
+          setMessageIsError(true);
+        }
         return;
       }
+      if (!active) return;
 
-      setAlias(profile?.alias ?? "");
+      setAlias(profile.alias ?? "");
       const socialAvatar = getSocialAvatar(user);
-      setAvatarUrl(socialAvatar ?? profile?.avatar_url ?? null);
-      if (socialAvatar && socialAvatar !== profile?.avatar_url) {
-        const { error: avatarError } = await supabase
-          .from("profiles")
-          .update({ avatar_url: socialAvatar })
-          .eq("id", user.id);
-        if (avatarError) {
+      setAvatarUrl(socialAvatar ?? profile.avatarUrl ?? null);
+      if (socialAvatar && socialAvatar !== profile.avatarUrl) {
+        try {
+          await saveSocialAvatar(user.id, socialAvatar);
+        } catch (avatarError) {
           console.error("Could not save the social profile avatar.", avatarError);
           if (active) {
             setMessage(t("profilePage.avatarSaveError"));
@@ -100,50 +102,48 @@ export default function ProfilePage({ returnTo, locale }: Props) {
       }
     };
     void load();
-    const { data } = supabase.auth.onAuthStateChange(() => {
+    const unsubscribe = onAuthStateChange(() => {
       window.setTimeout(() => {
         void load();
       }, 0);
     });
     return () => {
       active = false;
-      data.subscription.unsubscribe();
+      unsubscribe();
     };
   }, [locale, t]);
 
   const sendLink = async (event: FormEvent) => {
     event.preventDefault();
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     setBusy(true);
     setMessage("");
     setMessageIsError(false);
     const callback = new URL(localizePath("/perfil/", locale), window.location.origin);
     callback.searchParams.set("returnTo", safeReturn);
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: callback.href },
-    });
-    setMessage(
-      error ? error.message : t("profilePage.linkSent"),
-    );
-    setMessageIsError(Boolean(error));
+    try {
+      await signInWithEmailLink(email, callback.href);
+      setMessage(t("profilePage.linkSent"));
+      setMessageIsError(false);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : t("profilePage.sessionError"));
+      setMessageIsError(true);
+    }
     setBusy(false);
   };
 
   const oauth = async (provider: "google" | "github") => {
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     setBusy(true);
     setMessage("");
     setMessageIsError(false);
     const callback = new URL(localizePath("/perfil/", locale), window.location.origin);
     callback.searchParams.set("returnTo", safeReturn);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo: callback.href },
-    });
-    if (error) {
+    try {
+      await signInWithOAuth(provider, callback.href);
+    } catch (error) {
       console.error(`Could not start ${provider} sign-in.`, error);
-      setMessage(error.message);
+      setMessage(error instanceof Error ? error.message : t("profilePage.sessionError"));
       setMessageIsError(true);
       setBusy(false);
     }
@@ -151,33 +151,31 @@ export default function ProfilePage({ returnTo, locale }: Props) {
 
   const saveAlias = async (event: FormEvent) => {
     event.preventDefault();
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     setBusy(true);
     setMessage("");
     setMessageIsError(false);
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    const { error } = user
-      ? await supabase
-          .from("profiles")
-          .update({ alias: alias.trim(), updated_at: new Date().toISOString() })
-          .eq("id", user.id)
-      : { error: new Error(t("profilePage.sessionExpired")) };
-    setMessage(error ? error.message : t("profilePage.aliasSaved"));
-    setMessageIsError(Boolean(error));
+    try {
+      const user = await getCurrentUser();
+      if (!user) throw new Error(t("profilePage.sessionExpired"));
+      await updateAlias(user.id, alias);
+      setMessage(t("profilePage.aliasSaved"));
+      setMessageIsError(false);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : t("profilePage.sessionError"));
+      setMessageIsError(true);
+    }
     setBusy(false);
   };
 
   const signOut = async () => {
-    if (supabase) {
-      await supabase.auth.signOut();
-      setUserEmail("");
-      setAlias("");
-      setAvatarUrl(null);
-      setMessage(t("profilePage.signedOut"));
-      setMessageIsError(false);
-    }
+    if (!hasSupabaseConfig) return;
+    await signOutUser();
+    setUserEmail("");
+    setAlias("");
+    setAvatarUrl(null);
+    setMessage(t("profilePage.signedOut"));
+    setMessageIsError(false);
   };
   const safeReturn =
     returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/";
@@ -191,7 +189,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
         {message && (
           <Alert severity={messageIsError ? "error" : "info"}>{message}</Alert>
         )}
-        {!supabase && (
+        {!hasSupabaseConfig && (
           <Alert severity="error">{t("profilePage.supabaseMissing")}</Alert>
         )}
         {userEmail ? (

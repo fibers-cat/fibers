@@ -13,7 +13,9 @@ import AttachFileRounded from "@mui/icons-material/AttachFileRounded";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
 import ErrorOutlineRounded from "@mui/icons-material/ErrorOutlineRounded";
 import { ThemeProvider } from "@mui/material/styles";
-import { supabase, type Subject } from "@/lib/supabase";
+import { hasSupabaseConfig, type Subject } from "@/services/supabase";
+import { getSession } from "@/services/auth";
+import { listSubjectsForContribution, submitContribution } from "@/services/contributions";
 import { fibersTheme } from "@/components/shared/theme";
 import { localizePath, useTranslations, type Locale } from "@/i18n";
 
@@ -37,24 +39,15 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   const [showValidationErrors, setShowValidationErrors] = useState(false);
 
   useEffect(() => {
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     Promise.all([
-      supabase
-        .from("subjects")
-        .select(
-          "id,slug,acronym,code,name,category,description,languages,specialty,is_current",
-        )
-        .order("acronym"),
-      supabase.auth.getSession(),
-    ]).then(([subjectResult, userResult]) => {
-      setSubjects((subjectResult.data ?? []) as Subject[]);
-      setUserId(userResult.data.session?.user.id ?? null);
+      listSubjectsForContribution(),
+      getSession(),
+    ]).then(([subjects, session]) => {
+      setSubjects(subjects);
+      setUserId(session?.user.id ?? null);
       setAuthLoaded(true);
-      if (userResult.error) {
-        console.error("Could not load the authentication session for contributions.", userResult.error);
-        setAuthError(true);
-      }
-      const selected = subjectResult.data?.find(
+      const selected = subjects.find(
         (item) => item.acronym === initialSubject,
       );
       if (selected) setSubjectId(selected.id);
@@ -65,7 +58,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
     });
   }, [initialSubject]);
 
-  const needsLogin = Boolean(supabase && authLoaded && !authError && !userId);
+  const needsLogin = Boolean(hasSupabaseConfig && authLoaded && !authError && !userId);
   const fieldErrors = {
     subject: !subjectId ? t("contributionForm.errors.subject") : "",
     title:
@@ -86,8 +79,8 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
       : t("contributionForm.errors.acknowledgement"),
   };
   const validationIssues = [
-    !supabase && t("contributionForm.serviceUnavailable"),
-    supabase && !authLoaded && t("contributionForm.sessionChecking"),
+    !hasSupabaseConfig && t("contributionForm.serviceUnavailable"),
+    hasSupabaseConfig && !authLoaded && t("contributionForm.sessionChecking"),
     authError && t("contributionForm.sessionError"),
     fieldErrors.subject,
     fieldErrors.title,
@@ -99,39 +92,17 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setShowValidationErrors(true);
-    if (validationIssues.length > 0 || !supabase || !userId) return;
+    if (validationIssues.length > 0 || !hasSupabaseConfig || !userId) return;
     setBusy(true);
     setMessage("");
     try {
-      const { data: contribution, error } = await supabase
-        .from("contributions")
-        .insert({
-          author_id: userId,
-          subject_id: subjectId,
-          title: title.trim(),
-          description: description.trim(),
-        })
-        .select("id")
-        .single();
-      if (error) throw error;
-
-      for (const file of files) {
-        const path = `${userId}/${contribution.id}/${crypto.randomUUID()}-${file.name.replace(/[^\w.-]/g, "_")}`;
-        const uploaded = await supabase.storage
-          .from("contributions")
-          .upload(path, file, {
-            contentType: file.type || "application/octet-stream",
-          });
-        if (uploaded.error) throw uploaded.error;
-        const registered = await supabase.from("contribution_files").insert({
-          contribution_id: contribution.id,
-          storage_path: path,
-          original_name: file.name,
-          mime_type: file.type || "application/octet-stream",
-          size_bytes: file.size,
-        });
-        if (registered.error) throw registered.error;
-      }
+      await submitContribution({
+        authorId: userId,
+        subjectId,
+        title: title.trim(),
+        description: description.trim(),
+        files,
+      });
       setMessage(t("contributionForm.success"));
       setFiles([]);
       setTitle("");
@@ -158,7 +129,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
         noValidate
         useFlexGap
       >
-        {!supabase && (
+        {!hasSupabaseConfig && (
           <Typography className="contribution-status contribution-status--error" role="status">
             {t("contributionForm.supabaseMissing")}
           </Typography>
@@ -300,7 +271,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
             </FormHelperText>
           )}
         </Stack>
-        {showValidationErrors && (needsLogin || authError || (supabase && !authLoaded)) && (
+        {showValidationErrors && (needsLogin || authError || (hasSupabaseConfig && !authLoaded)) && (
           <Alert severity="error">
             {needsLogin && (
               <p className="contribution-login-issue">
@@ -315,7 +286,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
                 {t("contributionForm.sessionError")}
               </p>
             )}
-            {supabase && !authLoaded && (
+            {hasSupabaseConfig && !authLoaded && (
               <p className="contribution-login-issue">
                 {t("contributionForm.sessionChecking")}
               </p>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { isAppRole, type AppRole } from '@/lib/roles';
+import { hasSupabaseConfig } from '@/services/supabase';
+import { getSession, onAuthStateChange } from '@/services/auth';
+import { fetchUserProfile } from '@/services/profiles';
+import type { AppRole } from '@/services/roles';
 
 type RoleState = {
   role: AppRole | null;
@@ -16,7 +18,7 @@ export function useCurrentRole(): RoleState {
   });
 
   useEffect(() => {
-    if (!supabase) {
+    if (!hasSupabaseConfig) {
       setState({ role: null, loading: false, error: 'Falta configurar Supabase.' });
       return;
     }
@@ -29,38 +31,37 @@ export function useCurrentRole(): RoleState {
       }
 
       if (active) setState({ role: null, loading: true, error: null });
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', userId)
-        .maybeSingle();
-
-      if (!active) return;
-      if (error) {
+      try {
+        const profile = await fetchUserProfile(userId);
+        if (!active) return;
+        if (!profile.role) {
+          setState({ role: null, loading: false, error: 'El teu perfil no té un rol vàlid.' });
+          return;
+        }
+        setState({ role: profile.role, loading: false, error: null });
+      } catch (error) {
         console.error('Could not load the signed-in user role.', error);
-        setState({ role: null, loading: false, error: 'No s’ha pogut comprovar el teu rol.' });
-        return;
+        if (active) {
+          setState({ role: null, loading: false, error: 'No s’ha pogut comprovar el teu rol.' });
+        }
       }
-      if (!data || !isAppRole(data.role)) {
-        setState({ role: null, loading: false, error: 'El teu perfil no té un rol vàlid.' });
-        return;
-      }
-      setState({ role: data.role, loading: false, error: null });
     };
 
     const loadSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (!active) return;
-      if (error) {
+      try {
+        const session = await getSession();
+        if (!active) return;
+        await loadRole(session?.user.id ?? null);
+      } catch (error) {
         console.error('Could not load the current authentication session.', error);
-        setState({ role: null, loading: false, error: 'No s’ha pogut carregar la sessió.' });
-        return;
+        if (active) {
+          setState({ role: null, loading: false, error: 'No s’ha pogut carregar la sessió.' });
+        }
       }
-      await loadRole(data.session?.user.id ?? null);
     };
 
     void loadSession();
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+    const unsubscribe = onAuthStateChange((_event, session) => {
       window.setTimeout(() => {
         void loadRole(session?.user.id ?? null);
       }, 0);
@@ -68,7 +69,7 @@ export function useCurrentRole(): RoleState {
 
     return () => {
       active = false;
-      data.subscription.unsubscribe();
+      unsubscribe();
     };
   }, []);
 

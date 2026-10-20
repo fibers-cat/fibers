@@ -2,32 +2,11 @@ import { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
-import { supabase } from "@/lib/supabase";
+import { hasSupabaseConfig } from "@/services/supabase";
+import { fetchApprovedMaterials, type ApprovedContribution, type LegacyMaterial } from "@/services/contributions";
 import { intlLocale, useTranslations, type Locale } from "@/i18n";
 
 type Props = { subjectId: string; locale: Locale };
-type ApprovedFile = {
-  id: string;
-  original_name: string;
-  size_bytes: number;
-  url: string;
-};
-type ApprovedContribution = {
-  id: string;
-  title: string;
-  description: string;
-  profiles: { alias: string } | null;
-  files: ApprovedFile[];
-};
-type LegacyMaterial = {
-  id: string;
-  title: string;
-  path: string | null;
-  external_url: string | null;
-  content_text: string | null;
-  contributed_at: string;
-  profiles: { alias: string } | null;
-};
 
 export default function ApprovedMaterials({ subjectId, locale }: Props) {
   const t = useTranslations(locale);
@@ -36,66 +15,22 @@ export default function ApprovedMaterials({ subjectId, locale }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   useEffect(() => {
-    if (!supabase) {
+    if (!hasSupabaseConfig) {
       setLoading(false);
       return;
     }
     let active = true;
     (async () => {
-      const [approvedResult, legacyResult] = await Promise.all([
-        supabase
-          .from("contributions")
-          .select(
-            "id,title,description,profiles(alias),contribution_files(id,original_name,storage_path,size_bytes)",
-          )
-          .eq("subject_id", subjectId)
-          .eq("status", "approved")
-          .order("created_at", { ascending: false }),
-        supabase
-          .from("legacy_material_subjects")
-          .select(
-            "legacy_materials(id,title,path,external_url,content_text,contributed_at,profiles(alias))",
-          )
-          .eq("subject_id", subjectId),
-      ]);
-      if (approvedResult.error || legacyResult.error) {
-        if (active) {
-          setError(t("approvedMaterials.error"));
-          setLoading(false);
-        }
-        return;
-      }
-      const entries = await Promise.all(
-        (approvedResult.data ?? []).map(async (entry) => {
-          const files = await Promise.all(
-            (entry.contribution_files ?? []).map(async (file) => {
-              const { data: signed } = await supabase.storage
-                .from("contributions")
-                .createSignedUrl(file.storage_path, 60 * 60);
-              return {
-                id: file.id,
-                original_name: file.original_name,
-                size_bytes: Number(file.size_bytes),
-                url: signed?.signedUrl ?? "",
-              };
-            }),
-          );
-          return {
-            id: entry.id,
-            title: entry.title,
-            description: entry.description,
-            profiles: entry.profiles,
-            files,
-          };
-        }),
-      );
-      if (active) {
-        const historical = (legacyResult.data ?? [])
-          .map((entry) => entry.legacy_materials)
-          .filter((item) => item && !item.path) as unknown as LegacyMaterial[];
-        setItems(entries);
-        setLegacyItems(historical);
-        setLoading(false);
+      try {
+        const { contributions, legacyMaterials } = await fetchApprovedMaterials(subjectId);
+        if (!active) return;
+        setItems(contributions);
+        setLegacyItems(legacyMaterials);
+      } catch (loadError) {
+        console.error("Could not load approved materials.", loadError);
+        if (active) setError(t("approvedMaterials.error"));
+      } finally {
+        if (active) setLoading(false);
       }
     })();
     return () => {

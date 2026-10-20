@@ -3,7 +3,7 @@ import SiteLayout from '@/layouts/SiteLayout.astro';
 // import SiteBreadcrumbs from '../shared/SiteBreadcrumbs';
 import SubjectStatus from '@/components/SubjectStatus';
 import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
-import type { Subject } from '@/lib/supabase';
+import type { Subject } from '@/services/supabase';
 
 interface Props {
   subject: Subject;

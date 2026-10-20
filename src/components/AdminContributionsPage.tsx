@@ -9,28 +9,10 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 import { fibersTheme } from '@/components/shared/theme';
-import { supabase } from '@/lib/supabase';
-import { useCurrentRole } from '@/lib/useCurrentRole';
+import { hasSupabaseConfig } from '@/services/supabase';
+import { fetchPendingContributions, reviewContribution, type PendingContribution } from '@/services/contributions';
+import { useCurrentRole } from '@/services/useCurrentRole';
 import { intlLocale, localizePath, useTranslations, type Locale } from '@/i18n';
-
-type ContributionFile = {
-  id: string;
-  original_name: string;
-  size_bytes: number;
-  storage_path: string;
-  url: string;
-};
-
-type PendingContribution = {
-  id: string;
-  title: string;
-  description: string;
-  review_note: string | null;
-  created_at: string;
-  profiles: { alias: string } | null;
-  subjects: { acronym: string; name: string } | null;
-  contribution_files: ContributionFile[];
-};
 
 export default function AdminContributionsPage({ locale }: { locale: Locale }) {
   const t = useTranslations(locale);
@@ -43,42 +25,14 @@ export default function AdminContributionsPage({ locale }: { locale: Locale }) {
   const [error, setError] = useState('');
 
   const loadPending = useCallback(async () => {
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     setLoading(true);
     setError('');
-    const { data, error: queryError } = await supabase
-      .from('contributions')
-      .select('id,title,description,review_note,created_at,profiles(alias),subjects(acronym,name),contribution_files(id,original_name,size_bytes,storage_path)')
-      .eq('status', 'pending')
-      .order('created_at', { ascending: true });
-
-    if (queryError) {
-      console.error('Could not load pending contributions.', queryError);
-      setError(t('admin.contributions.loadError'));
-      setLoading(false);
-      return;
-    }
-
     try {
-      const withSignedFiles = await Promise.all(
-        ((data ?? []) as unknown as PendingContribution[]).map(async (item) => {
-          const files = await Promise.all(
-            item.contribution_files.map(async (file) => {
-              if (!supabase) throw new Error(t('admin.supabaseMissing'));
-              const { data: signed, error: signedError } = await supabase.storage
-                .from('contributions')
-                .createSignedUrl(file.storage_path, 60 * 60);
-              if (signedError) throw signedError;
-              return { ...file, url: signed.signedUrl };
-            }),
-          );
-          return { ...item, contribution_files: files };
-        }),
-      );
-      setItems(withSignedFiles);
+      setItems(await fetchPendingContributions());
     } catch (loadError) {
-      console.error('Could not create review links for contribution files.', loadError);
-      setError(t('admin.contributions.filesError'));
+      console.error('Could not load pending contributions.', loadError);
+      setError(t('admin.contributions.loadError'));
     } finally {
       setLoading(false);
     }
@@ -89,31 +43,22 @@ export default function AdminContributionsPage({ locale }: { locale: Locale }) {
   }, [loadPending, role]);
 
   const review = async (item: PendingContribution, status: 'approved' | 'rejected') => {
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     setActionId(item.id);
     setMessage('');
     setError('');
 
-    const { data, error: updateError } = await supabase
-      .from('contributions')
-      .update({
-        status,
-        review_note: notes[item.id]?.trim() || null,
-        reviewed_at: new Date().toISOString(),
-      })
-      .eq('id', item.id)
-      .eq('status', 'pending')
-      .select('id')
-      .maybeSingle();
-
-    if (updateError) {
+    try {
+      const updated = await reviewContribution(item.id, status, notes[item.id]?.trim() || null);
+      if (!updated) {
+        setError(t('admin.contributions.staleError'));
+      } else {
+        setItems((current) => current.filter((candidate) => candidate.id !== item.id));
+        setMessage(status === 'approved' ? t('admin.contributions.approved') : t('admin.contributions.rejected'));
+      }
+    } catch (updateError) {
       console.error('Could not review the contribution.', updateError);
       setError(t('admin.contributions.saveError'));
-    } else if (!data) {
-      setError(t('admin.contributions.staleError'));
-    } else {
-      setItems((current) => current.filter((candidate) => candidate.id !== item.id));
-      setMessage(status === 'approved' ? t('admin.contributions.approved') : t('admin.contributions.rejected'));
     }
     setActionId(null);
   };

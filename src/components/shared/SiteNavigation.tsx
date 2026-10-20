@@ -14,8 +14,7 @@ import Toolbar from '@mui/material/Toolbar';
 import AppTooltip from '@/components/shared/AppTooltip';
 import SvgIcon from '@mui/material/SvgIcon';
 import type { User } from '@supabase/supabase-js';
-import MenuRounded from '@mui/icons-material/MenuRounded';
-import CloseRounded from '@mui/icons-material/CloseRounded';
+import MenuRounded from '@mui/icons-material/MenuRounded';import CloseRounded from '@mui/icons-material/CloseRounded';
 import HomeRounded from '@mui/icons-material/HomeRounded';
 import MenuBookRounded from '@mui/icons-material/MenuBookRounded';
 import VolunteerActivismRounded from '@mui/icons-material/VolunteerActivismRounded';
@@ -28,9 +27,11 @@ import ManageAccountsRounded from '@mui/icons-material/ManageAccountsRounded';
 import { siDiscord, siFacebook, siGithub } from 'simple-icons';
 import { ThemeProvider } from '@mui/material/styles';
 import { fibersTheme } from '@/components/shared/theme';
-import { supabase } from '@/lib/supabase';
-import { isAppRole, type AppRole } from '@/lib/roles';
-import { getSocialAvatar } from '@/lib/socialAvatar';
+import { hasSupabaseConfig } from '@/services/supabase';
+import { getSession, onAuthStateChange } from '@/services/auth';
+import { fetchUserProfile } from '@/services/profiles';
+import type { AppRole } from '@/services/roles';
+import { getSocialAvatar } from '@/services/socialAvatar';
 import { localizePath, stripLocalePrefix, useTranslations, type Locale, type UIKey } from '@/i18n';
 
 const links: { path: string; labelKey: UIKey; icon: ReactElement }[] = [
@@ -140,7 +141,7 @@ export default function SiteNavigation({ currentPath, locale }: Props) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [role, setRole] = useState<AppRole | null>(null);
   useEffect(() => {
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     let active = true;
     const loadAvatar = async (user: User | null) => {
       if (!user) {
@@ -152,37 +153,31 @@ export default function SiteNavigation({ currentPath, locale }: Props) {
       }
       const socialAvatar = getSocialAvatar(user);
       if (active) setAvatarUrl(socialAvatar);
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('avatar_url,role')
-        .eq('id', user.id)
-        .maybeSingle();
-      if (error) {
+      try {
+        const profile = await fetchUserProfile(user.id);
+        if (active) {
+          setAvatarUrl(socialAvatar ?? profile.avatarUrl ?? null);
+          setRole(profile.role);
+        }
+      } catch (error) {
         console.error('Could not load the profile avatar for navigation.', error);
         if (active) setRole(null);
-        return;
-      }
-      if (active) {
-        setAvatarUrl(socialAvatar ?? profile?.avatar_url ?? null);
-        setRole(isAppRole(profile?.role) ? profile.role : null);
       }
     };
-    supabase.auth.getSession().then(({ data, error }) => {
-      if (error) {
-        console.error('Could not load the current authentication session.', error);
-        return;
-      }
+    getSession().then((session) => {
       if (!active) return;
-      setSignedIn(Boolean(data.session));
-      void loadAvatar(data.session?.user ?? null);
+      setSignedIn(Boolean(session));
+      void loadAvatar(session?.user ?? null);
+    }).catch((error: unknown) => {
+      console.error('Could not load the current authentication session.', error);
     });
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+    const unsubscribe = onAuthStateChange((_event, session) => {
       setSignedIn(Boolean(session));
       window.setTimeout(() => { void loadAvatar(session?.user ?? null); }, 0);
     });
     return () => {
       active = false;
-      data.subscription.unsubscribe();
+      unsubscribe();
     };
   }, []);
   const brand = (

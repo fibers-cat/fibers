@@ -2,8 +2,8 @@
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import SubjectExplorer from "@/components/SubjectExplorer";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
-import { fetchSubjects } from "@/lib/subjects";
-import { fetchSubjectMaterialCounts } from "@/lib/subjectMaterialCounts";
+import { fetchSubjects } from "@/services/subjects";
+import { fetchSubjectMaterialCounts } from "@/services/subjectMaterialCounts";
 import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from "@/i18n";
 
 const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);

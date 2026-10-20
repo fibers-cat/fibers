@@ -3,7 +3,7 @@ import SiteLayout from '@/layouts/SiteLayout.astro';
 // import SiteBreadcrumbs from '@/components/shared/SiteBreadcrumbs';
 import ResourceCollection from '@/components/ResourceCollection';
 import { generalMaterials } from '@/data/materials';
-import { fetchMaterialAttributions } from '@/lib/materialAttributions';
+import { fetchMaterialAttributions } from '@/services/materialAttributions';
 import { getLocaleFromUrl, isLocale, useTranslations } from '@/i18n';
 
 const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
