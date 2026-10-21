@@ -354,6 +354,8 @@
     "subjectLabel": "Asignatura",
     "subjectPlaceholder": "Selecciona una asignatura",
     "subjectLatest": " · Asignatura no vigente",
+    "subjectNoResults": "No se ha encontrado ninguna asignatura.",
+    "subjectLoading": "Cargando asignaturas…",
     "titleLabel": "Título del material",
     "descriptionLabel": "Descripción",
     "attachFiles": "Adjunta archivos",

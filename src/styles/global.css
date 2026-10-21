@@ -1769,6 +1769,40 @@ textarea {
   font-weight: 700;
 }
 
+.contribution-subject-option {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+.contribution-subject-code {
+  flex: 0 0 auto;
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.contribution-subject-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.875rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contribution-subject-tag {
+  flex: 0 0 auto;
+  color: #8b929d;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .file-input {
   position: absolute;
   overflow: hidden;

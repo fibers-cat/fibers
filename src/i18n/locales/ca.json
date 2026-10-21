@@ -354,6 +354,8 @@
     "subjectLabel": "Assignatura",
     "subjectPlaceholder": "Selecciona una assignatura",
     "subjectLatest": " · Assignatura no vigent",
+    "subjectNoResults": "No s’ha trobat cap assignatura.",
+    "subjectLoading": "Carregant assignatures…",
     "titleLabel": "Títol del material",
     "descriptionLabel": "Descripció",
     "attachFiles": "Adjunta arxius",

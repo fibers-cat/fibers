@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useRef, useState, type SyntheticEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type SyntheticEvent } from "react";
 import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from "@mui/material/Alert";
+import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
-import MenuItem from "@mui/material/MenuItem";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -41,6 +41,39 @@ function fileExtension(name: string): string {
   return name.slice(index + 1).toUpperCase().slice(0, 4);
 }
 
+/** Label of a subject inside the searchable select. */
+function subjectOptionLabel(subject: Subject): string {
+  return `${subject.acronym}${subject.code ? ` (${subject.code})` : ""} — ${subject.name}`;
+}
+
+/**
+ * Filters the subjects: acronym and code matches come first, then matches on
+ * the subject name.
+ */
+function filterSubjects(
+  options: Subject[],
+  state: { inputValue: string },
+): Subject[] {
+  const query = state.inputValue.trim().toLowerCase();
+  if (!query) return options;
+  const exact: Subject[] = [];
+  const loose: Subject[] = [];
+  for (const option of options) {
+    const acronym = option.acronym.toLowerCase();
+    const code = option.code?.toLowerCase() ?? "";
+    const name = option.name.toLowerCase();
+    if (acronym.startsWith(query) || code.startsWith(query)) exact.push(option);
+    else if (
+      acronym.includes(query) ||
+      code.includes(query) ||
+      name.includes(query)
+    ) {
+      loose.push(option);
+    }
+  }
+  return [...exact, ...loose];
+}
+
 export default function ContributionForm({ initialSubject = "", locale }: Props) {
   const t = useTranslations(locale);
   const gate = getDictionary(locale).contributionForm.gate;
@@ -48,6 +81,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   const [phase, setPhase] = useState<AuthPhase>("loading");
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [subjectsError, setSubjectsError] = useState(false);
+  const [subjectsLoading, setSubjectsLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [identity, setIdentity] = useState("");
   const [sessionLost, setSessionLost] = useState(false);
@@ -83,6 +117,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
 
   const loadSubjects = useCallback(async () => {
     if (subjectsLoaded.current) return;
+    setSubjectsLoading(true);
     try {
       const list = await listSubjectsForContribution();
       subjectsLoaded.current = true;
@@ -95,6 +130,8 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
     } catch (error) {
       console.error("Could not load the subjects of the contribution form.", error);
       setSubjectsError(true);
+    } finally {
+      setSubjectsLoading(false);
     }
   }, []);
 
@@ -166,6 +203,10 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   }, [loadSubjects, loadIdentity]);
 
   const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+  const selectedSubject = useMemo(
+    () => subjects.find((item) => item.id === subjectId) ?? null,
+    [subjects, subjectId],
+  );
   const fieldErrors = {
     subject: !subjectId ? t("contributionForm.errors.subject") : "",
     title:
@@ -328,34 +369,60 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
             {message}
           </Typography>
         )}
-        <TextField
-          select
-          required
-          label={t("contributionForm.subjectLabel")}
-          value={subjectId}
-          onChange={(event) => setSubjectId(event.target.value)}
-          error={showValidationErrors && Boolean(fieldErrors.subject)}
-          helperText={showValidationErrors ? fieldErrors.subject : ""}
-          slotProps={{
-            input: {
-              endAdornment: showValidationErrors && fieldErrors.subject ? (
-                <InputAdornment position="end">
-                  <ErrorOutlineRounded color="error" fontSize="small" aria-hidden="true" />
-                </InputAdornment>
-              ) : undefined,
-            },
-          }}
-          fullWidth
-        >
-          <MenuItem value="">{t("contributionForm.subjectPlaceholder")}</MenuItem>
-          {subjects.map((item) => (
-            <MenuItem key={item.id} value={item.id}>
-              {item.acronym}
-              {item.code ? ` (${item.code})` : ""} — {item.name}
-              {item.is_current ? "" : t("contributionForm.subjectLatest")}
-            </MenuItem>
-          ))}
-        </TextField>
+        <Autocomplete
+          options={subjects}
+          value={selectedSubject}
+          onChange={(_event, option) => setSubjectId(option?.id ?? "")}
+          getOptionLabel={subjectOptionLabel}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          filterOptions={filterSubjects}
+          noOptionsText={t("contributionForm.subjectNoResults")}
+          loading={subjectsLoading}
+          loadingText={t("contributionForm.subjectLoading")}
+          renderOption={(props, option) => (
+            <li {...props} key={option.id}>
+              <span className="contribution-subject-option">
+                <span className="contribution-subject-code">
+                  {option.acronym}
+                  {option.code ? ` (${option.code})` : ""}
+                </span>
+                <span className="contribution-subject-name">{option.name}</span>
+                {!option.is_current && (
+                  <span className="contribution-subject-tag">
+                    {t("contributionForm.subjectLatest")}
+                  </span>
+                )}
+              </span>
+            </li>
+          )}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              required
+              label={t("contributionForm.subjectLabel")}
+              placeholder={t("contributionForm.subjectPlaceholder")}
+              error={showValidationErrors && Boolean(fieldErrors.subject)}
+              helperText={showValidationErrors ? fieldErrors.subject : ""}
+              slotProps={{
+                inputLabel: params.slotProps.inputLabel,
+                htmlInput: params.slotProps.htmlInput,
+                input: {
+                  ...params.slotProps.input,
+                  endAdornment: (
+                    <>
+                      {showValidationErrors && fieldErrors.subject && (
+                        <InputAdornment position="end">
+                          <ErrorOutlineRounded color="error" fontSize="small" aria-hidden="true" />
+                        </InputAdornment>
+                      )}
+                      {params.slotProps.input?.endAdornment}
+                    </>
+                  ),
+                },
+              }}
+            />
+          )}
+        />
         <TextField
           required
           label={t("contributionForm.titleLabel")}
