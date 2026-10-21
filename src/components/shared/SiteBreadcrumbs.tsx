@@ -22,7 +22,7 @@ export default function SiteBreadcrumbs({ items, locale }: Props) {
       className="breadcrumbs"
       sx={{
         color: '#8b929d',
-        fontSize: '10px',
+        fontSize: '0.75rem',
         fontWeight: 800,
         letterSpacing: '1.7px',
         '& .MuiLink-root, & .MuiTypography-root, & .MuiBreadcrumbs-separator': {

@@ -630,7 +630,6 @@
     "filesMany": "{count} fitxers",
     "noFiles": "Sense fitxers",
     "historicalTooltip": "Assignatura històrica",
-    "cardDescription": "Materials compartits de l’assignatura.",
     "open": "Veure assignatura",
     "resultsOne": "{count} assignatura",
     "resultsMany": "{count} assignatures",

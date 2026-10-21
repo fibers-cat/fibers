@@ -10,7 +10,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import ResourceCollection from '@/components/ResourceCollection';
 import ApprovedMaterials from '@/components/ApprovedMaterials';
 import { materialsForSubject } from '@/data/materials';
-import { fibersTheme } from '@/components/shared/theme';
+import { fibersTheme } from '@/styles/theme';
 import { localizePath, useTranslations, type Locale } from '@/i18n';
 
 type Props = {

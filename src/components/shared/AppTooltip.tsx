@@ -50,7 +50,7 @@ export default function AppTooltip({ slotProps, variant = 'dark', ...props }: Ap
           color,
           borderRadius: '10px',
           padding: '7px 11px',
-          fontSize: 12,
+          fontSize: 13,
           fontWeight: 600,
           lineHeight: 1.35,
           letterSpacing: '0.2px',

@@ -26,7 +26,7 @@ import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
 import ManageAccountsRounded from '@mui/icons-material/ManageAccountsRounded';
 import { siDiscord, siFacebook, siGithub } from 'simple-icons';
 import { ThemeProvider } from '@mui/material/styles';
-import { fibersTheme } from '@/components/shared/theme';
+import { fibersTheme } from '@/styles/theme';
 import { hasSupabaseConfig } from '@/services/supabase';
 import { getSession, onAuthStateChange } from '@/services/auth';
 import { fetchUserProfile } from '@/services/profiles';

@@ -16,7 +16,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { hasSupabaseConfig, type Subject } from "@/services/supabase";
 import { getSession } from "@/services/auth";
 import { listSubjectsForContribution, submitContribution } from "@/services/contributions";
-import { fibersTheme } from "@/components/shared/theme";
+import { fibersTheme } from "@/styles/theme";
 import { localizePath, useTranslations, type Locale } from "@/i18n";
 
 type Props = { initialSubject?: string; locale: Locale };

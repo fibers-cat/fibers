@@ -26,7 +26,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import type { Subject } from '@/data/subjects';
 import { hasSupabaseConfig } from '@/services/supabase';
 import { fetchSubjectMaterialCounts, fetchLatestMaterialDates } from '@/services/subjectMaterialCounts';
-import { fibersTheme } from '@/components/shared/theme';
+import { fibersTheme } from '@/styles/theme';
 import { localizePath, useTranslations, type Locale } from '@/i18n';
 
 type Props = {
@@ -428,8 +428,10 @@ export default function SubjectExplorer({
                     </div>
                   
                     <Typography component="h3" variant="h6" className="subject-name">{subject.name}</Typography>
-                    <Typography className="subject-description">{t('subjectExplorer.cardDescription')}</Typography>
-                    <Button className="subject-open" size="small" endIcon={<ArrowForwardRounded />}>{t('subjectExplorer.open')}</Button>
+                    <span className="subject-open">
+                      {t('subjectExplorer.open')}
+                      <ArrowForwardRounded aria-hidden="true" />
+                    </span>
                   </CardContent>
                 </CardActionArea>
               </Card>;

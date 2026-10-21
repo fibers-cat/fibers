@@ -33,7 +33,7 @@ import { fetchPendingContributionCount } from "@/services/contributions";
 import { fetchContributorStanding, type ContributorStanding } from "@/services/contributors";
 import { getSocialAvatar } from "@/services/socialAvatar";
 import type { AppRole } from "@/services/roles";
-import { fibersTheme } from "@/components/shared/theme";
+import { fibersTheme } from "@/styles/theme";
 import { localizePath, useTranslations, type Locale } from "@/i18n";
 
 type Props = { returnTo: string; locale: Locale };
@@ -407,7 +407,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
                   {t("profilePage.sendLink")}
                 </Button>
               </Stack>
-              <Divider sx={{ color: "text.secondary", fontSize: "0.875rem" }}>
+              <Divider sx={{ color: "text.secondary", fontSize: "1rem" }}>
                 {t("profilePage.orContinueWith")}
               </Divider>
               <Button
@@ -448,7 +448,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
                   bgcolor: "#fff",
                   color: "#1f1f1f",
                   fontFamily: '"Roboto Variable", Roboto, Arial, sans-serif',
-                  fontSize: 14,
+                  fontSize: 16,
                   fontWeight: 500,
                   letterSpacing: "0.25px",
                   textTransform: "none",

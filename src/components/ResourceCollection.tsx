@@ -19,7 +19,7 @@ import {
   getMaterialGroups,
   materialUrl,
 } from "@/data/materials";
-import { fibersTheme } from "@/components/shared/theme";
+import { fibersTheme } from "@/styles/theme";
 import { hasSupabaseConfig } from "@/services/supabase";
 import { fetchMaterialAttributionRows } from "@/services/materialAttributions";
 import { intlLocale, useTranslations, type Locale } from "@/i18n";
@@ -236,7 +236,7 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
                   variant="h6"
                   sx={{
                     overflowWrap: "anywhere",
-                    fontSize: 17,
+                    fontSize: 20,
                     fontWeight: 700,
                   }}
                 >
@@ -307,7 +307,7 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
                         color: "text.primary",
                         fontFamily:
                           "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
-                        fontSize: 14,
+                        fontSize: 15,
                         lineHeight: 1.65,
                         whiteSpace: "pre-wrap",
                         overflowWrap: "anywhere",

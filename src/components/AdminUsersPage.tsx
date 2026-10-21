@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
-import { fibersTheme } from '@/components/shared/theme';
+import { fibersTheme } from '@/styles/theme';
 import { hasSupabaseConfig } from '@/services/supabase';
 import { fetchManagedUsers, updateManagedUser, type ManagedRole, type ManagedUser } from '@/services/adminUsers';
 import { useCurrentRole } from '@/services/useCurrentRole';
