@@ -350,8 +350,6 @@
       "title": "Compte",
       "aliasTitle": "Àlies públic",
       "aliasHelper": "Entre 2 i 40 caràcters. És el nom que apareix a les teves aportacions.",
-      "emailLabel": "Correu electrònic",
-      "roleLabel": "Rol",
       "roleUser": "Col·laborador",
       "roleAdmin": "Administrador",
       "roleSuperadmin": "Superadministrador"
@@ -359,6 +357,8 @@
     "actions": {
       "title": "Accions",
       "contribute": "Aporta material",
+      "browseSubjects": "Explora les assignatures",
+      "howItWorks": "Com funciona",
       "adminContributions": "Revisa aportacions",
       "adminUsers": "Gestiona usuaris"
     }

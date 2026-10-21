@@ -350,8 +350,6 @@
       "title": "Cuenta",
       "aliasTitle": "Alias público",
       "aliasHelper": "Entre 2 y 40 caracteres. Es el nombre que aparece en tus aportaciones.",
-      "emailLabel": "Correo electrónico",
-      "roleLabel": "Rol",
       "roleUser": "Colaborador",
       "roleAdmin": "Administrador",
       "roleSuperadmin": "Superadministrador"
@@ -359,6 +357,8 @@
     "actions": {
       "title": "Acciones",
       "contribute": "Aporta material",
+      "browseSubjects": "Explora las asignaturas",
+      "howItWorks": "Cómo funciona",
       "adminContributions": "Revisa aportaciones",
       "adminUsers": "Gestiona usuarios"
     }

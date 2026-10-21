@@ -13,7 +13,9 @@ import DescriptionOutlined from "@mui/icons-material/DescriptionOutlined";
 import EmojiEventsOutlined from "@mui/icons-material/EmojiEventsOutlined";
 import GitHub from "@mui/icons-material/GitHub";
 import HourglassEmptyRounded from "@mui/icons-material/HourglassEmptyRounded";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import LogoutRounded from "@mui/icons-material/LogoutRounded";
+import MenuBookRounded from "@mui/icons-material/MenuBookRounded";
 import PersonOutlineRounded from "@mui/icons-material/PersonOutlineRounded";
 import UploadFileRounded from "@mui/icons-material/UploadFileRounded";
 import { ThemeProvider } from "@mui/material/styles";
@@ -585,22 +587,19 @@ export default function ProfilePage({ returnTo, locale }: Props) {
                 {t("profilePage.saveAlias")}
               </Button>
             </form>
-            <Divider sx={{ my: 2.5 }} />
-            <dl className="profile-facts">
-              <div>
-                <dt>{t("profilePage.account.emailLabel")}</dt>
-                <dd>{userEmail}</dd>
-              </div>
-              <div>
-                <dt>{t("profilePage.account.roleLabel")}</dt>
-                <dd>{roleLabel}</dd>
-              </div>
-            </dl>
           </section>
 
           <section className="profile-section profile-actions">
             <h2>{t("profilePage.actions.title")}</h2>
-            <Stack spacing={1.25}>
+            <Stack spacing={1.25} className="profile-actions-list">
+              <Button
+                fullWidth
+                variant="outlined"
+                href={localizePath("/guia/", locale)}
+                startIcon={<InfoOutlined />}
+              >
+                {t("profilePage.actions.howItWorks")}
+              </Button>
               <Button
                 fullWidth
                 variant="outlined"
@@ -608,6 +607,14 @@ export default function ProfilePage({ returnTo, locale }: Props) {
                 startIcon={<UploadFileRounded />}
               >
                 {t("profilePage.actions.contribute")}
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                href={localizePath("/assignatures/", locale)}
+                startIcon={<MenuBookRounded />}
+              >
+                {t("profilePage.actions.browseSubjects")}
               </Button>
               {isAdmin && (
                 <Button

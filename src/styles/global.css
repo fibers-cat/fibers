@@ -2084,35 +2084,7 @@ textarea {
 .profile-alias-form .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline { border-color: var(--coral); border-width: 1px; }
 .profile-alias-form .MuiFormHelperText-root { margin-left: 2px; line-height: 1.45; }
 
-.profile-facts {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 0;
-}
-
-.profile-facts div {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.profile-facts dt {
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-}
-
-.profile-facts dd {
-  margin: 0;
-  font-size: 13.5px;
-  font-weight: 600;
-  overflow-wrap: anywhere;
-  text-align: right;
-}
+.profile-actions-list { margin-top: 16px; }
 
 .profile-actions .MuiButton-root {
   justify-content: flex-start;
