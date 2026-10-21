@@ -355,7 +355,13 @@
     "titleLine2": "podemos ayudar?",
     "lead": "¿Tienes una duda, una idea o necesitas ayuda con Fibers? Envíanos un mensaje y te responderemos al correo que nos indiques.",
     "formTitle": "Envíanos un mensaje",
-    "formLead": "Rellena el formulario y te responderemos lo antes posible."
+    "formLead": "Rellena el formulario y te responderemos lo antes posible.",
+    "directLabel": "CORREO DIRECTO",
+    "directText": "Si prefieres escribirnos sin usar el formulario, este es nuestro correo.",
+    "helpTitle": "Antes de escribir",
+    "helpLead": "Quizá encuentres la respuesta en estas páginas.",
+    "helpGuide": "Cómo funciona Fibers",
+    "helpTerms": "Condiciones de uso"
   },
   "contactForm": {
     "name": "Nombre",

@@ -2890,8 +2890,142 @@ textarea {
   margin-top: 43px;
 }
 
+@media (min-width: 901px) and (max-width: 1200px) {
+  .contact-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(330px, .95fr);
+    gap: clamp(32px, 4vw, 50px);
+  }
+}
+
+.contact-intro {
+  min-width: 0;
+}
+
 .contact-form-card {
   width: 100%;
+}
+
+@media (min-width: 901px) {
+  .contact-form-card {
+    margin-top: clamp(56px, 7vw, 104px);
+  }
+}
+
+.contact-direct {
+  margin-top: 34px;
+  padding: 21px 23px;
+  border: 1px solid #f1ded9;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fffdfc, #fff7f5);
+}
+
+.contact-direct-label {
+  margin: 0;
+  color: var(--coral);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  line-height: 1.5;
+}
+
+.contact-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  margin-top: 12px;
+  color: #1f2833;
+  font-size: clamp(19px, 1.7vw, 23px);
+  font-weight: 700;
+  letter-spacing: -.5px;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+.contact-email:hover {
+  color: var(--coral);
+}
+
+.contact-email-icon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(233, 75, 80, .1);
+  color: var(--coral);
+}
+
+.contact-email-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.contact-email>span:last-child {
+  overflow-wrap: anywhere;
+}
+
+.contact-direct p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.contact-help {
+  margin-top: 30px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.contact-help h2 {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.contact-help p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.contact-help-links {
+  display: grid;
+}
+
+.contact-help-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(32, 36, 44, .08);
+  color: #34404d;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+.contact-help-links a:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.contact-help-links a span {
+  color: var(--teal);
+  transition: transform .2s ease;
+}
+
+.contact-help-links a:hover {
+  color: var(--coral);
+}
+
+.contact-help-links a:hover span {
+  transform: translateX(3px);
 }
 
 .contact-form .MuiOutlinedInput-root {
@@ -2937,17 +3071,27 @@ textarea {
 
 
 
-@media (max-width: 680px) {
+@media (max-width: 800px) {
   .contact-layout {
     grid-template-columns: 1fr;
     gap: 29px;
     margin-top: 34px;
   }
+}
 
+@media (max-width: 680px) {
   .contact-layout .form-heading h1 {
     font-size: 40px;
   }
 
+  .contact-direct {
+    margin-top: 26px;
+    padding: 20px;
+  }
+
+  .contact-help {
+    margin-top: 26px;
+  }
 }
 
 @media (max-width: 900px) {

@@ -355,7 +355,13 @@
     "titleLine2": "podem ajudar?",
     "lead": "Tens un dubte, una idea o necessites ajuda amb Fibers? Envia’ns un missatge i et respondrem al correu que ens indiquis.",
     "formTitle": "Envia’ns un missatge",
-    "formLead": "Omple el formulari i et respondrem tan aviat com puguem."
+    "formLead": "Omple el formulari i et respondrem tan aviat com puguem.",
+    "directLabel": "CORREU DIRECTE",
+    "directText": "Si prefereixes escriure’ns sense fer servir el formulari, aquest és el nostre correu.",
+    "helpTitle": "Abans d’escriure",
+    "helpLead": "Potser trobes la resposta en aquestes pàgines.",
+    "helpGuide": "Com funciona Fibers",
+    "helpTerms": "Condicions d’ús"
   },
   "contactForm": {
     "name": "Nom",
