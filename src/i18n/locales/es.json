@@ -191,17 +191,91 @@
   "guide": {
     "meta": {
       "title": "Cómo funciona Fibers",
-      "description": "Aprende a encontrar materiales de estudio por asignatura, consultar los recursos disponibles y compartir apuntes propios en Fibers."
+      "description": "Descubre cómo compartir apuntes y materiales en Fibers: elige la asignatura, envía el archivo, pasa la revisión y queda publicado con tu atribución."
     },
-    "eyebrow": "UNA RED DE APRENDIZAJE",
-    "titleLine1": "Materiales útiles,",
-    "titleLine2": "compartidos con cuidado.",
-    "lead": "Fibers quiere hacer más accesibles los recursos de estudio creados por estudiantes de la Facultad de Informática de Barcelona.",
-    "steps": [
-      { "title": "Encuentra una asignatura", "text": "Explora el catálogo y entra en el espacio de la materia que estás cursando." },
-      { "title": "Consulta los materiales", "text": "Los recursos se organizarán por asignatura y tipo cuando el inventario esté revisado." },
-      { "title": "Comparte los tuyos", "text": "Aporta contenido propio para que más estudiantes puedan beneficiarse." }
-    ]
+    "eyebrow": "CÓMO FUNCIONA",
+    "titleLine1": "Del apunte",
+    "titleLine2": "a la comunidad.",
+    "lead": "Fibers es un archivo vivo de materiales de estudio hechos por estudiantes de la FIB. Aquí tienes el recorrido completo: desde encontrar lo que necesitas hasta publicar lo que quieres compartir.",
+    "heroPrimary": "Aporta material",
+    "heroSecondary": "Explora las asignaturas",
+    "heroFacts": [
+      { "value": "4", "label": "pasos claros" },
+      { "value": "50 MB", "label": "por archivo" },
+      { "value": "Abierto", "label": "para consultar" }
+    ],
+    "process": {
+      "eyebrow": "EL RECORRIDO",
+      "title": "Cuatro pasos hasta el catálogo",
+      "lead": "Cada aportación sigue el mismo camino. Sin intermediarios y con tu atribución siempre visible.",
+      "steps": [
+        {
+          "label": "Elige",
+          "title": "Elige la asignatura",
+          "text": "Explora el catálogo por nombre o acrónimo y entra en la materia a la que pertenece el material.",
+          "note": "Si no encuentras la asignatura, escríbenos."
+        },
+        {
+          "label": "Prepara",
+          "title": "Reúne el material",
+          "text": "Apuntes, exámenes, ejercicios resueltos, prácticas o resúmenes. Cuanto menos ruido tenga el archivo, más fácil será usarlo.",
+          "note": "PDF, imágenes, código, Office o ZIP · hasta 50 MB por archivo."
+        },
+        {
+          "label": "Envía",
+          "title": "Completa la aportación",
+          "text": "Inicia sesión, indica la asignatura y añade un título y una descripción que ayuden a entender qué hay dentro.",
+          "note": "Necesitas una cuenta para identificar la autoría de la aportación."
+        },
+        {
+          "label": "Publica",
+          "title": "Revisión y publicación",
+          "text": "Revisamos que el material sea propio, que se pueda abrir y que encaje con la asignatura. Si todo está bien, aparece en el catálogo.",
+          "note": "La revisión es manual; no hay un tiempo fijo."
+        }
+      ]
+    },
+    "types": {
+      "eyebrow": "QUÉ TIENE CABIDA",
+      "title": "Más allá de los apuntes",
+      "lead": "Cualquier material que te haya ayudado a estudiar puede ayudar a otra persona.",
+      "items": [
+        { "title": "Apuntes y resúmenes", "text": "Temas desarrollados, fichas y resúmenes para repasar." },
+        { "title": "Exámenes y ejercicios", "text": "Enunciados, soluciones y problemas resueltos." },
+        { "title": "Prácticas y código", "text": "Proyectos, scripts y entregas con el contexto necesario." },
+        { "title": "Guías y esquemas", "text": "Mapas conceptuales, fórmulas y material de apoyo." }
+      ]
+    },
+    "review": {
+      "eyebrow": "ANTES DE PUBLICAR",
+      "title": "Qué revisamos",
+      "lead": "La revisión protege a quien comparte y a quien consulta.",
+      "items": [
+        "Que el material sea tuyo o tengas permiso para compartirlo.",
+        "Que no sea material facilitado por el profesorado ni contenido con derechos de autor.",
+        "Que los archivos se abran correctamente y sean útiles para la asignatura.",
+        "Que no incluyan datos personales o información sensible."
+      ],
+      "note": "Si tienes dudas sobre un recurso, consulta las condiciones de uso o escríbenos antes de publicarlo.",
+      "termsLink": "Condiciones de uso",
+      "contactLink": "Contacta con el equipo"
+    },
+    "faq": {
+      "eyebrow": "DUDAS FRECUENTES",
+      "title": "Preguntas rápidas",
+      "items": [
+        { "question": "¿Cuánto tarda la revisión?", "answer": "Depende del volumen de aportaciones. Cuando esté revisado, el material aparecerá en el catálogo." },
+        { "question": "¿Puedo compartir material del profesorado?", "answer": "No. Solo aceptamos material propio o con permiso explícito de quien tiene los derechos." },
+        { "question": "¿Hace falta cuenta para consultar el catálogo?", "answer": "No. Consultar y descargar materiales es abierto. Para aportar, hay que iniciar sesión." },
+        { "question": "¿Quién verá mi nombre?", "answer": "Las aportaciones se publican con tu alias público si has configurado uno; si no, aparecen como «Estudiante». Puedes cambiarlo desde tu perfil." }
+      ]
+    },
+    "cta": {
+      "title": "Empieza por una asignatura",
+      "text": "Explora qué hay en el catálogo o comparte el material que echas en falta.",
+      "primary": "Aporta material",
+      "secondary": "Explora el catálogo"
+    }
   },
   "resources": {
     "meta": {
@@ -345,6 +419,13 @@
       "rankingNone": "Sin posición",
       "rankingNoneHint": "Publica material para entrar en el ranking",
       "rankingLink": "Ver el ranking"
+    },
+    "provider": {
+      "label": "Método de acceso",
+      "email": "Enlace de correo",
+      "google": "Google",
+      "github": "GitHub",
+      "other": "Otro método"
     },
     "account": {
       "title": "Cuenta",

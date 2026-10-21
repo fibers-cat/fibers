@@ -43,7 +43,7 @@ export function stripLocalePrefix(pathname: string): string {
  */
 export const routeSlugs: Record<string, Record<Locale, string>> = {
   'sobre': { ca: 'sobre', es: 'acerca' },
-  'guia': { ca: 'guia', es: 'guia' },
+  'com-funciona': { ca: 'com-funciona', es: 'como-funciona' },
   'recursos': { ca: 'recursos', es: 'recursos' },
   'contacte': { ca: 'contacte', es: 'contacto' },
   'aporta': { ca: 'aporta', es: 'aporta' },

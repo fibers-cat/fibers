@@ -191,17 +191,91 @@
   "guide": {
     "meta": {
       "title": "Com funciona Fibers",
-      "description": "Aprèn a trobar materials d’estudi per assignatura, consultar els recursos disponibles i compartir apunts propis a Fibers."
+      "description": "Descobreix com compartir apunts i materials a Fibers: tria l’assignatura, envia el fitxer, passa la revisió i queda publicat amb la teva atribució."
     },
-    "eyebrow": "UNA XARXA D’APRENENTATGE",
-    "titleLine1": "Materials útils,",
-    "titleLine2": "compartits amb cura.",
-    "lead": "Fibers vol fer més accessibles els recursos d’estudi creats per estudiants de la Facultat d’Informàtica de Barcelona.",
-    "steps": [
-      { "title": "Troba una assignatura", "text": "Explora el catàleg i entra a l’espai de la matèria que estàs cursant." },
-      { "title": "Consulta els materials", "text": "Els recursos s’organitzaran per assignatura i tipus quan l’inventari estigui revisat." },
-      { "title": "Comparteix els teus", "text": "Aporta contingut propi perquè més estudiants puguin beneficiar-se’n." }
-    ]
+    "eyebrow": "COM FUNCIONA",
+    "titleLine1": "De l’apunt",
+    "titleLine2": "a la comunitat.",
+    "lead": "Fibers és un arxiu viu de materials d’estudi fets per estudiants de la FIB. Aquí tens el recorregut complet: des de trobar el que necessites fins a publicar el que vols compartir.",
+    "heroPrimary": "Aporta material",
+    "heroSecondary": "Explora les assignatures",
+    "heroFacts": [
+      { "value": "4", "label": "passes clares" },
+      { "value": "50 MB", "label": "per fitxer" },
+      { "value": "Obert", "label": "per consultar" }
+    ],
+    "process": {
+      "eyebrow": "EL RECORREGUT",
+      "title": "Quatre passes fins al catàleg",
+      "lead": "Cada aportació segueix el mateix camí. Sense intermediaris i amb la teva atribució sempre visible.",
+      "steps": [
+        {
+          "label": "Tria",
+          "title": "Tria l’assignatura",
+          "text": "Explora el catàleg per nom o acrònim i entra a la matèria a la qual pertany el material.",
+          "note": "Si no trobes l’assignatura, escriu-nos."
+        },
+        {
+          "label": "Prepara",
+          "title": "Reuneix el material",
+          "text": "Apunts, exàmens, exercicis resolts, pràctiques o resums. Com menys soroll tingui el fitxer, més fàcil serà fer-lo servir.",
+          "note": "PDF, imatges, codi, Office o ZIP · fins a 50 MB per fitxer."
+        },
+        {
+          "label": "Envia",
+          "title": "Completa l’aportació",
+          "text": "Inicia sessió, indica l’assignatura i afegeix un títol i una descripció que ajudin a entendre què hi ha dins.",
+          "note": "Cal un compte per identificar l’autoria de l’aportació."
+        },
+        {
+          "label": "Publica",
+          "title": "Revisió i publicació",
+          "text": "Revisem que el material sigui propi, que es pugui obrir i que encaixi amb l’assignatura. Si tot està bé, apareix al catàleg.",
+          "note": "La revisió és manual; no hi ha un temps fix."
+        }
+      ]
+    },
+    "types": {
+      "eyebrow": "QUÈ HI CAP",
+      "title": "Més enllà dels apunts",
+      "lead": "Qualsevol material que t’hagi ajudat a estudiar pot ajudar algú altre.",
+      "items": [
+        { "title": "Apunts i resums", "text": "Temes desenvolupats, fitxes i resums per repassar." },
+        { "title": "Exàmens i exercicis", "text": "Enunciats, solucions i problemes resolts." },
+        { "title": "Pràctiques i codi", "text": "Projectes, scripts i entregues amb el context necessari." },
+        { "title": "Guies i esquemes", "text": "Mapes conceptuals, fórmules i material de suport." }
+      ]
+    },
+    "review": {
+      "eyebrow": "ABANS DE PUBLICAR",
+      "title": "Què revisem",
+      "lead": "La revisió protegeix qui comparteix i qui consulta.",
+      "items": [
+        "Que el material sigui teu o tinguis permís per compartir-lo.",
+        "Que no sigui material facilitat pel professorat ni contingut amb drets d’autor.",
+        "Que els fitxers s’obrin correctament i siguin útils per a l’assignatura.",
+        "Que no incloguin dades personals o informació sensible."
+      ],
+      "note": "Si tens dubtes sobre un recurs, consulta les condicions d’ús o escriu-nos abans de publicar-lo.",
+      "termsLink": "Condicions d’ús",
+      "contactLink": "Contacta amb l’equip"
+    },
+    "faq": {
+      "eyebrow": "DUBTES FREQÜENTS",
+      "title": "Preguntes ràpides",
+      "items": [
+        { "question": "Quant triga la revisió?", "answer": "Depèn del volum d’aportacions. Quan estigui revisada, el material apareixerà al catàleg." },
+        { "question": "Puc compartir material del professorat?", "answer": "No. Només acceptem material propi o amb permís explícit de qui en té els drets." },
+        { "question": "Cal compte per consultar el catàleg?", "answer": "No. Consultar i descarregar materials és obert. Per aportar-ne, cal iniciar sessió." },
+        { "question": "Qui veurà el meu nom?", "answer": "Les aportacions es publiquen amb el teu àlies públic si n’has configurat un; si no, apareixen com a «Estudiant». Pots canviar-lo des del teu perfil." }
+      ]
+    },
+    "cta": {
+      "title": "Comença per una assignatura",
+      "text": "Explora què hi ha al catàleg o comparteix el material que trobes a faltar.",
+      "primary": "Aporta material",
+      "secondary": "Explora el catàleg"
+    }
   },
   "resources": {
     "meta": {
@@ -345,6 +419,13 @@
       "rankingNone": "Sense posició",
       "rankingNoneHint": "Publica material per entrar al rànquing",
       "rankingLink": "Veure el rànquing"
+    },
+    "provider": {
+      "label": "Mètode d’accés",
+      "email": "Enllaç de correu",
+      "google": "Google",
+      "github": "GitHub",
+      "other": "Altre mètode"
     },
     "account": {
       "title": "Compte",

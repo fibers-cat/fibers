@@ -15,6 +15,10 @@ export default defineConfig({
       es: 'ca',
     },
   },
+  redirects: {
+    '/guia/': '/com-funciona/',
+    '/es/guia/': '/es/como-funciona/',
+  },
   integrations: [
     react(),
     sitemap({
@@ -23,9 +27,11 @@ export default defineConfig({
         // Noindex pages: contributor ranking (both locales) and admin area.
         if (/\/(col-laboradors|colaboradores)\/?$/.test(page)) return false;
         if (page.includes('/admin/')) return false;
+        // Old guide route, now served via redirect.
+        if (/\/guia\/?$/.test(page)) return false;
         // Spanish fallback URLs whose slug differs from the localized one are
         // duplicates of the translated route (e.g. /es/sobre/ → /es/acerca/).
-        if (/\/es\/(sobre|contacte|condicions)\/?$/.test(page)) return false;
+        if (/\/es\/(sobre|contacte|condicions|com-funciona)\/?$/.test(page)) return false;
         if (/\/es\/assignatures\//.test(page)) return false;
         return true;
       },
