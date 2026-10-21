@@ -12,3 +12,12 @@ supabase/*
 !/supabase/migrations/
 # !/supabase/migrations/*.sql
 /supabase/migrations/*.sql
+
+!/supabase/emails/
+!/supabase/emails/src/
+!/supabase/emails/scripts/
+!/supabase/emails/out/
+!/supabase/emails/package.json
+!/supabase/emails/README.md
+!/supabase/emails/package-lock.json
+supabase/emails/node_modules/

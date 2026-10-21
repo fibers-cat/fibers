@@ -1,0 +1,18 @@
+<!-- supabase/emails/src/invite.mjml -->
+<mjml>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700" color="#20242c" padding="0 0 8px">
+          T'han convidat
+        </mj-text>
+        <mj-text>
+          T'han convidat a crear un compte. Segueix l'enllaç a continuació per acceptar la invitació.
+        </mj-text>
+        <mj-button href="{{ .ConfirmationURL }}" align="left">
+          Accepta la invitació
+        </mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
