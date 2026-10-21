@@ -772,6 +772,10 @@ textarea {
   border-radius: 16px !important;
   background: #fff;
   box-shadow: 0 1px 2px rgba(32, 36, 44, .025);
+}
+
+/* Dos clases para ganar a la transición de .MuiPaper-root que inyecta Emotion */
+.subject-card.MuiPaper-root {
   transition:
     transform .3s ease,
     box-shadow .3s ease,
@@ -782,13 +786,24 @@ textarea {
   transition: background-color .3s ease;
 }
 
+/* Sin oscurecimiento al pasar el cursor: el hover lo marca la card */
+.subject-card-action.MuiCardActionArea-root:hover {
+  background-color: transparent !important;
+}
+
+/* El oscurecimiento real lo pinta el overlay .MuiCardActionArea-focusHighlight (opacity .04) */
 @media (hover: hover) and (pointer: fine) {
+  .subject-card-action.MuiCardActionArea-root:hover .MuiCardActionArea-focusHighlight {
+    opacity: 0;
+  }
+
   .subject-card:hover {
     transform: translateY(-2px);
-    border-color: #e2e6eb;
+    border-color: rgba(21, 139, 132, .32);
     box-shadow:
-      0 2px 4px rgba(32, 36, 44, .035),
-      0 12px 28px rgba(32, 36, 44, .07);
+      0 0 0 4px rgba(21, 139, 132, .06),
+      0 10px 28px rgba(21, 139, 132, .10),
+      0 2px 4px rgba(32, 36, 44, .03);
   }
 }
 
@@ -798,7 +813,7 @@ textarea {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .subject-card,
+  .subject-card.MuiPaper-root,
   .subject-card-action.MuiCardActionArea-root {
     transition-duration: .01ms;
   }
@@ -1048,7 +1063,7 @@ textarea {
 
 .subject-title-panel {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 19px;
   margin: 43px 0 25px;
   padding: 27px 29px;
@@ -1057,23 +1072,64 @@ textarea {
   background: #fff;
 }
 
+.subject-title-body {
+  min-width: 0;
+  flex: 1;
+}
+
 .subject-code-large {
   min-width: 62px;
   min-height: 62px;
+  /* Alinea la caja con el h1: línea del eyebrow (20px) + margen superior del h1 (5px) */
+  margin-top: 25px;
   border-radius: 16px;
   font-size: 18px;
 }
 
 .subject-title-panel h1 {
-  margin: 5px 0 3px;
+  margin: 5px 0 0;
   font-size: clamp(26px, 3.5vw, 38px);
   letter-spacing: -1.4px;
 }
 
-.subject-title-panel p {
+.subject-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  margin: 16px 0 0;
+}
+
+.subject-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.subject-meta dt {
+  color: #8b929d;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.subject-meta dd {
   margin: 0;
-  color: var(--muted);
+  color: var(--ink);
   font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.subject-note {
+  margin: 16px 0 0;
+  padding-top: 13px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 .subject-status-panel {
@@ -1754,6 +1810,17 @@ textarea {
     min-width: 49px;
     min-height: 49px;
     font-size: 14px;
+  }
+
+  .subject-meta {
+    gap: 10px 22px;
+    margin-top: 14px;
+  }
+
+  .subject-note {
+    margin-top: 14px;
+    padding-top: 11px;
+    font-size: 12.5px;
   }
 
   .subject-status-panel {
