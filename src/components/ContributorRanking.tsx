@@ -1,5 +1,4 @@
 import Alert from "@mui/material/Alert";
-import Typography from "@mui/material/Typography";
 import type { Contributor } from "@/services/contributors";
 import { useTranslations, type Locale } from "@/i18n";
 

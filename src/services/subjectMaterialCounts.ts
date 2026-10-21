@@ -56,10 +56,13 @@ export async function fetchLatestMaterialDates(): Promise<Record<string, string>
     recordDate(item.subject_id, item.reviewed_at);
   }
   for (const item of legacyResult.data ?? []) {
-    const material = item.legacy_materials;
-    const contributedAt = Array.isArray(material)
-      ? material[0]?.contributed_at
-      : material?.contributed_at;
+    const related = item.legacy_materials as unknown as
+      | { contributed_at: string | null }
+      | { contributed_at: string | null }[]
+      | null;
+    const contributedAt = Array.isArray(related)
+      ? related[0]?.contributed_at
+      : related?.contributed_at;
     recordDate(item.subject_id, contributedAt);
   }
   return latestDates;

@@ -26,7 +26,7 @@ import { intlLocale, useTranslations, type Locale } from "@/i18n";
 
 type Props = {
   materials: Material[];
-  attributions?: Record<string, string>;
+  attributions?: Record<string, string> | undefined;
   locale: Locale;
 };
 
@@ -367,10 +367,10 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
   );
 }
 
-export default function ResourceCollection({ materials }: Props) {
+export default function ResourceCollection({ materials, attributions, locale }: Props) {
   return (
     <ThemeProvider theme={fibersTheme}>
-      <Collection materials={materials} />
+      <Collection materials={materials} attributions={attributions} locale={locale} />
     </ThemeProvider>
   );
 }

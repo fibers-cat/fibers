@@ -26,7 +26,7 @@ export default function SubjectStatus({ subjectId, subjectName, subjectAcronym, 
   return (
     <ThemeProvider theme={fibersTheme}>
       <Paper className="subject-status-panel" elevation={0}>
-        <Stack direction="row" alignItems="center" spacing={1.5} className="status-heading">
+        <Stack direction="row" spacing={1.5} className="status-heading" sx={{ alignItems: 'center' }}>
           <Typography variant="h5" component="h2">{t('subjectStatus.heading')}</Typography>
           <Chip
             label={

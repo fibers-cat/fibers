@@ -7,6 +7,11 @@ export type MaterialAttributionRow = {
   profiles: { alias: string } | null;
 };
 
+type ProfileRef = { alias: string } | { alias: string }[];
+type MaterialAttributionQueryRow = Omit<MaterialAttributionRow, 'profiles'> & {
+  profiles: ProfileRef | null;
+};
+
 /** Loads the raw attribution rows for the given materials. */
 export async function fetchMaterialAttributionRows(
   materials: Material[],
@@ -30,7 +35,11 @@ export async function fetchMaterialAttributionRows(
     throw new Error(`No s’han pogut carregar les atribucions: ${error.message}`);
   }
 
-  return (data ?? []) as MaterialAttributionRow[];
+  const rows = (data ?? []) as unknown as MaterialAttributionQueryRow[];
+  return rows.map((row) => ({
+    ...row,
+    profiles: Array.isArray(row.profiles) ? row.profiles[0] ?? null : row.profiles,
+  }));
 }
 
 export async function fetchMaterialAttributions(

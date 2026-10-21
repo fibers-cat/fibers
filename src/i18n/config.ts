@@ -76,7 +76,7 @@ function translateSlug(base: string, locale: Locale): string {
 /** Reverses a localized slug back to the canonical (Catalan) path. */
 function canonicalizeSlug(localizedPath: string, locale: Locale): string {
   const { lead, rest } = splitLead(localizedPath);
-  const key = Object.keys(routeSlugs).find((candidate) => routeSlugs[candidate][locale].split('/')[0] === lead);
+  const key = Object.keys(routeSlugs).find((candidate) => routeSlugs[candidate]?.[locale]?.split('/')[0] === lead);
   if (!key) return localizedPath;
   const canonical = key.includes('/') ? key.slice(key.indexOf('/')) : rest;
   const result = `${key.split('/')[0]}${canonical}`;

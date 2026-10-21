@@ -130,7 +130,7 @@ export default function AdminUsersPage({ locale }: { locale: Locale }) {
                                 [user.user_id]: { ...currentDraft, alias: event.target.value },
                               };
                             })}
-                            inputProps={{ minLength: 2, maxLength: 40 }}
+                            slotProps={{ htmlInput: { minLength: 2, maxLength: 40 } }}
                           />
                           <TextField
                             select

@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type SyntheticEvent } from "react";
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -89,7 +89,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
     fieldErrors.acknowledgement,
   ].filter((issue): issue is string => Boolean(issue));
 
-  const submit = async (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     setShowValidationErrors(true);
     if (validationIssues.length > 0 || !hasSupabaseConfig || !userId) return;

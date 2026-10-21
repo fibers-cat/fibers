@@ -27,7 +27,7 @@ import type { Subject } from '@/data/subjects';
 import { hasSupabaseConfig } from '@/services/supabase';
 import { fetchSubjectMaterialCounts, fetchLatestMaterialDates } from '@/services/subjectMaterialCounts';
 import { fibersTheme } from '@/components/shared/theme';
-import { intlLocale, localizePath, useTranslations, type Locale } from '@/i18n';
+import { localizePath, useTranslations, type Locale } from '@/i18n';
 
 type Props = {
   subjects: Subject[];
@@ -54,7 +54,6 @@ export default function SubjectExplorer({
   locale,
 }: Props) {
   const t = useTranslations(locale);
-  const dateFormatter = new Intl.DateTimeFormat(intlLocale(locale));
   const [materialCounts, setMaterialCounts] = useState<Record<string, number>>(
     initialMaterialCounts ?? {},
   );

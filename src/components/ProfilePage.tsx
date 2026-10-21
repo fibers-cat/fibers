@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+﻿import { useEffect, useMemo, useRef, useState, type SyntheticEvent } from "react";
 import Alert from "@mui/material/Alert";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -213,7 +213,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
     return unsubscribe;
   }, []);
 
-  const sendLink = async (event: FormEvent) => {
+  const sendLink = async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!hasSupabaseConfig) return;
     setBusy(true);
@@ -249,7 +249,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
     }
   };
 
-  const saveAlias = async (event: FormEvent) => {
+  const saveAlias = async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!hasSupabaseConfig) return;
     const nextAlias = alias.trim();
@@ -575,7 +575,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
                 value={alias}
                 onChange={(event) => setAlias(event.target.value)}
                 helperText={t("profilePage.account.aliasHelper")}
-                inputProps={{ minLength: 2, maxLength: 40 }}
+                slotProps={{ htmlInput: { minLength: 2, maxLength: 40 } }}
               />
               <Button
                 type="submit"

@@ -46,7 +46,7 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
     href: string;
     label: string;
     title: string;
-    openLink?: { href: string; text: string };
+    openLink?: { href: string; text: string } | undefined;
   } | null>(null);
 
   return (
