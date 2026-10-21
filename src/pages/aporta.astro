@@ -4,6 +4,8 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 import ContributionForm from "@/components/ContributionForm";
 import { getDictionary, getLocaleFromUrl, isLocale, localizePath, useTranslations } from "@/i18n";
 
+// The subject can be preselected with ?assignatura=ACR. The site is
+// prerendered, so the form reads that query string on the client.
 const initialSubject = Astro.url.searchParams.get("assignatura") ?? "";
 const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);

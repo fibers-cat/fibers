@@ -11,6 +11,30 @@ import { supabase } from '@/services/supabase';
 
 export type AuthUser = User;
 
+/**
+ * Maximum time we wait for Supabase to answer a session check. Without this
+ * bound a stalled request (blocked network, ad blocker, offline device) would
+ * keep the interface in its loading state forever.
+ */
+const SESSION_TIMEOUT_MS = 8000;
+
+/** Rejects with `message` when the promise does not settle in time. */
+function withTimeout<T>(promise: Promise<T>, ms: number, message: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(message)), ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error: unknown) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
+}
+
 function client() {
   if (!supabase) {
     throw new Error(
@@ -22,14 +46,22 @@ function client() {
 
 /** Returns the current session, or `null` when the visitor is signed out. */
 export async function getSession(): Promise<Session | null> {
-  const { data, error } = await client().auth.getSession();
+  const { data, error } = await withTimeout(
+    client().auth.getSession(),
+    SESSION_TIMEOUT_MS,
+    'No s’ha pogut comprovar la sessió a temps.',
+  );
   if (error) throw error;
   return data.session;
 }
 
 /** Returns the signed-in user from the server, or `null`. */
 export async function getCurrentUser(): Promise<AuthUser | null> {
-  const { data, error } = await client().auth.getUser();
+  const { data, error } = await withTimeout(
+    client().auth.getUser(),
+    SESSION_TIMEOUT_MS,
+    'No s’ha pogut comprovar l’usuari a temps.',
+  );
   if (error) throw error;
   return data.user ?? null;
 }

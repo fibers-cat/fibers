@@ -348,6 +348,9 @@
     "sessionError": "No s’ha pogut comprovar la sessió. Torna-ho a provar més tard.",
     "loginRequired": "Has d’iniciar sessió per enviar l’aportació.",
     "signIn": "Inicia sessió",
+    "sessionExpired": "La teva sessió ha caducat. Torna a iniciar sessió per enviar l’aportació: el formulari conserva el que ja has escrit.",
+    "signedInAs": "Sessió activa com a {name}",
+    "subjectsError": "No s’han pogut carregar les assignatures. Torna-ho a provar més tard.",
     "subjectLabel": "Assignatura",
     "subjectPlaceholder": "Selecciona una assignatura",
     "subjectLatest": " · Assignatura no vigent",
@@ -360,12 +363,23 @@
     "filesTotalSize": "Mida total",
     "removeFile": "Elimina el fitxer",
     "acknowledgement": "Confirmo que tinc dret a compartir aquest material i que no inclou contingut protegit.",
+    "gate": {
+      "title": "Inicia sessió per compartir material",
+      "text": "Per enviar una aportació necessites un compte de Fibers. Inicia sessió i el formulari s’obrirà buit i amb tot el que escriguis quedarà a salvo.",
+      "action": "Inicia sessió",
+      "benefits": [
+        "El formulari només s’obre amb la sessió iniciada.",
+        "Si tornes més tard, el material continuarà esperant-te.",
+        "Cada aportació es revisarà abans de publicar-se."
+      ]
+    },
     "errors": {
       "subject": "Selecciona una assignatura.",
       "titleShort": "El títol és obligatori i ha de tenir almenys 3 caràcters.",
       "titleLong": "El títol no pot superar els 120 caràcters.",
       "descriptionShort": "La descripció és obligatòria i ha de tenir almenys 10 caràcters.",
       "descriptionLong": "La descripció no pot superar els 3000 caràcters.",
+      "filesRequired": "Adjunta almenys un fitxer per enviar l’aportació.",
       "filesTooLarge": "Cada fitxer ha de pesar com a màxim 50 MB.",
       "acknowledgement": "Confirma que tens dret a compartir aquest material."
     },

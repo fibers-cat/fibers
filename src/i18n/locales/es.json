@@ -348,6 +348,9 @@
     "sessionError": "No se ha podido comprobar la sesión. Vuelve a intentarlo más tarde.",
     "loginRequired": "Tienes que iniciar sesión para enviar la aportación.",
     "signIn": "Inicia sesión",
+    "sessionExpired": "Tu sesión ha caducado. Vuelve a iniciar sesión para enviar la aportación: el formulario conserva lo que ya has escrito.",
+    "signedInAs": "Sesión activa como {name}",
+    "subjectsError": "No se han podido cargar las asignaturas. Vuelve a intentarlo más tarde.",
     "subjectLabel": "Asignatura",
     "subjectPlaceholder": "Selecciona una asignatura",
     "subjectLatest": " · Asignatura no vigente",
@@ -360,12 +363,23 @@
     "filesTotalSize": "Tamaño total",
     "removeFile": "Eliminar el archivo",
     "acknowledgement": "Confirmo que tengo derecho a compartir este material y que no incluye contenido protegido.",
+    "gate": {
+      "title": "Inicia sesión para compartir material",
+      "text": "Para enviar una aportación necesitas una cuenta de Fibers. Inicia sesión y el formulario se abrirá vacío y todo lo que escribas quedará a salvo.",
+      "action": "Inicia sesión",
+      "benefits": [
+        "El formulario solo se abre con la sesión iniciada.",
+        "Si vuelves más tarde, el material seguirá esperándote.",
+        "Cada aportación se revisará antes de publicarse."
+      ]
+    },
     "errors": {
       "subject": "Selecciona una asignatura.",
       "titleShort": "El título es obligatorio y debe tener al menos 3 caracteres.",
       "titleLong": "El título no puede superar los 120 caracteres.",
       "descriptionShort": "La descripción es obligatoria y debe tener al menos 10 caracteres.",
       "descriptionLong": "La descripción no puede superar los 3000 caracteres.",
+      "filesRequired": "Adjunta al menos un archivo para enviar la aportación.",
       "filesTooLarge": "Cada archivo debe pesar como máximo 50 MB.",
       "acknowledgement": "Confirma que tienes derecho a compartir este material."
     },
