@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -13,6 +13,8 @@ import Typography from "@mui/material/Typography";
 import CloseRounded from "@mui/icons-material/CloseRounded";
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded";
 import VisibilityRounded from "@mui/icons-material/VisibilityRounded";
+import CodeBlock from "@/components/shared/CodeBlock";
+import { detectLanguage, languageFromFileName } from "@/data/codeLanguage";
 import type { Material } from "@/data/materials";
 import {
   formatFileSize,
@@ -122,6 +124,13 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
   const isText = Boolean(
     selectedExtension && textExtensions.has(selectedExtension),
   );
+  /** Language of the preview: by extension, or guessed from the content. */
+  const previewLanguage = useMemo(() => {
+    if (!selectedMaterial) return { language: "text", label: "Text" };
+    const byName = languageFromFileName(selectedMaterial.path);
+    if (byName.language !== "text") return byName;
+    return detectLanguage(textContent);
+  }, [selectedMaterial, textContent]);
   const closePreview = () => setSelectedMaterial(null);
 
   return (
@@ -293,27 +302,14 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
                     </Alert>
                   )}
                   {!loadingText && !textError && (
-                    <Box
-                      component="pre"
-                      sx={{
-                        m: 0,
-                        p: { xs: 2, sm: 3 },
-                        overflowX: "auto",
-                        border: "1px solid",
-                        borderColor: "divider",
-                        borderRadius: 2,
-                        bgcolor: "background.paper",
-                        color: "text.primary",
-                        fontFamily:
-                          "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
-                        fontSize: 15,
-                        lineHeight: 1.65,
-                        whiteSpace: "pre-wrap",
-                        overflowWrap: "anywhere",
-                      }}
-                    >
-                      {textContent || t("resourceCollection.emptyText")}
-                    </Box>
+                    <CodeBlock
+                      code={textContent || t("resourceCollection.emptyText")}
+                      language={previewLanguage.language}
+                      label={previewLanguage.label}
+                      wrap={previewLanguage.language === "text"}
+                      showLabel
+                      locale={locale}
+                    />
                   )}
                 </Box>
               )}

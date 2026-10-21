@@ -341,6 +341,13 @@
     "formTitle": "Detalles de la aportación",
     "formLead": "Indícanos qué quieres compartir con la comunidad."
   },
+  "codeBlock": {
+    "copy": "Copiar el código",
+    "copied": "¡Código copiado!",
+    "toggleLines": "Mostrar u ocultar los números de línea",
+    "lightMode": "Modo claro",
+    "darkMode": "Modo oscuro"
+  },
   "contributionForm": {
     "supabaseMissing": "Falta configurar la conexión con Supabase.",
     "serviceUnavailable": "No se ha podido conectar con el servicio de aportaciones.",

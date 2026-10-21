@@ -1239,6 +1239,129 @@ textarea {
   white-space: pre;
 }
 
+.code-block {
+  --code-bg: #20242c;
+  --code-border: #303844;
+  --code-text: #e6edf3;
+  --code-gutter: #6b7480;
+  --code-toolbar: rgba(255, 255, 255, .05);
+  --code-action: #b9c2cf;
+  position: relative;
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--code-border);
+  border-radius: 10px;
+  background: var(--code-bg);
+  color: var(--code-text);
+}
+
+.code-block--light {
+  --code-bg: #f7f8fa;
+  --code-border: #dfe3e8;
+  --code-text: #24292f;
+  --code-gutter: #9aa1ab;
+  --code-toolbar: rgba(32, 36, 44, .04);
+  --code-action: #57606a;
+}
+
+.code-block-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 6px 4px 12px;
+  border-bottom: 1px solid var(--code-border);
+  background: var(--code-toolbar);
+}
+
+.code-block-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.code-block-action.MuiIconButton-root {
+  width: 30px;
+  height: 30px;
+  color: var(--code-action);
+  transition: background .2s ease, color .2s ease;
+}
+
+.code-block-action.MuiIconButton-root:hover {
+  background: var(--code-toolbar);
+  color: var(--code-text);
+}
+
+.code-block-action.is-active.MuiIconButton-root {
+  color: var(--coral);
+}
+
+.code-block-pre {
+  margin: 0;
+  padding: 14px 0;
+  overflow-x: auto;
+  background: transparent;
+  color: var(--code-text);
+  font-family: Consolas, "SFMono-Regular", Menlo, monospace;
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  tab-size: 4;
+  white-space: pre;
+}
+
+.code-block--wrap .code-block-pre {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+/* Without the gutter the code needs its own left margin. */
+.code-block--no-lines .code-block-pre {
+  padding-left: 16px;
+}
+
+.code-block-code {
+  display: block;
+  font: inherit;
+}
+
+.code-block-line {
+  display: flex;
+  align-items: baseline;
+  min-height: 1.65em;
+  padding-right: 16px;
+}
+
+.code-block-lineno {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  flex: 0 0 auto;
+  min-width: 3.4em;
+  padding-right: 1.1em;
+  background: var(--code-bg);
+  color: var(--code-gutter);
+  text-align: right;
+  user-select: none;
+}
+
+.code-block-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.code-block-label {
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--code-toolbar);
+  color: var(--code-action);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
 .status-heading {
   margin-bottom: 17px;
 }

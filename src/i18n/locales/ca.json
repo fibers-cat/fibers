@@ -341,6 +341,13 @@
     "formTitle": "Detalls de l’aportació",
     "formLead": "Indica’ns què vols compartir amb la comunitat."
   },
+  "codeBlock": {
+    "copy": "Copia el codi",
+    "copied": "Codi copiat!",
+    "toggleLines": "Mostra o amaga els números de línia",
+    "lightMode": "Mode clar",
+    "darkMode": "Mode fosc"
+  },
   "contributionForm": {
     "supabaseMissing": "Falta configurar la connexió amb Supabase.",
     "serviceUnavailable": "No s’ha pogut connectar amb el servei d’aportacions.",
