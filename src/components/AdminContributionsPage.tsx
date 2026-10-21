@@ -75,7 +75,7 @@ export default function AdminContributionsPage({ locale }: { locale: Locale }) {
         {roleLoading && <CircularProgress aria-label={t('admin.checkingPermissions')} />}
         {roleError && <Alert severity="error">{roleError}</Alert>}
         {!roleLoading && !role && !roleError && (
-          <Alert severity="info">{t('admin.contributions.signInPrompt')} <a href={localizePath(`/perfil/?returnTo=${encodeURIComponent('/admin/aportacions/')}`, locale)}>{t('admin.signIn')}</a></Alert>
+          <Alert severity="info">{t('admin.contributions.signInPrompt')} <a href={`${localizePath('/perfil/', locale)}?returnTo=${encodeURIComponent(localizePath('/admin/aportacions/', locale))}`}>{t('admin.signIn')}</a></Alert>
         )}
         {!roleLoading && role === 'user' && (
           <Alert severity="error">{t('admin.contributions.noPermission')}</Alert>

@@ -276,7 +276,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
             {needsLogin && (
               <p className="contribution-login-issue">
                 {t("contributionForm.loginRequired")}{" "}
-                <a href={localizePath(`/perfil/?returnTo=${encodeURIComponent('/aporta/')}`, locale)}>
+                <a href={`${localizePath('/perfil/', locale)}?returnTo=${encodeURIComponent(localizePath('/aporta/', locale))}`}>
                   {t("contributionForm.signIn")}
                 </a>
               </p>

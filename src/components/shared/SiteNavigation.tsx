@@ -43,7 +43,7 @@ const links: { path: string; labelKey: UIKey; icon: ReactElement }[] = [
   { path: '/sobre/', labelKey: 'nav.about', icon: <InfoOutlined /> },
 ];
 
-type Props = { currentPath: string; locale: Locale };
+type Props = { currentPath: string; returnTo?: string; locale: Locale };
 
 const socialLinks = [
   { href: 'https://github.com/fibers-cat/fibers/', label: 'GitHub', icon: siGithub },
@@ -134,12 +134,16 @@ function NavigationLinks({ currentPath, locale, onNavigate, role }: Props & { on
   );
 }
 
-export default function SiteNavigation({ currentPath, locale }: Props) {
+export default function SiteNavigation({ currentPath, returnTo, locale }: Props) {
   const t = useTranslations(locale);
   const [open, setOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [role, setRole] = useState<AppRole | null>(null);
+  const [currentUrl, setCurrentUrl] = useState(returnTo ?? localizePath(currentPath, locale));
+  useEffect(() => {
+    setCurrentUrl(`${window.location.pathname}${window.location.search}${window.location.hash}`);
+  }, []);
   useEffect(() => {
     if (!hasSupabaseConfig) return;
     let active = true;
@@ -180,6 +184,11 @@ export default function SiteNavigation({ currentPath, locale }: Props) {
       unsubscribe();
     };
   }, []);
+  const profilePath = localizePath('/perfil/', locale);
+  const profileReturnTo = currentUrl.startsWith(profilePath) ? '' : currentUrl;
+  const profileHref = signedIn || !profileReturnTo
+    ? profilePath
+    : `${profilePath}?returnTo=${encodeURIComponent(profileReturnTo)}`;
   const brand = (
     <a className="brand-lockup" href={localizePath('/', locale)} aria-label={t('brand.home')}>
       <img src="/images/fibers-heart.svg" alt="" width="34" height="34" />
@@ -197,7 +206,7 @@ export default function SiteNavigation({ currentPath, locale }: Props) {
           <SocialLinks className="desktop-socials" locale={locale} />
           <LocaleSwitcher currentPath={currentPath} locale={locale} tooltipVariant="sidebar" />
           <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow variant="sidebar">
-            <IconButton component="a" href={localizePath('/perfil/', locale)} className="profile-link" aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}>
+            <IconButton component="a" href={profileHref} className="profile-link" aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}>
               {signedIn ? (
                 <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
                   <PersonOutlineRounded fontSize="small" />
@@ -233,7 +242,7 @@ export default function SiteNavigation({ currentPath, locale }: Props) {
             <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow variant="sidebar">
               <IconButton
                 component="a"
-                href={localizePath('/perfil/', locale)}
+                href={profileHref}
                 className="profile-link"
                 aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}
               >

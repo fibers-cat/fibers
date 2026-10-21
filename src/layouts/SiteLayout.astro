@@ -33,6 +33,7 @@ const description = Astro.props.description ?? t('meta.siteDescription');
 const currentPath = Astro.url.pathname;
 // Canonical (Catalan) logical path, e.g. `/es/acerca/` → `/sobre/`.
 const basePath = canonicalPath(currentPath, currentLocale);
+const returnTo = localizePath(basePath, currentLocale);
 const site = Astro.site ?? new URL('https://fibers.cat');
 const siteOrigin = site.origin;
 const canonicalUrl = new URL(localizePath(basePath, currentLocale), site).href;
@@ -139,7 +140,7 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
     )}
   </head>
   <body>
-    <SiteNavigation client:load currentPath={basePath} locale={currentLocale} />
+    <SiteNavigation client:load currentPath={basePath} returnTo={returnTo} locale={currentLocale} />
     <main class="site-main">
       <slot />
       <footer class="site-footer">

@@ -90,7 +90,7 @@ export default function AdminUsersPage({ locale }: { locale: Locale }) {
         {roleLoading && <CircularProgress aria-label={t('admin.checkingPermissions')} />}
         {roleError && <Alert severity="error">{roleError}</Alert>}
         {!roleLoading && !role && !roleError && (
-          <Alert severity="info">{t('admin.users.signInPrompt')} <a href={localizePath(`/perfil/?returnTo=${encodeURIComponent('/admin/usuaris/')}`, locale)}>{t('admin.signIn')}</a></Alert>
+          <Alert severity="info">{t('admin.users.signInPrompt')} <a href={`${localizePath('/perfil/', locale)}?returnTo=${encodeURIComponent(localizePath('/admin/usuaris/', locale))}`}>{t('admin.signIn')}</a></Alert>
         )}
         {!roleLoading && role === 'admin' && (
           <Alert severity="error">{t('admin.users.noPermission')}</Alert>

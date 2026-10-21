@@ -31,12 +31,13 @@ import {
 import { fetchUserProfile, saveSocialAvatar, updateAlias } from "@/services/profiles";
 import { fetchPendingContributionCount } from "@/services/contributions";
 import { fetchContributorStanding, type ContributorStanding } from "@/services/contributors";
+import { toSafeLocalPath } from "@/services/safeRedirect";
 import { getSocialAvatar } from "@/services/socialAvatar";
 import type { AppRole } from "@/services/roles";
 import { fibersTheme } from "@/styles/theme";
-import { localizePath, useTranslations, type Locale } from "@/i18n";
+import { localizePath, locales, useTranslations, type Locale } from "@/i18n";
 
-type Props = { returnTo: string; locale: Locale };
+type Props = { locale: Locale };
 
 type AuthStatus = "loading" | "signedOut" | "signedIn" | "error";
 
@@ -55,7 +56,7 @@ const PROVIDER_LABEL_KEY: Record<
   github: "profilePage.provider.github",
 };
 
-export default function ProfilePage({ returnTo, locale }: Props) {
+export default function ProfilePage({ locale }: Props) {
   const t = useMemo(() => useTranslations(locale), [locale]);
   const [status, setStatus] = useState<AuthStatus>("loading");
   const [reloadToken, setReloadToken] = useState(0);
@@ -76,8 +77,12 @@ export default function ProfilePage({ returnTo, locale }: Props) {
   const [busy, setBusy] = useState(false);
   const currentUserId = useRef("");
   const initialLoadDone = useRef(false);
+  const [safeReturn, setSafeReturn] = useState("");
 
-  const safeReturn = returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/";
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("returnTo");
+    setSafeReturn(toSafeLocalPath(requested, window.location.origin));
+  }, []);
 
   useEffect(() => {
     if (!hasSupabaseConfig) {
@@ -232,6 +237,26 @@ export default function ProfilePage({ returnTo, locale }: Props) {
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    if (status !== "signedIn" || !safeReturn) return;
+
+    const targetPath = toSafeLocalPath(safeReturn, window.location.origin);
+    if (!targetPath) return;
+    const target = new URL(targetPath, window.location.origin);
+
+    const profilePaths = new Set(
+      locales.map((item) =>
+        new URL(localizePath("/perfil/", item), window.location.origin).pathname,
+      ),
+    );
+    if (profilePaths.has(target.pathname)) return;
+
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (`${target.pathname}${target.search}${target.hash}` === current) return;
+
+    window.location.replace(target.href);
+  }, [safeReturn, status]);
+
   const sendLink = async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!hasSupabaseConfig) return;
@@ -239,7 +264,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
     setMessage("");
     setMessageIsError(false);
     const callback = new URL(localizePath("/perfil/", locale), window.location.origin);
-    callback.searchParams.set("returnTo", safeReturn);
+    if (safeReturn) callback.searchParams.set("returnTo", safeReturn);
     try {
       await signInWithEmailLink(email, callback.href);
       setMessage(t("profilePage.linkSent"));
@@ -257,7 +282,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
     setMessage("");
     setMessageIsError(false);
     const callback = new URL(localizePath("/perfil/", locale), window.location.origin);
-    callback.searchParams.set("returnTo", safeReturn);
+    if (safeReturn) callback.searchParams.set("returnTo", safeReturn);
     try {
       await signInWithOAuth(provider, callback.href);
     } catch (error) {
