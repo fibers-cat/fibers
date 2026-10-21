@@ -48,7 +48,7 @@ export const routeSlugs: Record<string, Record<Locale, string>> = {
   'contacte': { ca: 'contacte', es: 'contacto' },
   'aporta': { ca: 'aporta', es: 'aporta' },
   'perfil': { ca: 'perfil', es: 'perfil' },
-  'condicions': { ca: 'condicions', es: 'condiciones' },
+  'condicions-us': { ca: 'condicions-us', es: 'condiciones-uso' },
   'col-laboradors': { ca: 'col-laboradors', es: 'colaboradores' },
   'assignatures': { ca: 'assignatures', es: 'asignaturas' },
   'admin/aportacions': { ca: 'admin/aportacions', es: 'admin/aportaciones' },

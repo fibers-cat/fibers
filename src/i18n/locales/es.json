@@ -473,19 +473,104 @@
   "terms": {
     "meta": {
       "title": "Condiciones de uso de Fibers",
-      "description": "Consulta las condiciones y los criterios para compartir materiales propios con la comunidad de estudiantes de la FIB."
+      "description": "Consulta las normas para compartir materiales en Fibers: material propio, respeto por los derechos de autor y revisión antes de publicar."
     },
-    "eyebrow": "COMPARTIR CON RESPONSABILIDAD",
+    "eyebrow": "NORMAS DE LA COMUNIDAD",
     "title": "Condiciones de uso",
-    "lead": "Al aportar material a Fibers, ten en cuenta estas normas de la comunidad.",
-    "rules": [
-      "No se acepta material facilitado por el profesorado.",
-      "No se acepta material con copyright, como libros o copias de libros.",
-      "No se acepta material sin el consentimiento de quien es propietario."
-    ],
-    "disclaimerBefore": "Si tienes dudas sobre un recurso, háznoslas llegar antes de compartirlo a través del ",
-    "disclaimerLink": "formulario de contacto",
-    "disclaimerAfter": "."
+    "lead": "Fibers es un espacio para compartir materiales de estudio con respeto. Estas condiciones explican qué se puede publicar, cómo se revisa y qué puedes esperar de la comunidad.",
+    "principles": {
+      "eyebrow": "ANTES DE COMPARTIR",
+      "title": "Tres principios básicos",
+      "lead": "Si tienes dudas, es mejor preguntar antes de publicar.",
+      "items": [
+        {
+          "title": "Material propio o con permiso",
+          "text": "Comparte apuntes, ejercicios, prácticas o guías que hayas creado tú o para los que tengas un permiso explícito."
+        },
+        {
+          "title": "Sin copyright",
+          "text": "No se aceptan libros, copias de libros ni ningún contenido protegido por derechos de autor."
+        },
+        {
+          "title": "Fuera del material del profesorado",
+          "text": "No publicamos materiales facilitados por el profesorado ni recursos que no estén pensados para compartirse."
+        }
+      ]
+    },
+    "scope": {
+      "eyebrow": "ALCANCE",
+      "title": "A quién se aplican",
+      "lead": "Se aplican a cualquier persona que consulte el catálogo o aporte material. Consultar es gratuito y abierto; aportar requiere una cuenta.",
+      "items": [
+        {
+          "title": "Quien consulta",
+          "text": "Puede explorar y descargar materiales sin cuenta."
+        },
+        {
+          "title": "Quien aporta",
+          "text": "Debe iniciar sesión y confirmar que tiene derecho a compartir el material."
+        }
+      ]
+    },
+    "review": {
+      "eyebrow": "REVISIÓN",
+      "title": "Qué pasa después de enviarlo",
+      "lead": "Ningún material se publica automáticamente.",
+      "items": [
+        {
+          "title": "Revisión manual",
+          "text": "Comprobamos que el material sea propio, que los archivos se abran y que encaje con la asignatura."
+        },
+        {
+          "title": "Publicación con atribución",
+          "text": "Si todo está correcto, aparece en el catálogo con el alias público de quien lo ha aportado."
+        },
+        {
+          "title": "Retirada",
+          "text": "Podemos retirar un recurso si incumple estas condiciones o si quien tiene los derechos lo solicita."
+        }
+      ]
+    },
+    "allowed": {
+      "eyebrow": "EN RESUMEN",
+      "title": "Qué puede haber",
+      "lead": "Una guía rápida para saber si tu material encaja.",
+      "okTitle": "Sí, si es tuyo o tienes permiso",
+      "okItems": [
+        "Apuntes, resúmenes y esquemas.",
+        "Exámenes y ejercicios resueltos.",
+        "Prácticas, proyectos y código.",
+        "Guías y material de apoyo."
+      ],
+      "noTitle": "No lo aceptamos",
+      "noItems": [
+        "Material facilitado por el profesorado.",
+        "Libros o contenido con copyright.",
+        "Material sin consentimiento de quien tiene los derechos.",
+        "Archivos con datos personales o información sensible."
+      ]
+    },
+    "use": {
+      "eyebrow": "USO DEL CATÁLOGO",
+      "title": "Consulta con respeto",
+      "lead": "Los materiales son para estudiar y aprender. Estas dos pautas ayudan a cuidar el catálogo.",
+      "items": [
+        {
+          "title": "Respeta la autoría",
+          "text": "No presentes como propio el material que has consultado."
+        },
+        {
+          "title": "Avísanos",
+          "text": "Si detectas un error de atribución o un contenido que no debería estar, escríbenos."
+        }
+      ]
+    },
+    "contact": {
+      "eyebrow": "HABLEMOS",
+      "title": "¿Tienes dudas sobre un recurso?",
+      "text": "Escríbenos antes de publicarlo o si crees que algún material no debería estar en el catálogo.",
+      "link": "Contacta con el equipo"
+    }
   },
   "catalog": {
     "meta": {

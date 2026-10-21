@@ -473,19 +473,104 @@
   "terms": {
     "meta": {
       "title": "Condicions d’ús de Fibers",
-      "description": "Consulta les condicions i els criteris per compartir materials propis amb la comunitat d’estudiants de la FIB."
+      "description": "Consulta les normes per compartir materials a Fibers: material propi, respecte pels drets d’autor i revisió abans de publicar."
     },
-    "eyebrow": "COMPARTIR AMB RESPONSABILITAT",
+    "eyebrow": "NORMES DE LA COMUNITAT",
     "title": "Condicions d’ús",
-    "lead": "En aportar material a Fibers, tingues en compte aquestes normes de la comunitat.",
-    "rules": [
-      "No s’accepta material facilitat pel professorat.",
-      "No s’accepta material amb copyright, com ara llibres o còpies de llibres.",
-      "No s’accepta material sense el consentiment de qui n’és propietari."
-    ],
-    "disclaimerBefore": "Si tens dubtes sobre un recurs, fes-nos-els arribar abans de compartir-lo a través del ",
-    "disclaimerLink": "formulari de contacte",
-    "disclaimerAfter": "."
+    "lead": "Fibers és un espai per compartir materials d’estudi amb respecte. Aquestes condicions expliquen què es pot publicar, com es revisa i què pots esperar de la comunitat.",
+    "principles": {
+      "eyebrow": "ABANS DE COMPARTIR",
+      "title": "Tres principis bàsics",
+      "lead": "Si tens dubtes, és millor preguntar abans de publicar.",
+      "items": [
+        {
+          "title": "Material propi o amb permís",
+          "text": "Comparteix apunts, exercicis, pràctiques o guies que hagis creat tu o per als quals tinguis un permís explícit."
+        },
+        {
+          "title": "Sense copyright",
+          "text": "No s’accepten llibres, còpies de llibres ni cap contingut protegit per drets d’autor."
+        },
+        {
+          "title": "Fora del material del professorat",
+          "text": "No publiquem materials facilitats pel professorat ni recursos que no estiguin pensats per compartir-se."
+        }
+      ]
+    },
+    "scope": {
+      "eyebrow": "ABAST",
+      "title": "A qui s’apliquen",
+      "lead": "S’apliquen a qualsevol persona que consulti el catàleg o hi aporti material. Consultar és gratuït i obert; aportar requereix un compte.",
+      "items": [
+        {
+          "title": "Qui consulta",
+          "text": "Pot explorar i descarregar materials sense compte."
+        },
+        {
+          "title": "Qui aporta",
+          "text": "Ha d’iniciar sessió i confirmar que té dret a compartir el material."
+        }
+      ]
+    },
+    "review": {
+      "eyebrow": "REVISIÓ",
+      "title": "Què passa després d’enviar-ho",
+      "lead": "Cap material es publica automàticament.",
+      "items": [
+        {
+          "title": "Revisió manual",
+          "text": "Comprovem que el material sigui propi, que els fitxers s’obrin i que encaixi amb l’assignatura."
+        },
+        {
+          "title": "Publicació amb atribució",
+          "text": "Si tot està correcte, apareix al catàleg amb l’àlies públic de qui l’ha aportat."
+        },
+        {
+          "title": "Retirada",
+          "text": "Podem retirar un recurs si incompleix aquestes condicions o si qui en té els drets ho sol·licita."
+        }
+      ]
+    },
+    "allowed": {
+      "eyebrow": "EN RESUM",
+      "title": "Què hi pot haver",
+      "lead": "Una guia ràpida per saber si el teu material encaixa.",
+      "okTitle": "Sí, si és teu o tens permís",
+      "okItems": [
+        "Apunts, resums i esquemes.",
+        "Exàmens i exercicis resolts.",
+        "Pràctiques, projectes i codi.",
+        "Guies i material de suport."
+      ],
+      "noTitle": "No ho acceptem",
+      "noItems": [
+        "Material facilitat pel professorat.",
+        "Llibres o contingut amb copyright.",
+        "Material sense consentiment de qui en té els drets.",
+        "Fitxers amb dades personals o informació sensible."
+      ]
+    },
+    "use": {
+      "eyebrow": "ÚS DEL CATÀLEG",
+      "title": "Consulta amb respecte",
+      "lead": "Els materials són per estudiar i aprendre. Aquestes dues pautes ajuden a cuidar el catàleg.",
+      "items": [
+        {
+          "title": "Respecta l’autoria",
+          "text": "No presentis com a propi el material que has consultat."
+        },
+        {
+          "title": "Avisa’ns",
+          "text": "Si detectes un error d’atribució o un contingut que no hi hauria de ser, escriu-nos."
+        }
+      ]
+    },
+    "contact": {
+      "eyebrow": "PARLEM-NE",
+      "title": "Tens dubtes sobre un recurs?",
+      "text": "Escriu-nos abans de publicar-lo o si creus que algun material no hauria de ser al catàleg.",
+      "link": "Contacta amb l’equip"
+    }
   },
   "catalog": {
     "meta": {

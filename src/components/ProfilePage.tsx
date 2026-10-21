@@ -46,11 +46,21 @@ const ROLE_LABEL_KEY: Record<AppRole, "profilePage.account.roleUser" | "profileP
   superadmin: "profilePage.account.roleSuperadmin",
 };
 
+const PROVIDER_LABEL_KEY: Record<
+  string,
+  "profilePage.provider.email" | "profilePage.provider.google" | "profilePage.provider.github" | "profilePage.provider.other"
+> = {
+  email: "profilePage.provider.email",
+  google: "profilePage.provider.google",
+  github: "profilePage.provider.github",
+};
+
 export default function ProfilePage({ returnTo, locale }: Props) {
   const t = useMemo(() => useTranslations(locale), [locale]);
   const [status, setStatus] = useState<AuthStatus>("loading");
   const [reloadToken, setReloadToken] = useState(0);
   const [userEmail, setUserEmail] = useState("");
+  const [authProvider, setAuthProvider] = useState("");
   const [alias, setAlias] = useState("");
   const [savedAlias, setSavedAlias] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
@@ -98,6 +108,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
       if (!session) {
         setStatus("signedOut");
         setUserEmail("");
+        setAuthProvider("");
         setAlias("");
         setSavedAlias("");
         setAvatarUrl(null);
@@ -126,6 +137,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
         currentUserId.current = "";
         setStatus("signedOut");
         setUserEmail("");
+        setAuthProvider("");
         return;
       }
 
@@ -146,6 +158,11 @@ export default function ProfilePage({ returnTo, locale }: Props) {
       const socialAvatar = getSocialAvatar(user);
       currentUserId.current = user.id;
       setUserEmail(user.email ?? "");
+      const provider =
+        typeof user.app_metadata?.provider === "string"
+          ? user.app_metadata.provider
+          : user.identities?.[0]?.provider ?? "email";
+      setAuthProvider(provider);
       setAlias(nextAlias);
       setSavedAlias(nextAlias);
       setAvatarUrl(socialAvatar ?? profile.avatarUrl ?? null);
@@ -294,6 +311,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
       currentUserId.current = "";
       setStatus("signedOut");
       setUserEmail("");
+      setAuthProvider("");
       setAlias("");
       setSavedAlias("");
       setAvatarUrl(null);
@@ -475,6 +493,9 @@ export default function ProfilePage({ returnTo, locale }: Props) {
 
   const isAdmin = role === "admin" || role === "superadmin";
   const roleLabel = role ? t(ROLE_LABEL_KEY[role]) : "";
+  const providerLabel = authProvider
+    ? t(PROVIDER_LABEL_KEY[authProvider] ?? "profilePage.provider.other")
+    : "";
   const published = standing ? standing.materialCount : null;
   const aliasChanged = alias.trim() !== savedAlias && alias.trim().length >= 2 && alias.trim().length <= 40;
 
@@ -490,10 +511,18 @@ export default function ProfilePage({ returnTo, locale }: Props) {
             <PersonOutlineRounded fontSize="large" />
           </Avatar>
           <div className="profile-hero-body">
-            <span className="eyebrow">{t("profilePage.eyebrow")}</span>
             <h2 className="profile-hero-name">{savedAlias || userEmail}</h2>
             <p className="profile-hero-meta">
               {userEmail}
+              {providerLabel && (
+                <span
+                  className="profile-provider"
+                  title={t("profilePage.provider.label")}
+                  aria-label={`${t("profilePage.provider.label")}: ${providerLabel}`}
+                >
+                  {providerLabel}
+                </span>
+              )}
               {role && <span className={`profile-role profile-role--${role}`}>{roleLabel}</span>}
             </p>
           </div>
@@ -595,7 +624,7 @@ export default function ProfilePage({ returnTo, locale }: Props) {
               <Button
                 fullWidth
                 variant="outlined"
-                href={localizePath("/guia/", locale)}
+                href={localizePath("/com-funciona/", locale)}
                 startIcon={<InfoOutlined />}
               >
                 {t("profilePage.actions.howItWorks")}
