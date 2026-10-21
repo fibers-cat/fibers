@@ -329,7 +329,39 @@
     "linkSent": "Te hemos enviado un enlace para iniciar sesión.",
     "aliasSaved": "Alias guardado.",
     "signedOut": "Has cerrado la sesión.",
-    "sessionExpired": "Sesión caducada"
+    "sessionExpired": "Sesión caducada",
+    "lead": "Gestiona tu alias y consulta tus estadísticas en la comunidad.",
+    "loading": "Cargando el perfil…",
+    "retry": "Volver a intentarlo",
+    "aliasInvalid": "El alias debe tener entre 2 y 40 caracteres.",
+    "rankingError": "No se ha podido cargar tu posición en el ranking.",
+    "stats": {
+      "published": "Materiales publicados",
+      "publishedHint": "Archivos aprobados en el catálogo",
+      "pending": "En revisión",
+      "pendingHint": "Aportaciones pendientes de aprobación",
+      "ranking": "Posición en el ranking",
+      "rankingHint": "De {total} colaboradores",
+      "rankingNone": "Sin posición",
+      "rankingNoneHint": "Publica material para entrar en el ranking",
+      "rankingLink": "Ver el ranking"
+    },
+    "account": {
+      "title": "Cuenta",
+      "aliasTitle": "Alias público",
+      "aliasHelper": "Entre 2 y 40 caracteres. Es el nombre que aparece en tus aportaciones.",
+      "emailLabel": "Correo electrónico",
+      "roleLabel": "Rol",
+      "roleUser": "Colaborador",
+      "roleAdmin": "Administrador",
+      "roleSuperadmin": "Superadministrador"
+    },
+    "actions": {
+      "title": "Acciones",
+      "contribute": "Aporta material",
+      "adminContributions": "Revisa aportaciones",
+      "adminUsers": "Gestiona usuarios"
+    }
   },
   "notFound": {
     "meta": {

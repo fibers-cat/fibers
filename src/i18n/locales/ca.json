@@ -329,7 +329,39 @@
     "linkSent": "T’hem enviat un enllaç per iniciar sessió.",
     "aliasSaved": "Àlies desat.",
     "signedOut": "Has tancat la sessió.",
-    "sessionExpired": "Sessió caducada"
+    "sessionExpired": "Sessió caducada",
+    "lead": "Gestiona el teu àlies i consulta les teves estadístiques a la comunitat.",
+    "loading": "Carregant el perfil…",
+    "retry": "Torna-ho a provar",
+    "aliasInvalid": "L’àlies ha de tenir entre 2 i 40 caràcters.",
+    "rankingError": "No s’ha pogut carregar la teva posició al rànquing.",
+    "stats": {
+      "published": "Materials publicats",
+      "publishedHint": "Fitxers aprovats al catàleg",
+      "pending": "En revisió",
+      "pendingHint": "Aportacions pendents d’aprovació",
+      "ranking": "Posició al rànquing",
+      "rankingHint": "De {total} col·laboradors",
+      "rankingNone": "Sense posició",
+      "rankingNoneHint": "Publica material per entrar al rànquing",
+      "rankingLink": "Veure el rànquing"
+    },
+    "account": {
+      "title": "Compte",
+      "aliasTitle": "Àlies públic",
+      "aliasHelper": "Entre 2 i 40 caràcters. És el nom que apareix a les teves aportacions.",
+      "emailLabel": "Correu electrònic",
+      "roleLabel": "Rol",
+      "roleUser": "Col·laborador",
+      "roleAdmin": "Administrador",
+      "roleSuperadmin": "Superadministrador"
+    },
+    "actions": {
+      "title": "Accions",
+      "contribute": "Aporta material",
+      "adminContributions": "Revisa aportacions",
+      "adminUsers": "Gestiona usuaris"
+    }
   },
   "notFound": {
     "meta": {

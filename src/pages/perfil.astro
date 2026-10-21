@@ -9,5 +9,12 @@ const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFr
 const t = useTranslations(locale);
 ---
 <SiteLayout title={t('profilePage.meta.title')} description={t('profilePage.meta.description')} noindex>
-  <div class="page-content inner-page"><section class="form-card profile-panel"><span class="eyebrow">{t('profilePage.eyebrow')}</span><h1>{t('profilePage.heading')}</h1><ProfilePage client:load returnTo={returnTo} locale={locale} /></section></div>
+  <div class="page-content inner-page profile-page">
+    <header class="page-heading">
+      <span class="eyebrow">{t('profilePage.eyebrow')}</span>
+      <h1>{t('profilePage.heading')}</h1>
+      <p>{t('profilePage.lead')}</p>
+    </header>
+    <ProfilePage client:load returnTo={returnTo} locale={locale} />
+  </div>
 </SiteLayout>

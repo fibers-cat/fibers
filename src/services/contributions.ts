@@ -136,6 +136,17 @@ export async function fetchPendingContributions(): Promise<PendingContribution[]
   );
 }
 
+/** Counts the contributions of the given user that are still waiting for review. */
+export async function fetchPendingContributionCount(authorId: string): Promise<number> {
+  const { count, error } = await client()
+    .from('contributions')
+    .select('*', { count: 'exact', head: true })
+    .eq('author_id', authorId)
+    .eq('status', 'pending');
+  if (error) throw error;
+  return count ?? 0;
+}
+
 export type ContributionInput = {
   authorId: string;
   subjectId: string;
