@@ -1,0 +1,18 @@
+<!-- supabase/emails/src/magic-link.mjml -->
+<mjml>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700" color="#20242c" padding="0 0 8px">
+          El teu enllaç d'accés
+        </mj-text>
+        <mj-text>
+          Segueix l'enllaç a continuació per iniciar sessió. Aquest enllaç caduca en poc temps i només es pot fer servir una vegada.
+        </mj-text>
+        <mj-button href="{{ .ConfirmationURL }}" align="left">
+          Inicia sessió
+        </mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

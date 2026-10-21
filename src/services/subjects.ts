@@ -1,4 +1,4 @@
-import { supabase, type Subject } from '@/lib/supabase';
+import { supabase, type Subject } from '@/services/supabase';
 
 export async function fetchSubjects(): Promise<Subject[]> {
   if (!supabase) throw new Error('Configura PUBLIC_SUPABASE_URL i PUBLIC_SUPABASE_PUBLISHABLE_KEY per llegir les assignatures.');

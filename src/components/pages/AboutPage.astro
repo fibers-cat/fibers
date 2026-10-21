@@ -1,0 +1,37 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../shared/SiteBreadcrumbs';
+import ProjectTimeline from '@/components/ProjectTimeline';
+import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
+
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+---
+
+<SiteLayout title={t('about.meta.title')} description={t('about.meta.description')}>
+  <div class="page-content inner-page">
+    <!-- <SiteBreadcrumbs
+      items={[{ href: "/", label: "Inici" }, { label: "Sobre Fibers" }]}
+    /> -->
+    <header class="page-heading about-heading">
+      <span class="eyebrow">{t('about.eyebrow')}</span><h1>
+        {t('about.titleLine1')}<br />{t('about.titleLine2')}
+      </h1><p>{t('about.lead')}</p><a class="button-primary" href={localizePath('/contacte/', locale)}
+        >{t('about.cta')} <span aria-hidden="true">→</span></a>
+    </header>
+
+    <section class="about-timeline" aria-labelledby="project-timeline-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">{t('about.timelineEyebrow')}</span><h2
+            id="project-timeline-title"
+          >
+            {t('about.timelineTitle')}
+          </h2><p>{t('about.timelineLead')}</p>
+        </div>
+      </div>
+
+      <ProjectTimeline client:load locale={locale} />
+    </section>
+  </div>
+</SiteLayout>

@@ -7,20 +7,25 @@ import TextField from "@mui/material/TextField";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
 import ErrorOutlineRounded from "@mui/icons-material/ErrorOutlineRounded";
 import { ThemeProvider } from "@mui/material/styles";
-import { fibersTheme } from "@/components/theme";
+import { fibersTheme } from "@/components/shared/theme";
+import { localizePath, useTranslations, type Locale } from "@/i18n";
 
-type SubmissionState = {
+type Submission = {
   severity: "success" | "error";
   message: string;
-} | null;
+};
 
-type ContactField = "name" | "email" | "subject" | "message";
 type ValidationErrors = Partial<Record<ContactField, string>>;
 
-export default function ContactForm() {
-  const [busy, setBusy] = useState(false);
-  const [submission, setSubmission] = useState<SubmissionState>(null);
+type ContactField = "name" | "email" | "subject" | "message";
+
+type Props = { locale: Locale };
+
+export default function ContactForm({ locale }: Props) {
+  const t = useTranslations(locale);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+  const [submission, setSubmission] = useState<Submission | null>(null);
+  const [busy, setBusy] = useState(false);
 
   const getValidationErrors = (form: HTMLFormElement): ValidationErrors => {
     const values = new FormData(form);
@@ -31,14 +36,14 @@ export default function ContactForm() {
     const emailInput = form.querySelector<HTMLInputElement>("#contact-email");
 
     return {
-      ...(!name && { name: "Escriu el teu nom." }),
+      ...(!name && { name: t("contactForm.validation.name") }),
       ...(!email
-        ? { email: "Escriu el teu correu electrònic." }
+        ? { email: t("contactForm.validation.emailRequired") }
         : emailInput && !emailInput.validity.valid
-          ? { email: "Introdueix un correu electrònic vàlid." }
+          ? { email: t("contactForm.validation.emailInvalid") }
           : {}),
-      ...(!subject && { subject: "Escriu l’assumpte del missatge." }),
-      ...(!message && { message: "Escriu el missatge." }),
+      ...(!subject && { subject: t("contactForm.validation.subject") }),
+      ...(!message && { message: t("contactForm.validation.message") }),
     };
   };
 
@@ -50,8 +55,6 @@ export default function ContactForm() {
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (busy) return;
-
     const form = event.currentTarget;
     if (!validateForm(form)) return;
 
@@ -78,13 +81,13 @@ export default function ContactForm() {
       setValidationErrors({});
       setSubmission({
         severity: "success",
-        message: "Missatge enviat correctament. Et respondrem aviat.",
+        message: t("contactForm.success"),
       });
     } catch (error) {
       console.error("Could not submit the contact form.", error);
       setSubmission({
         severity: "error",
-        message: "No s’ha pogut enviar el missatge. Torna-ho a provar més tard.",
+        message: t("contactForm.error"),
       });
     } finally {
       setBusy(false);
@@ -98,7 +101,7 @@ export default function ContactForm() {
         className="contact-form"
         name="contacte"
         method="POST"
-        action="/contacte/"
+        action={localizePath("/contacte/", locale)}
         data-netlify="true"
         data-netlify-honeypot="bot-field"
         netlify-honeypot="bot-field"
@@ -119,17 +122,17 @@ export default function ContactForm() {
         <input type="hidden" name="form-name" value="contacte" />
         <div className="contact-honeypot" aria-hidden="true">
           <label>
-            No emplenis aquest camp:
+            {t("contactForm.honeypot")}
             <input name="bot-field" tabIndex={-1} autoComplete="off" />
           </label>
         </div>
+
         <TextField
+          required
           id="contact-name"
           name="name"
-          label="Nom"
+          label={t("contactForm.name")}
           autoComplete="name"
-          required
-          fullWidth
           error={Boolean(validationErrors.name)}
           helperText={validationErrors.name}
           slotProps={{
@@ -142,14 +145,14 @@ export default function ContactForm() {
             },
           }}
         />
+
         <TextField
+          required
           id="contact-email"
           name="email"
           type="email"
-          label="Correu electrònic"
+          label={t("contactForm.email")}
           autoComplete="email"
-          required
-          fullWidth
           error={Boolean(validationErrors.email)}
           helperText={validationErrors.email}
           slotProps={{
@@ -162,12 +165,12 @@ export default function ContactForm() {
             },
           }}
         />
+
         <TextField
+          required
           id="contact-subject"
           name="subject"
-          label="Assumpte"
-          required
-          fullWidth
+          label={t("contactForm.subject")}
           error={Boolean(validationErrors.subject)}
           helperText={validationErrors.subject}
           slotProps={{
@@ -180,14 +183,14 @@ export default function ContactForm() {
             },
           }}
         />
+
         <TextField
+          required
           id="contact-message"
           name="message"
-          label="Missatge"
+          label={t("contactForm.message")}
           multiline
-          minRows={6}
-          required
-          fullWidth
+          minRows={5}
           error={Boolean(validationErrors.message)}
           helperText={validationErrors.message}
           slotProps={{
@@ -203,24 +206,22 @@ export default function ContactForm() {
             },
           }}
         />
+
         {submission && (
           <Alert severity={submission.severity} role="status">
             {submission.message}
           </Alert>
         )}
+
         <Button
           className="primary-action-button"
           type="submit"
           variant="contained"
           disabled={busy}
-          onClick={(event) => {
-            const form = event.currentTarget.form;
-            if (form && !validateForm(form)) event.preventDefault();
-          }}
           endIcon={<ArrowForwardRounded />}
           sx={{ alignSelf: "flex-start" }}
         >
-          {busy ? "Enviant…" : "Envia el missatge"}
+          {busy ? t("contactForm.sending") : t("contactForm.submit")}
         </Button>
       </Stack>
     </ThemeProvider>

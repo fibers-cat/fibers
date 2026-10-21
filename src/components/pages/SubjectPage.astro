@@ -1,0 +1,50 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../shared/SiteBreadcrumbs';
+import SubjectStatus from '@/components/SubjectStatus';
+import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
+import type { Subject } from '@/services/supabase';
+
+interface Props {
+  subject: Subject;
+}
+
+const { subject } = Astro.props;
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const subjectDescription = t('subject.metaDescription', { name: subject.name, acronym: subject.acronym });
+---
+
+<SiteLayout title={`${subject.acronym}: ${subject.name}`} description={subjectDescription}>
+  <div class="page-content inner-page subject-page">
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { href: '/assignatures/', label: 'Assignatures' }, { label: subject.acronym }]} /> -->
+    <header class="subject-title-panel">
+      <span class="subject-code subject-code-large">{subject.acronym}</span>
+      <div class="subject-title-body">
+        <span class="eyebrow">{t('subject.eyebrow')}</span>
+        <h1>{subject.name}</h1>
+        <dl class="subject-meta">
+          <div class="subject-meta-item">
+            <dt>{t('subject.codeLabel')}</dt>
+            <dd>{subject.code ?? t('subject.codeUnavailable')}</dd>
+          </div>
+          {subject.languages.length > 0 && (
+            <div class="subject-meta-item">
+              <dt>{t('subject.languagesLabel')}</dt>
+              <dd>{subject.languages.map((language) => t(`subject.languages.${language}`)).join(', ')}</dd>
+            </div>
+          )}
+          {subject.specialty && (
+            <div class="subject-meta-item">
+              <dt>{t('subject.specialtyLabel')}</dt>
+              <dd>{subject.specialty}</dd>
+            </div>
+          )}
+        </dl>
+        <p class="subject-note">{subject.is_current ? t('subject.currentNote') : t('subject.historicalNote')}</p>
+      </div>
+    </header>
+    <SubjectStatus client:load subjectId={subject.id} subjectName={subject.name} subjectAcronym={subject.acronym} locale={locale} />
+    <a class="back-link" href={localizePath('/assignatures/', locale)}>← {t('subject.backLink')}</a>
+  </div>
+</SiteLayout>

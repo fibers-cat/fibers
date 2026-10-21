@@ -1,6 +1,7 @@
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+import { useTranslations, type Locale } from '@/i18n';
 
 type BreadcrumbItem = {
   label: string;
@@ -9,13 +10,15 @@ type BreadcrumbItem = {
 
 type Props = {
   items: BreadcrumbItem[];
+  locale: Locale;
 };
 
-export default function SiteBreadcrumbs({ items }: Props) {
+export default function SiteBreadcrumbs({ items, locale }: Props) {
+  const t = useTranslations(locale);
   return (
     <Breadcrumbs
       separator="/"
-      aria-label="Fil d’Ariadna"
+      aria-label={t('breadcrumbs.ariaLabel')}
       className="breadcrumbs"
       sx={{
         color: '#8b929d',

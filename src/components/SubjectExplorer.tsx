@@ -15,7 +15,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Skeleton from '@mui/material/Skeleton';
 import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
+import AppTooltip from '@/components/shared/AppTooltip';
 import Typography from '@mui/material/Typography';
 import ArrowForwardRounded from '@mui/icons-material/ArrowForwardRounded';
 import FilterListRounded from '@mui/icons-material/FilterListRounded';
@@ -24,14 +24,17 @@ import SearchRounded from '@mui/icons-material/SearchRounded';
 import SwapVertRounded from '@mui/icons-material/SwapVertRounded';
 import { ThemeProvider } from '@mui/material/styles';
 import type { Subject } from '@/data/subjects';
-import { supabase } from '@/lib/supabase';
-import { fibersTheme } from '@/components/theme';
+import { hasSupabaseConfig } from '@/services/supabase';
+import { fetchSubjectMaterialCounts, fetchLatestMaterialDates } from '@/services/subjectMaterialCounts';
+import { fibersTheme } from '@/components/shared/theme';
+import { intlLocale, localizePath, useTranslations, type Locale } from '@/i18n';
 
 type Props = {
   subjects: Subject[];
   featured?: boolean;
   initialMaterialCounts?: Record<string, number>;
   showCategoryFilter?: boolean;
+  locale: Locale;
 };
 
 const featuredCodes = new Set(['F', 'FM', 'M2', 'BD', 'EDA', 'PE', 'SO', 'EEE', 'XC']);
@@ -48,7 +51,10 @@ export default function SubjectExplorer({
   featured = false,
   initialMaterialCounts,
   showCategoryFilter = !featured,
+  locale,
 }: Props) {
+  const t = useTranslations(locale);
+  const dateFormatter = new Intl.DateTimeFormat(intlLocale(locale));
   const [materialCounts, setMaterialCounts] = useState<Record<string, number>>(
     initialMaterialCounts ?? {},
   );
@@ -68,13 +74,13 @@ export default function SubjectExplorer({
     [allSubjects, featured],
   );
   const categories = useMemo(
-    () => [...new Set(subjects.map((subject) => subject.category))].sort((a, b) => a.localeCompare(b, 'ca')),
-    [subjects],
+    () => [...new Set(subjects.map((subject) => subject.category))].sort((a, b) => a.localeCompare(b, locale)),
+    [subjects, locale],
   );
   const specialties = useMemo(
     () => [...new Set(subjects.flatMap((subject) => subject.specialty ? [subject.specialty] : []))]
-      .sort((a, b) => a.localeCompare(b, 'ca')),
-    [subjects],
+      .sort((a, b) => a.localeCompare(b, locale)),
+    [subjects, locale],
   );
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     () => [...new Set(allSubjects
@@ -95,27 +101,16 @@ export default function SubjectExplorer({
     if (initialMaterialCounts !== undefined) return;
     let active = true;
     const loadMaterialCounts = async () => {
-      if (!supabase) {
+      if (!hasSupabaseConfig) {
         setCountLoadError(true);
         setLoadingCounts(false);
         return;
       }
       try {
-        const { data, error } = await supabase
-          .from('approved_material_counts')
-          .select('subject_id,file_count');
-        if (error) {
-          console.error('Could not load approved material counts from Supabase.', error);
-          if (active) setCountLoadError(true);
-          return;
-        }
-        if (active) {
-          const counts: Record<string, number> = {};
-          for (const item of data ?? []) counts[item.subject_id] = Number(item.file_count);
-          setMaterialCounts(counts);
-        }
+        const counts = await fetchSubjectMaterialCounts();
+        if (active) setMaterialCounts(counts);
       } catch (error) {
-        console.error('Could not connect to Supabase while loading material counts.', error);
+        console.error('Could not load approved material counts from Supabase.', error);
         if (active) setCountLoadError(true);
       } finally {
         if (active) setLoadingCounts(false);
@@ -129,41 +124,13 @@ export default function SubjectExplorer({
     if (!showCategoryFilter) return;
     let active = true;
     const loadLatestMaterialDates = async () => {
-      if (!supabase) {
+      if (!hasSupabaseConfig) {
         setDateLoadError(true);
         setLoadingDates(false);
         return;
       }
       try {
-        const [contributionsResult, legacyResult] = await Promise.all([
-          supabase
-            .from('contributions')
-            .select('subject_id,reviewed_at')
-            .eq('status', 'approved')
-            .not('reviewed_at', 'is', null),
-          supabase
-            .from('legacy_material_subjects')
-            .select('subject_id,legacy_materials!inner(contributed_at)'),
-        ]);
-        if (contributionsResult.error) throw contributionsResult.error;
-        if (legacyResult.error) throw legacyResult.error;
-
-        const latestDates: Record<string, string> = {};
-        const recordDate = (subjectId: string, date: string | null | undefined) => {
-          if (date && (!latestDates[subjectId] || date > latestDates[subjectId])) {
-            latestDates[subjectId] = date;
-          }
-        };
-        for (const item of contributionsResult.data ?? []) {
-          recordDate(item.subject_id, item.reviewed_at);
-        }
-        for (const item of legacyResult.data ?? []) {
-          const material = item.legacy_materials;
-          const contributedAt = Array.isArray(material)
-            ? material[0]?.contributed_at
-            : material?.contributed_at;
-          recordDate(item.subject_id, contributedAt);
-        }
+        const latestDates = await fetchLatestMaterialDates();
         if (active) setLatestMaterialDates(latestDates);
       } catch (error) {
         console.error('Could not load latest published material dates.', error);
@@ -177,9 +144,9 @@ export default function SubjectExplorer({
   }, [showCategoryFilter]);
 
   const visibleSubjects = useMemo(() => {
-    const normalized = query.trim().toLocaleLowerCase('ca');
+    const normalized = query.trim().toLocaleLowerCase(locale);
     const filteredSubjects = subjects.filter((subject) =>
-      (!normalized || `${subject.acronym} ${subject.name}`.toLocaleLowerCase('ca').includes(normalized)) &&
+      (!normalized || `${subject.acronym} ${subject.name}`.toLocaleLowerCase(locale).includes(normalized)) &&
       selectedCategories.includes(subject.category) &&
       (selectedSpecialties.length === specialties.length ||
         (subject.specialty !== null && selectedSpecialties.includes(subject.specialty))) &&
@@ -196,10 +163,10 @@ export default function SubjectExplorer({
           return sortOrder === 'newest' ? -dateComparison : dateComparison;
         }
       }
-      const acronymComparison = a.acronym.localeCompare(b.acronym, 'ca');
+      const acronymComparison = a.acronym.localeCompare(b.acronym, locale);
       return sortOrder === 'acronym-desc' ? -acronymComparison : acronymComparison;
     });
-  }, [query, selectedCategories, selectedSpecialties, selectedStatuses, specialties.length, subjects, sortOrder, latestMaterialDates]);
+  }, [query, selectedCategories, selectedSpecialties, selectedStatuses, specialties.length, subjects, sortOrder, latestMaterialDates, locale]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((current) =>
@@ -229,30 +196,31 @@ export default function SubjectExplorer({
         <div className="explorer-toolbar">
           <div className="explorer-filters">
             <TextField
+              id="subject-search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              label="Busca per nom o acrònim"
+              label={t('subjectExplorer.search')}
               size="small"
               className="subject-search"
               slotProps={{
                 input: {
-                  startAdornment: <InputAdornment position="start"><SearchRounded color="action" /></InputAdornment>,
+                  endAdornment: <InputAdornment position="end"><SearchRounded color="action" /></InputAdornment>,
                 },
               }}
             />
             {showCategoryFilter && (
               <>
-                <Tooltip title="Filtra assignatures" arrow>
+                <AppTooltip title={t('subjectExplorer.filter')} arrow>
                   <IconButton
                     className="subject-filter-button"
-                    aria-label="Filtra assignatures"
+                    aria-label={t('subjectExplorer.filter')}
                     aria-haspopup="true"
                     aria-expanded={Boolean(categoryAnchor)}
                     onClick={(event) => setCategoryAnchor(event.currentTarget)}
                   >
                     <FilterListRounded />
                   </IconButton>
-                </Tooltip>
+                </AppTooltip>
                 <Popover
                   open={Boolean(categoryAnchor)}
                   anchorEl={categoryAnchor}
@@ -262,7 +230,7 @@ export default function SubjectExplorer({
                 >
                   <div className="subject-filter-popover">
                     <div className="subject-filter-heading">
-                      <Typography variant="subtitle2">Filtres</Typography>
+                      <Typography variant="subtitle2">{t('subjectExplorer.filters')}</Typography>
                       <Button
                         size="small"
                         onClick={() => {
@@ -276,10 +244,10 @@ export default function SubjectExplorer({
                           selectedStatuses.length === 2
                         }
                       >
-                        Totes
+                        {t('subjectExplorer.all')}
                       </Button>
                     </div>
-                    <Typography className="subject-filter-label" variant="caption" color="text.secondary">Categories</Typography>
+                    <Typography className="subject-filter-label" variant="caption" color="text.secondary">{t('subjectExplorer.categories')}</Typography>
                     <FormGroup>
                       {categories.map((category) => (
                         <FormControlLabel
@@ -295,7 +263,7 @@ export default function SubjectExplorer({
                         />
                       ))}
                     </FormGroup>
-                    <Typography className="subject-filter-label" variant="caption" color="text.secondary">Especialitats</Typography>
+                    <Typography className="subject-filter-label" variant="caption" color="text.secondary">{t('subjectExplorer.specialties')}</Typography>
                     <FormGroup>
                       {specialties.map((specialty) => (
                         <FormControlLabel
@@ -311,7 +279,7 @@ export default function SubjectExplorer({
                         />
                       ))}
                     </FormGroup>
-                    <Typography className="subject-filter-label" variant="caption" color="text.secondary">Vigència</Typography>
+                    <Typography className="subject-filter-label" variant="caption" color="text.secondary">{t('subjectExplorer.validity')}</Typography>
                     <FormGroup>
                       <FormControlLabel
                         control={
@@ -321,7 +289,7 @@ export default function SubjectExplorer({
                             size="small"
                           />
                         }
-                        label="Vigents"
+                        label={t('subjectExplorer.current')}
                       />
                       <FormControlLabel
                         control={
@@ -331,22 +299,22 @@ export default function SubjectExplorer({
                             size="small"
                           />
                         }
-                        label="Històriques"
+                        label={t('subjectExplorer.historical')}
                       />
                     </FormGroup>
                   </div>
                 </Popover>
-                <Tooltip title="Ordena assignatures" arrow>
+                <AppTooltip title={t('subjectExplorer.sort')} arrow>
                   <IconButton
                     className="subject-filter-button"
-                    aria-label="Ordena assignatures"
+                    aria-label={t('subjectExplorer.sort')}
                     aria-haspopup="true"
                     aria-expanded={Boolean(sortAnchor)}
                     onClick={(event) => setSortAnchor(event.currentTarget)}
                   >
                     <SwapVertRounded />
                   </IconButton>
-                </Tooltip>
+                </AppTooltip>
                 <Popover
                   open={Boolean(sortAnchor)}
                   anchorEl={sortAnchor}
@@ -355,7 +323,7 @@ export default function SubjectExplorer({
                   transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                 >
                   <div className="subject-filter-popover subject-sort-popover">
-                    <Typography variant="subtitle2">Ordena per</Typography>
+                    <Typography variant="subtitle2">{t('subjectExplorer.sortBy')}</Typography>
                     <RadioGroup
                       value={sortOrder}
                       onChange={(event) => {
@@ -371,29 +339,29 @@ export default function SubjectExplorer({
                         }
                       }}
                     >
-                      <FormControlLabel value="acronym" control={<Radio size="small" />} label="Acrònim (A-Z)" />
-                      <FormControlLabel value="acronym-desc" control={<Radio size="small" />} label="Acrònim (Z-A)" />
+                      <FormControlLabel value="acronym" control={<Radio size="small" />} label={t('subjectExplorer.sortAcronymAsc')} />
+                      <FormControlLabel value="acronym-desc" control={<Radio size="small" />} label={t('subjectExplorer.sortAcronymDesc')} />
                       <FormControlLabel
                         value="newest"
                         control={<Radio size="small" />}
-                        label="Contingut més recent"
+                        label={t('subjectExplorer.sortNewest')}
                         disabled={loadingDates || dateLoadError}
                       />
                       <FormControlLabel
                         value="oldest"
                         control={<Radio size="small" />}
-                        label="Contingut més antic"
+                        label={t('subjectExplorer.sortOldest')}
                         disabled={loadingDates || dateLoadError}
                       />
                     </RadioGroup>
                     {loadingDates && (
                       <Typography variant="caption" color="text.secondary">
-                        Carregant dates de publicació…
+                        {t('subjectExplorer.loadingDates')}
                       </Typography>
                     )}
                     {dateLoadError && (
                       <Typography variant="caption" color="error">
-                        No s’han pogut carregar les dates de publicació.
+                        {t('subjectExplorer.datesError')}
                       </Typography>
                     )}
                   </div>
@@ -402,39 +370,47 @@ export default function SubjectExplorer({
             )}
           </div>
           <Typography className="results-count" aria-live="polite">
-            {`${visibleSubjects.length} ${visibleSubjects.length === 1 ? 'assignatura' : 'assignatures'}`}
+            {visibleSubjects.length === 1
+              ? t('subjectExplorer.resultsOne', { count: visibleSubjects.length })
+              : t('subjectExplorer.resultsMany', { count: visibleSubjects.length })}
           </Typography>
         </div>
-        {countLoadError && <Alert severity="error">No s’han pogut carregar els comptadors de fitxers.</Alert>}
+        {countLoadError && <Alert severity="error">{t('subjectExplorer.countersError')}</Alert>}
         {visibleSubjects.length > 0 ? (
           <div className="subject-grid">
             {visibleSubjects.map((subject) => {
               const materialCount = materialCounts[subject.id] ?? 0;
               return <Card className="subject-card" key={subject.slug} elevation={0}>
-                <CardActionArea component="a" href={`/assignatures/${subject.slug}/`} className="subject-card-action">
+                <CardActionArea component="a" href={localizePath(`/assignatures/${subject.slug}/`, locale)} className="subject-card-action">
                   <CardContent className="subject-card-content">
                     <div className="subject-card-top">
                       <span className="subject-code">{subject.acronym}</span>
                       <div className="subject-card-tags">
                         {loadingCounts ? (
-                          <Skeleton variant="rounded" width={88} height={24} aria-label="Carregant comptador de fitxers" />
+                          <Skeleton variant="rounded" width={88} height={24} aria-label={t('subjectExplorer.countsLoading')} />
                         ) : countLoadError ? (
-                          <Chip className="resource-empty-chip" label="No disponible" size="small" />
+                          <Chip className="resource-empty-chip" label={t('subjectExplorer.unavailable')} size="small" />
                         ) : (
                           <Chip
                             className={materialCount > 0 ? 'resource-count-chip' : 'resource-empty-chip'}
-                            label={materialCount > 0 ? `${materialCount} ${materialCount === 1 ? 'fitxer' : 'fitxers'}` : 'Sense fitxers'}
+                            label={
+                              materialCount > 0
+                                ? materialCount === 1
+                                  ? t('subjectExplorer.filesOne', { count: materialCount })
+                                  : t('subjectExplorer.filesMany', { count: materialCount })
+                                : t('subjectExplorer.noFiles')
+                            }
                             size="small"
                           />
                         )}
                         {subject.specialty ? (
-                          <Tooltip title={subject.specialty} arrow>
+                          <AppTooltip title={subject.specialty} arrow>
                             <Chip
                               className={`category-chip ${categoryClasses[subject.category] ?? ''}`}
                               label={subject.category}
                               size="small"
                             />
-                          </Tooltip>
+                          </AppTooltip>
                         ) : (
                           <Chip
                             className={`category-chip ${categoryClasses[subject.category] ?? ''}`}
@@ -443,18 +419,18 @@ export default function SubjectExplorer({
                           />
                         )}
                         {!subject.is_current && (
-                          <Tooltip title="Assignatura històrica" arrow describeChild>
-                            <span className="historical-indicator" role="img" aria-label="Assignatura històrica">
+                          <AppTooltip title={t('subjectExplorer.historicalTooltip')} arrow describeChild>
+                            <span className="historical-indicator" role="img" aria-label={t('subjectExplorer.historicalTooltip')}>
                               <Inventory2Outlined sx={{ fontSize: 14 }} aria-hidden="true" />
                             </span>
-                          </Tooltip>
+                          </AppTooltip>
                         )}
                       </div>
                     </div>
                   
                     <Typography component="h3" variant="h6" className="subject-name">{subject.name}</Typography>
-                    <Typography className="subject-description">Materials compartits de l’assignatura.</Typography>
-                    <Button className="subject-open" size="small" endIcon={<ArrowForwardRounded />}>Veure assignatura</Button>
+                    <Typography className="subject-description">{t('subjectExplorer.cardDescription')}</Typography>
+                    <Button className="subject-open" size="small" endIcon={<ArrowForwardRounded />}>{t('subjectExplorer.open')}</Button>
                   </CardContent>
                 </CardActionArea>
               </Card>;
@@ -462,8 +438,8 @@ export default function SubjectExplorer({
           </div>
         ) : (
           <div className="empty-search">
-            <Typography variant="h6">No hem trobat cap assignatura</Typography>
-            <Typography>Prova amb un altre nom o acrònim, o canvia els filtres.</Typography>
+            <Typography variant="h6">{t('subjectExplorer.emptyTitle')}</Typography>
+            <Typography>{t('subjectExplorer.emptyLead')}</Typography>
           </div>
         )}
       </div>

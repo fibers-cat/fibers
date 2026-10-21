@@ -1,0 +1,537 @@
+{
+  "nav": {
+    "home": "Inici",
+    "subjects": "Assignatures",
+    "resources": "Recursos generals",
+    "contribute": "Aporta material",
+    "contributeShort": "Aporta",
+    "contributors": "Col·laboradors",
+    "about": "Sobre Fibers",
+    "reviewContributions": "Revisió d’aportacions",
+    "manageUsers": "Gestió d’usuaris",
+    "primary": "Navegació principal",
+    "social": "Xarxes socials"
+  },
+  "sidebar": {
+    "label": "ESPAI D’ESTUDI"
+  },
+  "profile": {
+    "yourProfile": "El teu perfil",
+    "signIn": "Inicia sessió"
+  },
+  "menu": {
+    "open": "Obre el menú",
+    "close": "Tanca el menú"
+  },
+  "brand": {
+    "home": "Fibers, inici"
+  },
+  "footer": {
+    "tagline": "Recursos compartits per a la comunitat FIB",
+    "howItWorks": "Com funciona",
+    "terms": "Condicions d’ús",
+    "contact": "Contacte",
+    "linksLabel": "Enllaços del peu de pàgina"
+  },
+  "switcher": {
+    "label": "Idioma",
+    "ca": "Català",
+    "es": "Castellano",
+    "switchToCa": "Canviar a Català",
+    "switchToEs": "Canviar a Castellà"
+  },
+  "meta": {
+    "siteDescription": "Materials d’estudi compartits per la comunitat d’estudiants de la FIB.",
+    "imageAlt": "Fibers, materials d’estudi compartits per a la FIB"
+  },
+  "org": {
+    "description": "Projecte comunitari de materials d’estudi per a la Facultat d’Informàtica de Barcelona.",
+    "contactType": "Contacte"
+  },
+  "breadcrumbs": {
+    "ariaLabel": "Fil d’Ariadna"
+  },
+  "home": {
+    "meta": {
+      "title": "Materials d’estudi de la FIB",
+      "description": "Busca apunts, exercicis i recursos per a les assignatures de la Facultat d’Informàtica de Barcelona. Explora el catàleg de Fibers o comparteix els teus materials."
+    },
+    "eyebrow": "APRENENTATGE COMPARTIT",
+    "titleLine1": "Els bons apunts",
+    "titleLine2": "passen de mà en mà.",
+    "lead": "Un espai de la comunitat FIB per trobar i compartir materials que ajuden a estudiar, practicar i entendre millor.",
+    "exploreCta": "Explora assignatures",
+    "shareCta": "Comparteix els teus apunts",
+    "footnote": "Un projecte col·laboratiu, fet entre estudiants",
+    "stickerLine1": "apunts",
+    "stickerLine2": "oberts",
+    "tagTwo": "fet entre estudiants",
+    "catalogEyebrow": "EL CATÀLEG",
+    "catalogTitle": "Troba la teva assignatura",
+    "catalogLead": "Comença pel nom o l’acrònim i consulta l’estat de cada espai.",
+    "catalogCta": "Veure el catàleg",
+    "dataNote": "Comprova la data i la vigència del contingut abans d'utilitzar-lo.",
+    "shareTitle": "Has preparat uns bons apunts?",
+    "shareLead": "Compartir-los pot estalviar hores a una altra persona.",
+    "shareButton": "Aporta material"
+  },
+  "about": {
+    "meta": {
+      "title": "Sobre Fibers",
+      "description": "Coneix Fibers, el projecte comunitari on estudiants de la FIB comparteixen apunts, exercicis i recursos per facilitar l’aprenentatge."
+    },
+    "eyebrow": "SOBRE EL PROJECTE",
+    "titleLine1": "Un lloc per estudiar",
+    "titleLine2": "millor en comunitat.",
+    "lead": "Fibers és una iniciativa per facilitar que l’alumnat de la FIB comparteixi materials propis i els faci accessibles a tothom.",
+    "cta": "Contacta amb nosaltres",
+    "timelineEyebrow": "CRONOLOGIA",
+    "timelineTitle": "La història de Fibers",
+    "timelineLead": "Els inicis del projecte i l’evolució de la seva web."
+  },
+  "timeline": {
+    "closePreview": "Tanca la previsualització",
+    "previewTitle": "Previsualització: {title}",
+    "milestones": [
+      {
+        "label": "Versió 3.0",
+        "date": "2 d’octubre de 2026",
+        "dateTime": "2026-10-02",
+        "title": "Reinici del projecte",
+        "description": [
+          "En 2026, 10 anys després, amb l’experiència acumulada i els avenços de la IA, es decideix reiniciar-lo amb Astro, MUI i Supabase."
+        ],
+        "side": "left",
+        "links": [
+          { "href": "https://github.com/fibers-cat/fibers/", "ariaLabel": "Obre el repositori actual de Fibers a GitHub", "kind": "external", "icon": "github" }
+        ]
+      },
+      {
+        "label": "Intent de rellançament",
+        "date": "20 de setembre de 2022",
+        "dateTime": "2022-09-20",
+        "title": "Un nou intent amb Next.js",
+        "description": ["S’intenta rellançar Fibers amb Next.js, MUI i Firebase, però el projecte no arriba a materialitzar-se."],
+        "side": "right"
+      },
+      {
+        "label": "Versió 2.0",
+        "date": "8 de juliol de 2017",
+        "dateTime": "2017-07-08",
+        "title": "Publicació dinàmica amb PHP",
+        "description": [
+          "S’intenta crear una nova web en PHP amb un sistema de publicació de continguts que mostra els usuaris col·laboradors com a autors i deixa enrere la gestió de les aportacions per correu electrònic.",
+          "Es treballa en un redisseny de la web, amb una nova navegació i una nova manera d’interactuar."
+        ],
+        "note": "Aquesta versió no arribarà a publicar-se.",
+        "side": "left",
+        "links": [
+          { "href": "https://github.com/fibers-cat/fibers-old/tree/v-2017", "ariaLabel": "Obre el repositori de Fibers a GitHub", "kind": "external", "icon": "github" },
+          { "href": "/history/fibers-v2/index.html", "ariaLabel": "Previsualitza Fibers v2.0", "kind": "preview" },
+          { "href": "/history/fibers-v2/index.html", "text": "Fibers v2.0", "kind": "external" }
+        ]
+      },
+      {
+        "label": "Primer aportador",
+        "date": "18 d’octubre de 2016",
+        "dateTime": "2016-10-18",
+        "title": "Pau Risa comparteix material d’EEE",
+        "description": ["Pau Risa es converteix en el primer aportador de Fibers, amb material de l’assignatura EEE."],
+        "side": "right"
+      },
+      {
+        "label": "Versió 1.0",
+        "date": "8 d’octubre de 2016",
+        "dateTime": "2016-10-08",
+        "title": "La nova etapa de Fibers",
+        "description": ["La versió 1.0 estrena una nova web feta amb Materialize i obre el correu fiberscat@gmail.com per rebre i compartir material dels estudiants."],
+        "side": "left",
+        "links": [
+          { "href": "https://github.com/fibers-cat/fibers-old/tree/v-2016", "ariaLabel": "Obre el repositori de Fibers a GitHub", "kind": "external", "icon": "github" },
+          { "href": "/history/fibers-v1/index.html", "ariaLabel": "Previsualitza Fibers v1.0", "kind": "preview" },
+          { "href": "/history/fibers-v1/index.html", "text": "Fibers v1.0", "kind": "external" }
+        ]
+      },
+      {
+        "label": "Versió 0.1",
+        "date": "22 de setembre de 2016",
+        "dateTime": "2016-09-22",
+        "title": "Primera publicació",
+        "description": ["Fibers reprèn el projecte amb una primera versió pública, gratuïta i oberta, feta amb Bootstrap."],
+        "side": "left",
+        "links": [
+          { "href": "/history/fibers-v0/index.html", "ariaLabel": "Previsualitza Fibers v0", "kind": "preview" },
+          { "href": "/history/fibers-v0/index.html", "text": "Fibers v0.1", "kind": "external" }
+        ]
+      },
+      {
+        "label": "Neix Fibers",
+        "date": "22 de setembre de 2016",
+        "dateTime": "2016-09-22",
+        "title": "Una alternativa gratuïta i oberta",
+        "description": [
+          "Alex Calle (estudiant de la FIB) i Paul Guillamón (estudiant de DAW) s’uneixen per mantenir una web amb el mateix propòsit.",
+          "Es publica fibers.cat per mantenir accessibles a tothom els apunts i recursos que hi havia publicats a www.melocuenta.com."
+        ],
+        "side": "right"
+      },
+      {
+        "label": "Fi d’una etapa",
+        "date": "2014–2016",
+        "title": "Melocuenta anuncia el final del servei",
+        "description": ["Yeison Melo comunica que deixarà d’oferir el servei Melocuenta (www.melocuenta.com). El seu projecte dedicat a la divulgació."],
+        "side": "right",
+        "links": [
+          { "href": "/history/melocuenta/index.html", "ariaLabel": "Previsualitza Melocuenta", "kind": "preview" },
+          { "href": "/history/melocuenta/index.html", "text": "Obre la versió de Melocuenta", "kind": "external" }
+        ]
+      }
+    ]
+  },
+  "guide": {
+    "meta": {
+      "title": "Com funciona Fibers",
+      "description": "Aprèn a trobar materials d’estudi per assignatura, consultar els recursos disponibles i compartir apunts propis a Fibers."
+    },
+    "eyebrow": "UNA XARXA D’APRENENTATGE",
+    "titleLine1": "Materials útils,",
+    "titleLine2": "compartits amb cura.",
+    "lead": "Fibers vol fer més accessibles els recursos d’estudi creats per estudiants de la Facultat d’Informàtica de Barcelona.",
+    "steps": [
+      { "title": "Troba una assignatura", "text": "Explora el catàleg i entra a l’espai de la matèria que estàs cursant." },
+      { "title": "Consulta els materials", "text": "Els recursos s’organitzaran per assignatura i tipus quan l’inventari estigui revisat." },
+      { "title": "Comparteix els teus", "text": "Aporta contingut propi perquè més estudiants puguin beneficiar-se’n." }
+    ]
+  },
+  "resources": {
+    "meta": {
+      "title": "Recursos generals de la FIB",
+      "description": "Consulta documents generals, guies i recursos de recuperació recuperats del fons històric de Fibers per a estudiants de la FIB."
+    },
+    "eyebrow": "FONS RECUPERAT",
+    "title": "Recursos generals",
+    "lead": "Documents de consulta, orientació i recuperació que no pertanyen a una única assignatura.",
+    "dataNote": "Comprova la data i la vigència del contingut abans d'utilitzar-lo."
+  },
+  "resourceCollection": {
+    "preview": "Vista prèvia",
+    "previewAria": "Obre la vista prèvia de {title}",
+    "open": "Obre",
+    "openSeparately": "Obre en una pestanya nova",
+    "closePreview": "Tanca la vista prèvia",
+    "loadError": "No s’ha pogut carregar aquest fitxer. Pots obrir-lo en una pestanya nova.",
+    "emptyText": "Aquest fitxer no conté text.",
+    "attributedTo": "Aportat per {alias} · {date}",
+    "unknownAuthor": "Estudiant"
+  },
+  "contribute": {
+    "meta": {
+      "title": "Comparteix material d’estudi",
+      "description": "Aporta apunts, exercicis resolts i guies pròpies perquè altres estudiants de la FIB puguin aprofitar-los."
+    },
+    "eyebrow": "FEM-HO ENTRE TOTHOM",
+    "titleLine1": "Comparteix el que",
+    "titleLine2": "t’ha ajudat a aprendre.",
+    "lead": "Els apunts personals, els exercicis resolts i les guies creades per estudiants fan més fàcil el camí de les persones que venen darrere.",
+    "rulesTitle": "Abans d’enviar",
+    "rules": [
+      "Comparteix només material propi o amb permís.",
+      "No s’accepten apunts facilitats pel professorat.",
+      "No adjuntis llibres ni contingut protegit per drets d’autor."
+    ],
+    "formTitle": "Detalls de l’aportació",
+    "formLead": "Indica’ns què vols compartir amb la comunitat."
+  },
+  "contributionForm": {
+    "supabaseMissing": "Falta configurar la connexió amb Supabase.",
+    "serviceUnavailable": "No s’ha pogut connectar amb el servei d’aportacions.",
+    "sessionChecking": "Espera que es comprovi la sessió abans d’enviar.",
+    "sessionError": "No s’ha pogut comprovar la sessió. Torna-ho a provar més tard.",
+    "loginRequired": "Has d’iniciar sessió per enviar l’aportació.",
+    "signIn": "Inicia sessió",
+    "subjectLabel": "Assignatura",
+    "subjectPlaceholder": "Selecciona una assignatura",
+    "subjectLatest": " · Assignatura no vigent",
+    "titleLabel": "Títol del material",
+    "descriptionLabel": "Descripció",
+    "attachFiles": "Adjunta arxius",
+    "acknowledgement": "Confirmo que tinc dret a compartir aquest material i que no inclou contingut protegit.",
+    "errors": {
+      "subject": "Selecciona una assignatura.",
+      "titleShort": "El títol és obligatori i ha de tenir almenys 3 caràcters.",
+      "titleLong": "El títol no pot superar els 120 caràcters.",
+      "descriptionShort": "La descripció és obligatòria i ha de tenir almenys 10 caràcters.",
+      "descriptionLong": "La descripció no pot superar els 3000 caràcters.",
+      "filesTooLarge": "Cada fitxer ha de pesar com a màxim 50 MB.",
+      "acknowledgement": "Confirma que tens dret a compartir aquest material."
+    },
+    "submit": "Enviar per revisió",
+    "sending": "Enviant…",
+    "success": "Aportació enviada. Les aportacions i els fitxers queden pendents de revisió. Es publicaran quan s’aprovin.",
+    "errorPrefix": "No s’ha pogut enviar: {message}",
+    "error": "No s’ha pogut enviar l’aportació."
+  },
+  "contact": {
+    "meta": {
+      "title": "Contacte",
+      "description": "Contacta amb l’equip de Fibers per resoldre dubtes, compartir idees o demanar ajuda amb els materials d’estudi de la FIB."
+    },
+    "eyebrow": "PARLEM",
+    "titleLine1": "En què et",
+    "titleLine2": "podem ajudar?",
+    "lead": "Tens un dubte, una idea o necessites ajuda amb Fibers? Envia’ns un missatge i et respondrem al correu que ens indiquis.",
+    "formTitle": "Envia’ns un missatge",
+    "formLead": "Omple el formulari i et respondrem tan aviat com puguem."
+  },
+  "contactForm": {
+    "name": "Nom",
+    "email": "Correu electrònic",
+    "subject": "Assumpte",
+    "message": "Missatge",
+    "honeypot": "No emplenis aquest camp:",
+    "submit": "Envia el missatge",
+    "sending": "Enviant…",
+    "success": "Missatge enviat correctament. Et respondrem aviat.",
+    "error": "No s’ha pogut enviar el missatge. Torna-ho a provar més tard.",
+    "validation": {
+      "name": "Escriu el teu nom.",
+      "emailRequired": "Escriu el teu correu electrònic.",
+      "emailInvalid": "Introdueix un correu electrònic vàlid.",
+      "subject": "Escriu l’assumpte del missatge.",
+      "message": "Escriu el missatge."
+    }
+  },
+  "profilePage": {
+    "meta": {
+      "title": "El teu perfil",
+      "description": "Inicia sessió a Fibers i gestiona el teu àlies públic."
+    },
+    "eyebrow": "COMUNITAT FIBERS",
+    "heading": "El teu perfil",
+    "signedInHeading": "El teu perfil",
+    "signedOutHeading": "Inicia sessió",
+    "sessionError": "No s’ha pogut carregar la sessió.",
+    "profileError": "No s’ha pogut carregar el perfil.",
+    "avatarSaveError": "No s’ha pogut desar la imatge de perfil.",
+    "supabaseMissing": "Falta configurar Supabase.",
+    "avatarAlt": "Imatge de perfil de {alias}",
+    "avatarAltFallback": "Imatge de perfil",
+    "signedInWith": "Has iniciat sessió amb {email}.",
+    "aliasLabel": "Àlies o pseudònim públic",
+    "saveAlias": "Desa l’àlies",
+    "continue": "Continua",
+    "signOut": "Tanca la sessió",
+    "signInLead": "Entra amb un enllaç al correu o amb un compte social.",
+    "sendLink": "Envia’m un enllaç",
+    "orContinueWith": "o continua amb",
+    "google": "Inicia la sessió amb Google",
+    "github": "Inicia la sessió amb Github",
+    "linkSent": "T’hem enviat un enllaç per iniciar sessió.",
+    "aliasSaved": "Àlies desat.",
+    "signedOut": "Has tancat la sessió.",
+    "sessionExpired": "Sessió caducada"
+  },
+  "notFound": {
+    "meta": {
+      "title": "Pàgina no trobada",
+      "description": "No hem trobat la pàgina que busques. Torna a Fibers per explorar els materials d’estudi de la FIB."
+    },
+    "titleLine1": "Aquesta pàgina",
+    "titleLine2": "no hi és.",
+    "lead": "Potser l’enllaç ha canviat o potser necessites tornar a l’inici.",
+    "cta": "Torna a l’inici"
+  },
+  "contributors": {
+    "meta": {
+      "title": "Col·laboradors de Fibers",
+      "description": "Rànquing de les persones que han aportat materials aprovats a Fibers."
+    },
+    "eyebrow": "FET ENTRE ESTUDIANTS",
+    "titleLine1": "Qui fa créixer",
+    "titleLine2": "Fibers?",
+    "lead": "Rànquing de persones segons els materials publicats i les aportacions que han superat la revisió.",
+    "cta": "Fes una aportació"
+  },
+  "contributorRanking": {
+    "empty": "Encara no hi ha aportacions aprovades. Sigues la primera persona a compartir material.",
+    "materialsOne": "material",
+    "materialsMany": "materials"
+  },
+  "terms": {
+    "meta": {
+      "title": "Condicions d’ús de Fibers",
+      "description": "Consulta les condicions i els criteris per compartir materials propis amb la comunitat d’estudiants de la FIB."
+    },
+    "eyebrow": "COMPARTIR AMB RESPONSABILITAT",
+    "title": "Condicions d’ús",
+    "lead": "En aportar material a Fibers, tingues en compte aquestes normes de la comunitat.",
+    "rules": [
+      "No s’accepta material facilitat pel professorat.",
+      "No s’accepta material amb copyright, com ara llibres o còpies de llibres.",
+      "No s’accepta material sense el consentiment de qui n’és propietari."
+    ],
+    "disclaimerBefore": "Si tens dubtes sobre un recurs, fes-nos-els arribar abans de compartir-lo a través del ",
+    "disclaimerLink": "formulari de contacte",
+    "disclaimerAfter": "."
+  },
+  "catalog": {
+    "meta": {
+      "title": "Assignatures de la FIB",
+      "description": "Explora les assignatures de la FIB per nom o acrònim i troba els materials d’estudi recuperats per a cada matèria al catàleg de Fibers."
+    },
+    "eyebrow": "CATÀLEG FIB",
+    "title": "Assignatures",
+    "lead": "Busca per nom o acrònim i entra a cada assignatura per consultar els fitxers recuperats.",
+    "disclaimerTitle": "Catàleg històric",
+    "disclaimer": "Els fitxers estan associats a la seva assignatura. Revisa la data i la vigència del contingut abans d'utilitzar-los."
+  },
+  "subject": {
+    "metaDescription": "Apunts i recursos d’estudi de {name} ({acronym}), assignatura de la Facultat d’Informàtica de Barcelona (FIB). Troba materials compartits per estudiants.",
+    "eyebrow": "ESPAI D’ESTUDI",
+    "codeLabel": "Codi UPC",
+    "codeUnavailable": "No disponible",
+    "languagesLabel": "Idiomes",
+    "specialtyLabel": "Especialitat",
+    "historicalNote": "Assignatura no vigent · materials històrics",
+    "currentNote": "Materials compartits per la comunitat Fibers.",
+    "backLink": "Torna a totes les assignatures",
+    "languages": {
+      "ca": "Català",
+      "es": "Castellà",
+      "en": "Anglès"
+    }
+  },
+  "subjectExplorer": {
+    "search": "Busca per nom o acrònim",
+    "filter": "Filtra assignatures",
+    "filters": "Filtres",
+    "all": "Totes",
+    "categories": "Categories",
+    "specialties": "Especialitats",
+    "validity": "Vigència",
+    "current": "Vigents",
+    "historical": "Històriques",
+    "sort": "Ordena assignatures",
+    "sortBy": "Ordena per",
+    "sortAcronymAsc": "Acrònim (A-Z)",
+    "sortAcronymDesc": "Acrònim (Z-A)",
+    "sortNewest": "Contingut més recent",
+    "sortOldest": "Contingut més antic",
+    "loadingDates": "Carregant dates de publicació…",
+    "datesError": "No s’han pogut carregar les dates de publicació.",
+    "countersError": "No s’han pogut carregar els comptadors de fitxers.",
+    "countsLoading": "Carregant comptador de fitxers",
+    "unavailable": "No disponible",
+    "filesOne": "{count} fitxer",
+    "filesMany": "{count} fitxers",
+    "noFiles": "Sense fitxers",
+    "historicalTooltip": "Assignatura històrica",
+    "cardDescription": "Materials compartits de l’assignatura.",
+    "open": "Veure assignatura",
+    "resultsOne": "{count} assignatura",
+    "resultsMany": "{count} assignatures",
+    "emptyTitle": "No hem trobat cap assignatura",
+    "emptyLead": "Prova amb un altre nom o acrònim, o canvia els filtres."
+  },
+  "subjectStatus": {
+    "heading": "Materials",
+    "filesOne": "{count} fitxer",
+    "filesMany": "{count} fitxers",
+    "recoveredAlert": "Fitxers recuperats de la web anterior; comprova si el material continua vigent.",
+    "emptyAlert": "No s’han recuperat fitxers per a aquesta assignatura de la web anterior.",
+    "helpCopy": "Si tens apunts propis o exercicis resolts, pots ajudar a completar l’espai de {name} ({acronym}).",
+    "contributeCta": "Aporta material"
+  },
+  "approvedMaterials": {
+    "heading": "Aportacions de la comunitat",
+    "loading": "Carregant…",
+    "error": "No s’han pogut carregar els materials aprovats.",
+    "attributedTo": "Aportat per {alias}",
+    "unknownAuthor": "Estudiant",
+    "downloadFile": "Descarrega el fitxer",
+    "openExternal": "Obre l’enllaç extern"
+  },
+  "admin": {
+    "eyebrow": "GESTIÓ",
+    "checkingPermissions": "Comprovant permisos",
+    "refreshList": "Actualitza la llista",
+    "signIn": "Inicia sessió",
+    "supabaseMissing": "Falta configurar Supabase.",
+    "contributions": {
+      "meta": {
+        "title": "Revisió d’aportacions",
+        "description": "Àrea privada de revisió d’aportacions de Fibers."
+      },
+      "title": "Revisió d’aportacions",
+      "lead": "Revisa el contingut i aprova’l o denega’l abans de publicar-lo.",
+      "signInPrompt": "Inicia sessió amb un compte autoritzat per continuar.",
+      "noPermission": "No tens permisos per revisar aportacions.",
+      "loading": "Carregant aportacions",
+      "empty": "No hi ha aportacions pendents.",
+      "subjectUnavailable": "Assignatura no disponible",
+      "noteLabel": "Nota de revisió (opcional)",
+      "approve": "Aprova",
+      "reject": "Denega",
+      "approved": "Aportació aprovada.",
+      "rejected": "Aportació denegada.",
+      "loadError": "No s’han pogut carregar les aportacions pendents.",
+      "filesError": "No s’han pogut preparar els fitxers per revisar-los.",
+      "saveError": "No s’ha pogut desar la revisió.",
+      "staleError": "Aquesta aportació ja no està pendent de revisió. Actualitza la llista."
+    },
+    "users": {
+      "meta": {
+        "title": "Gestió d’usuaris",
+        "description": "Àrea privada de gestió d’usuaris de Fibers."
+      },
+      "title": "Gestió d’usuaris",
+      "lead": "Actualitza els àlies i assigna el rol d’administrador. El superadmin no es pot reassignar.",
+      "signInPrompt": "Inicia sessió amb el compte superadmin per continuar.",
+      "noPermission": "Només el superadmin pot gestionar usuaris.",
+      "loading": "Carregant usuaris",
+      "noEmail": "Compte sense correu",
+      "protectedSuperadmin": "Superadmin protegit.",
+      "aliasLabel": "Àlies públic",
+      "roleLabel": "Rol",
+      "roleUser": "Usuari",
+      "roleAdmin": "Administrador",
+      "save": "Desa canvis",
+      "aliasError": "L’àlies ha de tenir entre 2 i 40 caràcters.",
+      "loadError": "No s’ha pogut carregar la llista d’usuaris.",
+      "saveError": "No s’ha pogut desar el perfil. Pot ser que el rol ja hagi canviat.",
+      "notFoundError": "No s’ha pogut trobar el perfil per actualitzar.",
+      "saved": "S’ha desat el perfil de {email}."
+    }
+  },
+  "materials": {
+    "sections": {
+      "recoveries": "Recuperacions",
+      "helpDocumentation": "Documentació d’ajuda",
+      "generalDocuments": "Documents generals",
+      "supplementary": "Material complementari",
+      "proceduresAndTriggers": "Procediments i disparadors",
+      "jdbc": "Java Database Connectivity",
+      "sql": "SQL i àlgebra relacional",
+      "trackingExercises": "Exercicis de seguiment",
+      "transversal": "Transversal",
+      "chapterSummaries": "Resums de capítols",
+      "sortingAlgorithms": "Algorismes d’ordenació",
+      "algorithmAnalysis": "Anàlisi d’algorismes",
+      "laboratories": "Laboratoris",
+      "estatus": "E-status",
+      "labMaterials": "Materials de laboratori",
+      "economicsManualAnswers": "Respostes del manual d’economia",
+      "syllabusAndRecoveries": "Temari i recuperacions",
+      "subjectMaterials": "Materials de l’assignatura"
+    },
+    "displayTitles": {
+      "index": "Índex de materials",
+      "indexDocumentation": "Índex de documentació",
+      "indexRecoveries": "Índex de recuperacions",
+      "supplementaryNotes": "Notes complementàries",
+      "sqlPreview": "Vista prèvia SQL",
+      "convalidations": "Convalidacions",
+      "opinionsAndAdvice": "Opinions i consells"
+    }
+  }
+}

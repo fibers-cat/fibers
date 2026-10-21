@@ -19,9 +19,3 @@ export type Subject = {
   specialty: SubjectSpecialty | null;
   is_current: boolean;
 };
-
-export const subjectLanguageNames: Record<TeachingLanguage, string> = {
-  ca: 'Català',
-  es: 'Castellà',
-  en: 'Anglès',
-};

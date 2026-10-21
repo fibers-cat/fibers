@@ -88,14 +88,26 @@ textarea {
 
 .desktop-sidebar .navigation-links,
 .mobile-drawer .navigation-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   padding: 11px 0;
 }
 
 .desktop-sidebar .navigation-link,
 .mobile-drawer .navigation-link {
-  min-height: 48px;
+  min-height: 44px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   border-radius: 12px;
   color: #c4cad2;
+  transition: background .16s ease, color .16s ease;
+}
+
+.desktop-sidebar .navigation-link:hover,
+.mobile-drawer .navigation-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, .04);
 }
 
 .desktop-sidebar .navigation-link .MuiListItemIcon-root,
@@ -116,15 +128,36 @@ textarea {
   background: rgba(255, 255, 255, .11);
 }
 
-.desktop-sidebar .navigation-link.Mui-selected::before,
-.mobile-drawer .navigation-link.Mui-selected::before {
+.desktop-sidebar .navigation-link.Mui-selected:hover,
+.mobile-drawer .navigation-link.Mui-selected:hover {
+  background: rgba(255, 255, 255, .16);
+}
+
+.desktop-sidebar .navigation-link::before,
+.mobile-drawer .navigation-link::before {
   position: absolute;
   left: -18px;
   width: 3px;
   height: 24px;
   border-radius: 0 4px 4px 0;
   background: #ef555a;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform .3s cubic-bezier(.22, 1, .36, 1), opacity .18s ease;
   content: "";
+}
+
+.desktop-sidebar .navigation-link:hover::before,
+.mobile-drawer .navigation-link:hover::before {
+  opacity: .3;
+  transform: scaleY(1);
+}
+
+.desktop-sidebar .navigation-link.Mui-selected::before,
+.mobile-drawer .navigation-link.Mui-selected::before {
+  opacity: 1;
+  transform: scaleY(1);
 }
 
 .sidebar-bottom {
@@ -196,7 +229,7 @@ textarea {
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
-  padding: 14px 14px 0;
+  padding-top: 14px;
   border-top: 1px solid rgba(255, 255, 255, .1);
 }
 
@@ -224,6 +257,41 @@ textarea {
 .social-links .MuiSvgIcon-root {
   width: 18px;
   height: 18px;
+}
+
+.locale-switcher {
+  display: inline-flex;
+  align-items: center;
+}
+
+.locale-switcher .locale-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #c4cad2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-align: center;
+  text-decoration: none;
+  transition: background .15s ease, color .15s ease;
+}
+
+.locale-switcher .locale-option:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, .1);
+}
+
+.mobile-toolbar .locale-switcher .locale-option {
+  color: #69717d;
+}
+
+.mobile-toolbar .locale-switcher .locale-option:hover {
+  color: var(--sidebar);
+  background: rgba(32, 36, 44, .12);
 }
 
 .desktop-socials .MuiIconButton-root:hover {
@@ -703,21 +771,39 @@ textarea {
   border: 1px solid transparent;
   border-radius: 16px !important;
   background: #fff;
+  box-shadow: 0 1px 2px rgba(32, 36, 44, .025);
+}
+
+/* Dos clases para ganar a la transición de .MuiPaper-root que inyecta Emotion */
+.subject-card.MuiPaper-root {
   transition:
-    transform 320ms cubic-bezier(.2, .8, .2, 1),
-    box-shadow 320ms cubic-bezier(.2, .8, .2, 1),
-    border-color 320ms cubic-bezier(.2, .8, .2, 1);
+    transform .3s ease,
+    box-shadow .3s ease,
+    border-color .3s ease;
 }
 
 .subject-card-action.MuiCardActionArea-root {
-  transition: background-color 280ms cubic-bezier(.2, .8, .2, 1);
+  transition: background-color .3s ease;
 }
 
+/* Sin oscurecimiento al pasar el cursor: el hover lo marca la card */
+.subject-card-action.MuiCardActionArea-root:hover {
+  background-color: transparent !important;
+}
+
+/* El oscurecimiento real lo pinta el overlay .MuiCardActionArea-focusHighlight (opacity .04) */
 @media (hover: hover) and (pointer: fine) {
+  .subject-card-action.MuiCardActionArea-root:hover .MuiCardActionArea-focusHighlight {
+    opacity: 0;
+  }
+
   .subject-card:hover {
     transform: translateY(-2px);
-    border-color: #d7dbe1;
-    box-shadow: 0 10px 24px rgba(32, 36, 44, .065);
+    border-color: rgba(21, 139, 132, .32);
+    box-shadow:
+      0 0 0 4px rgba(21, 139, 132, .06),
+      0 10px 28px rgba(21, 139, 132, .10),
+      0 2px 4px rgba(32, 36, 44, .03);
   }
 }
 
@@ -727,7 +813,7 @@ textarea {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .subject-card,
+  .subject-card.MuiPaper-root,
   .subject-card-action.MuiCardActionArea-root {
     transition-duration: .01ms;
   }
@@ -977,7 +1063,7 @@ textarea {
 
 .subject-title-panel {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 19px;
   margin: 43px 0 25px;
   padding: 27px 29px;
@@ -986,23 +1072,64 @@ textarea {
   background: #fff;
 }
 
+.subject-title-body {
+  min-width: 0;
+  flex: 1;
+}
+
 .subject-code-large {
   min-width: 62px;
   min-height: 62px;
+  /* Alinea la caja con el h1: línea del eyebrow (20px) + margen superior del h1 (5px) */
+  margin-top: 25px;
   border-radius: 16px;
   font-size: 18px;
 }
 
 .subject-title-panel h1 {
-  margin: 5px 0 3px;
+  margin: 5px 0 0;
   font-size: clamp(26px, 3.5vw, 38px);
   letter-spacing: -1.4px;
 }
 
-.subject-title-panel p {
+.subject-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  margin: 16px 0 0;
+}
+
+.subject-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.subject-meta dt {
+  color: #8b929d;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.subject-meta dd {
   margin: 0;
-  color: var(--muted);
+  color: var(--ink);
   font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.subject-note {
+  margin: 16px 0 0;
+  padding-top: 13px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 .subject-status-panel {
@@ -1683,6 +1810,17 @@ textarea {
     min-width: 49px;
     min-height: 49px;
     font-size: 14px;
+  }
+
+  .subject-meta {
+    gap: 10px 22px;
+    margin-top: 14px;
+  }
+
+  .subject-note {
+    margin-top: 14px;
+    padding-top: 11px;
+    font-size: 12.5px;
   }
 
   .subject-status-panel {

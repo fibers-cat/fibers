@@ -1,0 +1,18 @@
+<!-- supabase/emails/src/signin-linked.mjml -->
+<mjml>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700" color="#20242c" padding="0 0 8px">
+          S'ha vinculat un nou mètode d'accés
+        </mj-text>
+        <mj-text>
+          S'ha vinculat el teu compte de {{ .Provider }} com a nou mètode d'accés per a {{ .Email }}.
+        </mj-text>
+        <mj-text font-size="12px" color="#8a929d">
+          Si no has fet aquest canvi, contacta amb el suport immediatament.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

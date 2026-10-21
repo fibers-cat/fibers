@@ -1,7 +1,11 @@
 ---
 import SiteLayout from '@/layouts/SiteLayout.astro';
+import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
+
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
 ---
 
-<SiteLayout title="Pàgina no trobada" description="No hem trobat la pàgina que busques. Torna a Fibers per explorar els materials d’estudi de la FIB." noindex>
-  <div class="page-content inner-page not-found-page"><span class="error-code">404</span><h1>Aquesta pàgina<br />no hi és.</h1><p>Potser l’enllaç ha canviat o potser necessites tornar a l’inici.</p><a class="button-primary" href="/">Torna a l’inici <span aria-hidden="true">→</span></a></div>
+<SiteLayout title={t('notFound.meta.title')} description={t('notFound.meta.description')} noindex>
+  <div class="page-content inner-page not-found-page"><span class="error-code">404</span><h1>{t('notFound.titleLine1')}<br />{t('notFound.titleLine2')}</h1><p>{t('notFound.lead')}</p><a class="button-primary" href={localizePath('/', locale)}>{t('notFound.cta')} <span aria-hidden="true">→</span></a></div>
 </SiteLayout>

@@ -1,0 +1,17 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+// import SiteBreadcrumbs from '../shared/SiteBreadcrumbs';
+import { getDictionary, getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
+
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const rules = getDictionary(locale).terms.rules;
+---
+
+<SiteLayout title={t('terms.meta.title')} description={t('terms.meta.description')}>
+  <div class="page-content inner-page legal-page">
+    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Condicions d’ús' }]} /> -->
+    <header class="page-heading"><span class="eyebrow">{t('terms.eyebrow')}</span><h1>{t('terms.title')}</h1><p>{t('terms.lead')}</p></header>
+    <div class="legal-copy"><ul>{rules.map((rule) => (<li>{rule}</li>))}</ul><p>{t('terms.disclaimerBefore')}<a href={localizePath('/contacte/', locale)}>{t('terms.disclaimerLink')}</a>{t('terms.disclaimerAfter')}</p></div>
+  </div>
+</SiteLayout>

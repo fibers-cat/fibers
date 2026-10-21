@@ -1,0 +1,18 @@
+<!-- supabase/emails/src/reauthentication.mjml -->
+<mjml>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700" color="#20242c" padding="0 0 8px">
+          El teu codi de verificació
+        </mj-text>
+        <mj-text>
+          Fes servir el codi a continuació per verificar la teva identitat. Caduca en poc temps.
+        </mj-text>
+        <mj-text font-size="32px" font-weight="800" color="#ef555a" padding="0 0 16px" align="left">
+          {{ .Token }}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

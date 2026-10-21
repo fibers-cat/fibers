@@ -10,13 +10,17 @@ import GitHub from "@mui/icons-material/GitHub";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
 import PersonOutlineRounded from "@mui/icons-material/PersonOutlineRounded";
 import { ThemeProvider } from "@mui/material/styles";
-import { supabase } from "@/lib/supabase";
-import { getSocialAvatar } from "@/lib/socialAvatar";
-import { fibersTheme } from "@/components/theme";
+import { hasSupabaseConfig } from "@/services/supabase";
+import { getSession, getCurrentUser, onAuthStateChange, signInWithEmailLink, signInWithOAuth, signOut as signOutUser } from "@/services/auth";
+import { fetchUserProfile, saveSocialAvatar, updateAlias } from "@/services/profiles";
+import { getSocialAvatar } from "@/services/socialAvatar";
+import { fibersTheme } from "@/components/shared/theme";
+import { localizePath, useTranslations, type Locale } from "@/i18n";
 
-type Props = { returnTo: string };
+type Props = { returnTo: string; locale: Locale };
 
-export default function ProfilePage({ returnTo }: Props) {
+export default function ProfilePage({ returnTo, locale }: Props) {
+  const t = useTranslations(locale);
   const [email, setEmail] = useState("");
   const [alias, setAlias] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -26,20 +30,21 @@ export default function ProfilePage({ returnTo }: Props) {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     let active = true;
     const load = async () => {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
-      if (!active) return;
-      if (sessionError) {
+      let session;
+      try {
+        session = await getSession();
+      } catch (sessionError) {
         console.error("Could not load the current authentication session.", sessionError);
-        setMessage("No s’ha pogut carregar la sessió.");
-        setMessageIsError(true);
+        if (active) {
+          setMessage(t("profilePage.sessionError"));
+          setMessageIsError(true);
+        }
         return;
       }
+      if (!active) return;
       if (!session) {
         setUserEmail("");
         setAlias("");
@@ -49,17 +54,18 @@ export default function ProfilePage({ returnTo }: Props) {
         return;
       }
 
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-      if (!active) return;
-      if (userError) {
+      let user;
+      try {
+        user = await getCurrentUser();
+      } catch (userError) {
         console.error("Could not load the signed-in user.", userError);
-        setMessage("No s’ha pogut carregar la sessió.");
-        setMessageIsError(true);
+        if (active) {
+          setMessage(t("profilePage.sessionError"));
+          setMessageIsError(true);
+        }
         return;
       }
+      if (!active) return;
       setUserEmail(user?.email ?? "");
       if (!user) {
         setAlias("");
@@ -67,81 +73,77 @@ export default function ProfilePage({ returnTo }: Props) {
         return;
       }
 
-      const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("alias,avatar_url")
-        .eq("id", user.id)
-        .maybeSingle();
-      if (!active) return;
-      if (profileError) {
+      let profile;
+      try {
+        profile = await fetchUserProfile(user.id);
+      } catch (profileError) {
         console.error("Could not load the signed-in user's profile.", profileError);
-        setMessage("No s’ha pogut carregar el perfil.");
-        setMessageIsError(true);
+        if (active) {
+          setMessage(t("profilePage.profileError"));
+          setMessageIsError(true);
+        }
         return;
       }
+      if (!active) return;
 
-      setAlias(profile?.alias ?? "");
+      setAlias(profile.alias ?? "");
       const socialAvatar = getSocialAvatar(user);
-      setAvatarUrl(socialAvatar ?? profile?.avatar_url ?? null);
-      if (socialAvatar && socialAvatar !== profile?.avatar_url) {
-        const { error: avatarError } = await supabase
-          .from("profiles")
-          .update({ avatar_url: socialAvatar })
-          .eq("id", user.id);
-        if (avatarError) {
+      setAvatarUrl(socialAvatar ?? profile.avatarUrl ?? null);
+      if (socialAvatar && socialAvatar !== profile.avatarUrl) {
+        try {
+          await saveSocialAvatar(user.id, socialAvatar);
+        } catch (avatarError) {
           console.error("Could not save the social profile avatar.", avatarError);
           if (active) {
-            setMessage("No s’ha pogut desar la imatge de perfil.");
+            setMessage(t("profilePage.avatarSaveError"));
             setMessageIsError(true);
           }
         }
       }
     };
     void load();
-    const { data } = supabase.auth.onAuthStateChange(() => {
+    const unsubscribe = onAuthStateChange(() => {
       window.setTimeout(() => {
         void load();
       }, 0);
     });
     return () => {
       active = false;
-      data.subscription.unsubscribe();
+      unsubscribe();
     };
-  }, []);
+  }, [locale, t]);
 
   const sendLink = async (event: FormEvent) => {
     event.preventDefault();
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     setBusy(true);
     setMessage("");
     setMessageIsError(false);
-    const callback = new URL("/perfil/", window.location.origin);
+    const callback = new URL(localizePath("/perfil/", locale), window.location.origin);
     callback.searchParams.set("returnTo", safeReturn);
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: callback.href },
-    });
-    setMessage(
-      error ? error.message : "T’hem enviat un enllaç per iniciar sessió.",
-    );
-    setMessageIsError(Boolean(error));
+    try {
+      await signInWithEmailLink(email, callback.href);
+      setMessage(t("profilePage.linkSent"));
+      setMessageIsError(false);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : t("profilePage.sessionError"));
+      setMessageIsError(true);
+    }
     setBusy(false);
   };
 
   const oauth = async (provider: "google" | "github") => {
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     setBusy(true);
     setMessage("");
     setMessageIsError(false);
-    const callback = new URL("/perfil/", window.location.origin);
+    const callback = new URL(localizePath("/perfil/", locale), window.location.origin);
     callback.searchParams.set("returnTo", safeReturn);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo: callback.href },
-    });
-    if (error) {
+    try {
+      await signInWithOAuth(provider, callback.href);
+    } catch (error) {
       console.error(`Could not start ${provider} sign-in.`, error);
-      setMessage(error.message);
+      setMessage(error instanceof Error ? error.message : t("profilePage.sessionError"));
       setMessageIsError(true);
       setBusy(false);
     }
@@ -149,33 +151,31 @@ export default function ProfilePage({ returnTo }: Props) {
 
   const saveAlias = async (event: FormEvent) => {
     event.preventDefault();
-    if (!supabase) return;
+    if (!hasSupabaseConfig) return;
     setBusy(true);
     setMessage("");
     setMessageIsError(false);
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    const { error } = user
-      ? await supabase
-          .from("profiles")
-          .update({ alias: alias.trim(), updated_at: new Date().toISOString() })
-          .eq("id", user.id)
-      : { error: new Error("Sessió caducada") };
-    setMessage(error ? error.message : "Àlies desat.");
-    setMessageIsError(Boolean(error));
+    try {
+      const user = await getCurrentUser();
+      if (!user) throw new Error(t("profilePage.sessionExpired"));
+      await updateAlias(user.id, alias);
+      setMessage(t("profilePage.aliasSaved"));
+      setMessageIsError(false);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : t("profilePage.sessionError"));
+      setMessageIsError(true);
+    }
     setBusy(false);
   };
 
   const signOut = async () => {
-    if (supabase) {
-      await supabase.auth.signOut();
-      setUserEmail("");
-      setAlias("");
-      setAvatarUrl(null);
-      setMessage("Has tancat la sessió.");
-      setMessageIsError(false);
-    }
+    if (!hasSupabaseConfig) return;
+    await signOutUser();
+    setUserEmail("");
+    setAlias("");
+    setAvatarUrl(null);
+    setMessage(t("profilePage.signedOut"));
+    setMessageIsError(false);
   };
   const safeReturn =
     returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/";
@@ -184,28 +184,28 @@ export default function ProfilePage({ returnTo }: Props) {
     <ThemeProvider theme={fibersTheme}>
       <Stack spacing={2.5} className="profile-card">
         <Typography component="h2" variant="h5">
-          {userEmail ? "El teu perfil" : "Inicia sessió"}
+          {userEmail ? t("profilePage.signedInHeading") : t("profilePage.signedOutHeading")}
         </Typography>
         {message && (
           <Alert severity={messageIsError ? "error" : "info"}>{message}</Alert>
         )}
-        {!supabase && (
-          <Alert severity="error">Falta configurar Supabase.</Alert>
+        {!hasSupabaseConfig && (
+          <Alert severity="error">{t("profilePage.supabaseMissing")}</Alert>
         )}
         {userEmail ? (
           <>
             <Avatar
               src={avatarUrl ?? undefined}
-              alt={alias ? `Imatge de perfil de ${alias}` : "Imatge de perfil"}
+              alt={alias ? t("profilePage.avatarAlt", { alias }) : t("profilePage.avatarAltFallback")}
               sx={{ width: 72, height: 72, bgcolor: "grey.100", color: "text.secondary" }}
             >
               <PersonOutlineRounded fontSize="large" />
             </Avatar>
-            <Typography>Has iniciat sessió amb {userEmail}.</Typography>
+            <Typography>{t("profilePage.signedInWith", { email: userEmail })}</Typography>
             <Stack component="form" spacing={2} onSubmit={saveAlias}>
               <TextField
                 required
-                label="Àlies o pseudònim públic"
+                label={t("profilePage.aliasLabel")}
                 value={alias}
                 onChange={(event) => setAlias(event.target.value)}
                 inputProps={{ minLength: 2, maxLength: 40 }}
@@ -215,24 +215,24 @@ export default function ProfilePage({ returnTo }: Props) {
                 variant="contained"
                 disabled={busy || alias.trim().length < 2}
               >
-                Desa l’àlies
+                {t("profilePage.saveAlias")}
               </Button>
             </Stack>
             <Button href={safeReturn} variant="outlined">
-              Continua
+              {t("profilePage.continue")}
             </Button>
-            <Button onClick={signOut}>Tanca la sessió</Button>
+            <Button onClick={signOut}>{t("profilePage.signOut")}</Button>
           </>
         ) : (
           <>
             <Typography>
-              Entra amb un enllaç al correu o amb un compte social.
+              {t("profilePage.signInLead")}
             </Typography>
             <Stack component="form" spacing={2} onSubmit={sendLink}>
               <TextField
                 required
                 type="email"
-                label="Correu electrònic"
+                label={t("contactForm.email")}
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
               />
@@ -243,11 +243,11 @@ export default function ProfilePage({ returnTo }: Props) {
                 disabled={busy}
                 endIcon={<ArrowForwardRounded />}
               >
-                Envia’m un enllaç
+                {t("profilePage.sendLink")}
               </Button>
             </Stack>
             <Divider sx={{ color: "text.secondary", fontSize: "0.875rem" }}>
-              o continua amb
+              {t("profilePage.orContinueWith")}
             </Divider>
             <Button
               fullWidth
@@ -294,7 +294,7 @@ export default function ProfilePage({ returnTo }: Props) {
                 "&:hover": { bgcolor: "#f6f7f9", borderColor: "#b8bec8" },
               }}
             >
-              Inicia la sessió amb Google
+              {t("profilePage.google")}
             </Button>
             <Button
               fullWidth
@@ -314,7 +314,7 @@ export default function ProfilePage({ returnTo }: Props) {
                 },
               }}
             >
-              Inicia la sessió amb Github
+              {t("profilePage.github")}
             </Button>
           </>
         )}

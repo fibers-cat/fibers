@@ -1,0 +1,12 @@
+---
+import SubjectPage from '@/components/pages/SubjectPage.astro';
+import { fetchSubjects } from '@/services/subjects';
+
+export async function getStaticPaths() {
+  const subjects = await fetchSubjects();
+  return subjects.map((subject) => ({ params: { slug: subject.slug }, props: { subject } }));
+}
+
+const { subject } = Astro.props;
+---
+<SubjectPage subject={subject} />

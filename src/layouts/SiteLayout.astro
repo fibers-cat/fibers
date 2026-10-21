@@ -1,5 +1,16 @@
 ---
-import SiteNavigation from '@/components/SiteNavigation';
+import SiteNavigation from '@/components/shared/SiteNavigation';
+import {
+  canonicalPath,
+  defaultLocale,
+  getLocaleFromUrl,
+  isLocale,
+  localizePath,
+  locales,
+  localeNames,
+  useTranslations,
+  type Locale,
+} from '@/i18n';
 import '@/styles/global.css';
 
 interface Props {
@@ -11,16 +22,27 @@ interface Props {
 
 const {
   title,
-  description = 'Materials d’estudi compartits per la comunitat d’estudiants de la FIB.',
   noindex = false,
   ogImage = '/images/og-fibers.png',
 } = Astro.props;
+
+const currentLocale: Locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(currentLocale);
+const description = Astro.props.description ?? t('meta.siteDescription');
+
 const currentPath = Astro.url.pathname;
+// Canonical (Catalan) logical path, e.g. `/es/acerca/` → `/sobre/`.
+const basePath = canonicalPath(currentPath, currentLocale);
 const site = Astro.site ?? new URL('https://fibers.cat');
 const siteOrigin = site.origin;
-const canonicalUrl = new URL(currentPath, site).href;
+const canonicalUrl = new URL(localizePath(basePath, currentLocale), site).href;
 const imageUrl = new URL(ogImage, site).href;
 const documentTitle = `${title} | Fibers`;
+const ogLocale = currentLocale === 'ca' ? 'ca_ES' : 'es_ES';
+const alternatePaths = locales.map((locale) => ({
+  locale,
+  href: new URL(localizePath(basePath, locale), site).href,
+}));
 
 const structuredData = noindex
   ? null
@@ -33,7 +55,7 @@ const structuredData = noindex
           url: `${siteOrigin}/`,
           name: 'Fibers',
           alternateName: 'Fibers FIB',
-          inLanguage: 'ca-ES',
+          inLanguage: currentLocale === 'ca' ? 'ca-ES' : 'es-ES',
         },
         {
           '@type': 'WebPage',
@@ -41,22 +63,22 @@ const structuredData = noindex
           url: canonicalUrl,
           name: documentTitle,
           description,
-          inLanguage: 'ca-ES',
+          inLanguage: currentLocale === 'ca' ? 'ca-ES' : 'es-ES',
           isPartOf: { '@id': `${siteOrigin}/#website` },
         },
-        ...(currentPath === '/'
+        ...(basePath === '/'
           ? [{
               '@type': 'Organization',
               '@id': `${siteOrigin}/#organization`,
               name: 'Fibers',
               url: `${siteOrigin}/`,
               logo: `${siteOrigin}/images/fibers-heart.png`,
-              description: 'Projecte comunitari de materials d’estudi per a la Facultat d’Informàtica de Barcelona.',
+              description: t('org.description'),
               contactPoint: {
                 '@type': 'ContactPoint',
-                contactType: 'Contacte',
-                url: `${siteOrigin}/contacte/`,
-                availableLanguage: ['Catalan'],
+                contactType: t('org.contactType'),
+                url: `${siteOrigin}${localizePath('/contacte/', currentLocale)}`,
+                availableLanguage: Object.values(localeNames),
               },
             }]
           : []),
@@ -66,7 +88,7 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
 ---
 
 <!doctype html>
-<html lang="ca">
+<html lang={currentLocale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -76,10 +98,22 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
     {noindex && <meta name="robots" content="noindex, follow" />}
     <title>{documentTitle}</title>
     <link rel="canonical" href={canonicalUrl} />
+    {alternatePaths.map(({ locale, href }) => (
+      <link rel="alternate" hreflang={locale} href={href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL(localizePath(basePath, defaultLocale), site).href} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="icon" type="image/svg+xml" href="/images/fibers-heart-alt.svg" />
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="ca_ES" />
+    <meta property="og:locale" content={ogLocale} />
+    {locales
+      .filter((locale) => locale !== currentLocale)
+      .map((locale) => (
+        <meta
+          property="og:locale:alternate"
+          content={locale === 'ca' ? 'ca_ES' : 'es_ES'}
+        />
+      ))}
     <meta property="og:site_name" content="Fibers" />
     <meta property="og:title" content={documentTitle} />
     <meta property="og:description" content={description} />
@@ -88,12 +122,12 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Fibers, materials d’estudi compartits per a la FIB" />
+    <meta property="og:image:alt" content={t('meta.imageAlt')} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={documentTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl} />
-    <meta name="twitter:image:alt" content="Fibers, materials d’estudi compartits per a la FIB" />
+    <meta name="twitter:image:alt" content={t('meta.imageAlt')} />
     {structuredDataJson && <script type="application/ld+json" set:html={structuredDataJson} />}
     {import.meta.env.PROD && (
       <script
@@ -105,15 +139,15 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
     )}
   </head>
   <body>
-    <SiteNavigation client:load currentPath={currentPath} />
+    <SiteNavigation client:load currentPath={basePath} locale={currentLocale} />
     <main class="site-main">
       <slot />
       <footer class="site-footer">
-        <div><span>© 2016-{new Date().getFullYear()} Fibers</span><span>Recursos compartits per a la comunitat FIB</span></div>
-        <nav aria-label="Enllaços del peu de pàgina">
-          <a href="/guia/">Com funciona</a>
-          <a href="/condicions/">Condicions d’ús</a>
-          <a href="/contacte/">Contacte</a>
+        <div><span>© 2016-{new Date().getFullYear()} Fibers</span><span>{t('footer.tagline')}</span></div>
+        <nav aria-label={t('footer.linksLabel')}>
+          <a href={localizePath('/guia/', currentLocale)}>{t('footer.howItWorks')}</a>
+          <a href={localizePath('/condicions/', currentLocale)}>{t('footer.terms')}</a>
+          <a href={localizePath('/contacte/', currentLocale)}>{t('footer.contact')}</a>
         </nav>
       </footer>
     </main>

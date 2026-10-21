@@ -1,0 +1,537 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "subjects": "Asignaturas",
+    "resources": "Recursos generales",
+    "contribute": "Aporta material",
+    "contributeShort": "Aporta",
+    "contributors": "Colaboradores",
+    "about": "Sobre Fibers",
+    "reviewContributions": "Revisión de aportaciones",
+    "manageUsers": "Gestión de usuarios",
+    "primary": "Navegación principal",
+    "social": "Redes sociales"
+  },
+  "sidebar": {
+    "label": "ESPACIO DE ESTUDIO"
+  },
+  "profile": {
+    "yourProfile": "Tu perfil",
+    "signIn": "Inicia sesión"
+  },
+  "menu": {
+    "open": "Abrir el menú",
+    "close": "Cerrar el menú"
+  },
+  "brand": {
+    "home": "Fibers, inicio"
+  },
+  "footer": {
+    "tagline": "Recursos compartidos para la comunidad FIB",
+    "howItWorks": "Cómo funciona",
+    "terms": "Condiciones de uso",
+    "contact": "Contacto",
+    "linksLabel": "Enlaces del pie de página"
+  },
+  "switcher": {
+    "label": "Idioma",
+    "ca": "Català",
+    "es": "Castellano",
+    "switchToCa": "Cambiar a Catalán",
+    "switchToEs": "Cambiar a Español"
+  },
+  "meta": {
+    "siteDescription": "Materiales de estudio compartidos por la comunidad de estudiantes de la FIB.",
+    "imageAlt": "Fibers, materiales de estudio compartidos para la FIB"
+  },
+  "org": {
+    "description": "Proyecto comunitario de materiales de estudio para la Facultad de Informática de Barcelona.",
+    "contactType": "Contacto"
+  },
+  "breadcrumbs": {
+    "ariaLabel": "Ruta de navegación"
+  },
+  "home": {
+    "meta": {
+      "title": "Materiales de estudio de la FIB",
+      "description": "Busca apuntes, ejercicios y recursos para las asignaturas de la Facultad de Informática de Barcelona. Explora el catálogo de Fibers o comparte tus materiales."
+    },
+    "eyebrow": "APRENDIZAJE COMPARTIDO",
+    "titleLine1": "Los buenos apuntes",
+    "titleLine2": "pasan de mano en mano.",
+    "lead": "Un espacio de la comunidad FIB para encontrar y compartir materiales que ayudan a estudiar, practicar y entender mejor.",
+    "exploreCta": "Explora asignaturas",
+    "shareCta": "Comparte tus apuntes",
+    "footnote": "Un proyecto colaborativo, hecho entre estudiantes",
+    "stickerLine1": "apuntes",
+    "stickerLine2": "abiertos",
+    "tagTwo": "hecho entre estudiantes",
+    "catalogEyebrow": "EL CATÁLOGO",
+    "catalogTitle": "Encuentra tu asignatura",
+    "catalogLead": "Empieza por el nombre o el acrónimo y consulta el estado de cada espacio.",
+    "catalogCta": "Ver el catálogo",
+    "dataNote": "Comprueba la fecha y la vigencia del contenido antes de utilizarlo.",
+    "shareTitle": "¿Has preparado unos buenos apuntes?",
+    "shareLead": "Compartirlos puede ahorrar horas a otra persona.",
+    "shareButton": "Aporta material"
+  },
+  "about": {
+    "meta": {
+      "title": "Sobre Fibers",
+      "description": "Conoce Fibers, el proyecto comunitario donde estudiantes de la FIB comparten apuntes, ejercicios y recursos para facilitar el aprendizaje."
+    },
+    "eyebrow": "SOBRE EL PROYECTO",
+    "titleLine1": "Un lugar para estudiar",
+    "titleLine2": "mejor en comunidad.",
+    "lead": "Fibers es una iniciativa para facilitar que el alumnado de la FIB comparta materiales propios y los haga accesibles a todo el mundo.",
+    "cta": "Contacta con nosotros",
+    "timelineEyebrow": "CRONOLOGÍA",
+    "timelineTitle": "La historia de Fibers",
+    "timelineLead": "Los inicios del proyecto y la evolución de su web."
+  },
+  "timeline": {
+    "closePreview": "Cierra la previsualización",
+    "previewTitle": "Previsualización: {title}",
+    "milestones": [
+      {
+        "label": "Versión 3.0",
+        "date": "2 de octubre de 2026",
+        "dateTime": "2026-10-02",
+        "title": "Reinicio del proyecto",
+        "description": [
+          "En 2026, 10 años después, con la experiencia acumulada y los avances de la IA, se decide reiniciarlo con Astro, MUI y Supabase."
+        ],
+        "side": "left",
+        "links": [
+          { "href": "https://github.com/fibers-cat/fibers/", "ariaLabel": "Abre el repositorio actual de Fibers en GitHub", "kind": "external", "icon": "github" }
+        ]
+      },
+      {
+        "label": "Intento de relanzamiento",
+        "date": "20 de septiembre de 2022",
+        "dateTime": "2022-09-20",
+        "title": "Un nuevo intento con Next.js",
+        "description": ["Se intenta relanzar Fibers con Next.js, MUI y Firebase, pero el proyecto no llega a materializarse."],
+        "side": "right"
+      },
+      {
+        "label": "Versión 2.0",
+        "date": "8 de julio de 2017",
+        "dateTime": "2017-07-08",
+        "title": "Publicación dinámica con PHP",
+        "description": [
+          "Se intenta crear una nueva web en PHP con un sistema de publicación de contenidos que muestra a los usuarios colaboradores como autores y deja atrás la gestión de las aportaciones por correo electrónico.",
+          "Se trabaja en un rediseño de la web, con una nueva navegación y una nueva forma de interactuar."
+        ],
+        "note": "Esta versión no llegará a publicarse.",
+        "side": "left",
+        "links": [
+          { "href": "https://github.com/fibers-cat/fibers-old/tree/v-2017", "ariaLabel": "Abre el repositorio de Fibers en GitHub", "kind": "external", "icon": "github" },
+          { "href": "/history/fibers-v2/index.html", "ariaLabel": "Previsualiza Fibers v2.0", "kind": "preview" },
+          { "href": "/history/fibers-v2/index.html", "text": "Fibers v2.0", "kind": "external" }
+        ]
+      },
+      {
+        "label": "Primer aportador",
+        "date": "18 de octubre de 2016",
+        "dateTime": "2016-10-18",
+        "title": "Pau Risa comparte material de EEE",
+        "description": ["Pau Risa se convierte en el primer aportador de Fibers, con material de la asignatura EEE."],
+        "side": "right"
+      },
+      {
+        "label": "Versión 1.0",
+        "date": "8 de octubre de 2016",
+        "dateTime": "2016-10-08",
+        "title": "La nueva etapa de Fibers",
+        "description": ["La versión 1.0 estrena una nueva web hecha con Materialize y abre el correo fiberscat@gmail.com para recibir y compartir material de los estudiantes."],
+        "side": "left",
+        "links": [
+          { "href": "https://github.com/fibers-cat/fibers-old/tree/v-2016", "ariaLabel": "Abre el repositorio de Fibers en GitHub", "kind": "external", "icon": "github" },
+          { "href": "/history/fibers-v1/index.html", "ariaLabel": "Previsualiza Fibers v1.0", "kind": "preview" },
+          { "href": "/history/fibers-v1/index.html", "text": "Fibers v1.0", "kind": "external" }
+        ]
+      },
+      {
+        "label": "Versión 0.1",
+        "date": "22 de septiembre de 2016",
+        "dateTime": "2016-09-22",
+        "title": "Primera publicación",
+        "description": ["Fibers retoma el proyecto con una primera versión pública, gratuita y abierta, hecha con Bootstrap."],
+        "side": "left",
+        "links": [
+          { "href": "/history/fibers-v0/index.html", "ariaLabel": "Previsualiza Fibers v0", "kind": "preview" },
+          { "href": "/history/fibers-v0/index.html", "text": "Fibers v0.1", "kind": "external" }
+        ]
+      },
+      {
+        "label": "Nace Fibers",
+        "date": "22 de septiembre de 2016",
+        "dateTime": "2016-09-22",
+        "title": "Una alternativa gratuita y abierta",
+        "description": [
+          "Alex Calle (estudiante de la FIB) y Paul Guillamón (estudiante de DAW) se unen para mantener una web con el mismo propósito.",
+          "Se publica fibers.cat para mantener accesibles a todo el mundo los apuntes y recursos que había publicados en www.melocuenta.com."
+        ],
+        "side": "right"
+      },
+      {
+        "label": "Fin de una etapa",
+        "date": "2014–2016",
+        "title": "Melocuenta anuncia el final del servicio",
+        "description": ["Yeison Melo comunica que dejará de ofrecer el servicio Melocuenta (www.melocuenta.com). Su proyecto dedicado a la divulgación."],
+        "side": "right",
+        "links": [
+          { "href": "/history/melocuenta/index.html", "ariaLabel": "Previsualiza Melocuenta", "kind": "preview" },
+          { "href": "/history/melocuenta/index.html", "text": "Abre la versión de Melocuenta", "kind": "external" }
+        ]
+      }
+    ]
+  },
+  "guide": {
+    "meta": {
+      "title": "Cómo funciona Fibers",
+      "description": "Aprende a encontrar materiales de estudio por asignatura, consultar los recursos disponibles y compartir apuntes propios en Fibers."
+    },
+    "eyebrow": "UNA RED DE APRENDIZAJE",
+    "titleLine1": "Materiales útiles,",
+    "titleLine2": "compartidos con cuidado.",
+    "lead": "Fibers quiere hacer más accesibles los recursos de estudio creados por estudiantes de la Facultad de Informática de Barcelona.",
+    "steps": [
+      { "title": "Encuentra una asignatura", "text": "Explora el catálogo y entra en el espacio de la materia que estás cursando." },
+      { "title": "Consulta los materiales", "text": "Los recursos se organizarán por asignatura y tipo cuando el inventario esté revisado." },
+      { "title": "Comparte los tuyos", "text": "Aporta contenido propio para que más estudiantes puedan beneficiarse." }
+    ]
+  },
+  "resources": {
+    "meta": {
+      "title": "Recursos generales de la FIB",
+      "description": "Consulta documentos generales, guías y recursos de recuperación recuperados del fondo histórico de Fibers para estudiantes de la FIB."
+    },
+    "eyebrow": "FONDO RECUPERADO",
+    "title": "Recursos generales",
+    "lead": "Documentos de consulta, orientación y recuperación que no pertenecen a una única asignatura.",
+    "dataNote": "Comprueba la fecha y la vigencia del contenido antes de utilizarlo."
+  },
+  "resourceCollection": {
+    "preview": "Vista previa",
+    "previewAria": "Abre la vista previa de {title}",
+    "open": "Abre",
+    "openSeparately": "Abrir aparte",
+    "closePreview": "Cierra la vista previa",
+    "loadError": "No se ha podido cargar este archivo. Puedes abrirlo en una pestaña nueva.",
+    "emptyText": "Este archivo no contiene texto.",
+    "attributedTo": "Aportado por {alias} · {date}",
+    "unknownAuthor": "Estudiante"
+  },
+  "contribute": {
+    "meta": {
+      "title": "Comparte material de estudio",
+      "description": "Aporta apuntes, ejercicios resueltos y guías propias para que otros estudiantes de la FIB puedan aprovecharlos."
+    },
+    "eyebrow": "HAGÁMOSLO ENTRE TODOS",
+    "titleLine1": "Comparte lo que",
+    "titleLine2": "te ha ayudado a aprender.",
+    "lead": "Los apuntes personales, los ejercicios resueltos y las guías creadas por estudiantes facilitan el camino de las personas que vienen detrás.",
+    "rulesTitle": "Antes de enviar",
+    "rules": [
+      "Comparte solo material propio o con permiso.",
+      "No se aceptan apuntes facilitados por el profesorado.",
+      "No adjuntes libros ni contenido protegido por derechos de autor."
+    ],
+    "formTitle": "Detalles de la aportación",
+    "formLead": "Indícanos qué quieres compartir con la comunidad."
+  },
+  "contributionForm": {
+    "supabaseMissing": "Falta configurar la conexión con Supabase.",
+    "serviceUnavailable": "No se ha podido conectar con el servicio de aportaciones.",
+    "sessionChecking": "Espera a que se compruebe la sesión antes de enviar.",
+    "sessionError": "No se ha podido comprobar la sesión. Vuelve a intentarlo más tarde.",
+    "loginRequired": "Tienes que iniciar sesión para enviar la aportación.",
+    "signIn": "Inicia sesión",
+    "subjectLabel": "Asignatura",
+    "subjectPlaceholder": "Selecciona una asignatura",
+    "subjectLatest": " · Asignatura no vigente",
+    "titleLabel": "Título del material",
+    "descriptionLabel": "Descripción",
+    "attachFiles": "Adjunta archivos",
+    "acknowledgement": "Confirmo que tengo derecho a compartir este material y que no incluye contenido protegido.",
+    "errors": {
+      "subject": "Selecciona una asignatura.",
+      "titleShort": "El título es obligatorio y debe tener al menos 3 caracteres.",
+      "titleLong": "El título no puede superar los 120 caracteres.",
+      "descriptionShort": "La descripción es obligatoria y debe tener al menos 10 caracteres.",
+      "descriptionLong": "La descripción no puede superar los 3000 caracteres.",
+      "filesTooLarge": "Cada archivo debe pesar como máximo 50 MB.",
+      "acknowledgement": "Confirma que tienes derecho a compartir este material."
+    },
+    "submit": "Enviar para revisión",
+    "sending": "Enviando…",
+    "success": "Aportación enviada. Las aportaciones y los archivos quedan pendientes de revisión. Se publicarán cuando se aprueben.",
+    "errorPrefix": "No se ha podido enviar: {message}",
+    "error": "No se ha podido enviar la aportación."
+  },
+  "contact": {
+    "meta": {
+      "title": "Contacto",
+      "description": "Contacta con el equipo de Fibers para resolver dudas, compartir ideas o pedir ayuda con los materiales de estudio de la FIB."
+    },
+    "eyebrow": "HABLEMOS",
+    "titleLine1": "¿En qué te",
+    "titleLine2": "podemos ayudar?",
+    "lead": "¿Tienes una duda, una idea o necesitas ayuda con Fibers? Envíanos un mensaje y te responderemos al correo que nos indiques.",
+    "formTitle": "Envíanos un mensaje",
+    "formLead": "Rellena el formulario y te responderemos lo antes posible."
+  },
+  "contactForm": {
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "honeypot": "No rellenes este campo:",
+    "submit": "Envía el mensaje",
+    "sending": "Enviando…",
+    "success": "Mensaje enviado correctamente. Te responderemos pronto.",
+    "error": "No se ha podido enviar el mensaje. Vuelve a intentarlo más tarde.",
+    "validation": {
+      "name": "Escribe tu nombre.",
+      "emailRequired": "Escribe tu correo electrónico.",
+      "emailInvalid": "Introduce un correo electrónico válido.",
+      "subject": "Escribe el asunto del mensaje.",
+      "message": "Escribe el mensaje."
+    }
+  },
+  "profilePage": {
+    "meta": {
+      "title": "Tu perfil",
+      "description": "Inicia sesión en Fibers y gestiona tu alias público."
+    },
+    "eyebrow": "COMUNIDAD FIBERS",
+    "heading": "Tu perfil",
+    "signedInHeading": "Tu perfil",
+    "signedOutHeading": "Inicia sesión",
+    "sessionError": "No se ha podido cargar la sesión.",
+    "profileError": "No se ha podido cargar el perfil.",
+    "avatarSaveError": "No se ha podido guardar la imagen de perfil.",
+    "supabaseMissing": "Falta configurar Supabase.",
+    "avatarAlt": "Imagen de perfil de {alias}",
+    "avatarAltFallback": "Imagen de perfil",
+    "signedInWith": "Has iniciado sesión con {email}.",
+    "aliasLabel": "Alias o seudónimo público",
+    "saveAlias": "Guarda el alias",
+    "continue": "Continúa",
+    "signOut": "Cierra la sesión",
+    "signInLead": "Entra con un enlace al correo o con una cuenta social.",
+    "sendLink": "Envíame un enlace",
+    "orContinueWith": "o continúa con",
+    "google": "Inicia sesión con Google",
+    "github": "Inicia sesión con Github",
+    "linkSent": "Te hemos enviado un enlace para iniciar sesión.",
+    "aliasSaved": "Alias guardado.",
+    "signedOut": "Has cerrado la sesión.",
+    "sessionExpired": "Sesión caducada"
+  },
+  "notFound": {
+    "meta": {
+      "title": "Página no encontrada",
+      "description": "No hemos encontrado la página que buscas. Vuelve a Fibers para explorar los materiales de estudio de la FIB."
+    },
+    "titleLine1": "Esta página",
+    "titleLine2": "no está aquí.",
+    "lead": "Puede que el enlace haya cambiado o que necesites volver al inicio.",
+    "cta": "Vuelve al inicio"
+  },
+  "contributors": {
+    "meta": {
+      "title": "Colaboradores de Fibers",
+      "description": "Ranking de las personas que han aportado materiales aprobados a Fibers."
+    },
+    "eyebrow": "HECHO ENTRE ESTUDIANTES",
+    "titleLine1": "¿Quién hace crecer",
+    "titleLine2": "Fibers?",
+    "lead": "Ranking de personas según los materiales publicados y las aportaciones que han superado la revisión.",
+    "cta": "Haz una aportación"
+  },
+  "contributorRanking": {
+    "empty": "Todavía no hay aportaciones aprobadas. Sé la primera persona en compartir material.",
+    "materialsOne": "material",
+    "materialsMany": "materiales"
+  },
+  "terms": {
+    "meta": {
+      "title": "Condiciones de uso de Fibers",
+      "description": "Consulta las condiciones y los criterios para compartir materiales propios con la comunidad de estudiantes de la FIB."
+    },
+    "eyebrow": "COMPARTIR CON RESPONSABILIDAD",
+    "title": "Condiciones de uso",
+    "lead": "Al aportar material a Fibers, ten en cuenta estas normas de la comunidad.",
+    "rules": [
+      "No se acepta material facilitado por el profesorado.",
+      "No se acepta material con copyright, como libros o copias de libros.",
+      "No se acepta material sin el consentimiento de quien es propietario."
+    ],
+    "disclaimerBefore": "Si tienes dudas sobre un recurso, háznoslas llegar antes de compartirlo a través del ",
+    "disclaimerLink": "formulario de contacto",
+    "disclaimerAfter": "."
+  },
+  "catalog": {
+    "meta": {
+      "title": "Asignaturas de la FIB",
+      "description": "Explora las asignaturas de la FIB por nombre o acrónimo y encuentra los materiales de estudio recuperados para cada materia en el catálogo de Fibers."
+    },
+    "eyebrow": "CATÁLOGO FIB",
+    "title": "Asignaturas",
+    "lead": "Busca por nombre o acrónimo y entra en cada asignatura para consultar los archivos recuperados.",
+    "disclaimerTitle": "Catálogo histórico",
+    "disclaimer": "Los archivos están asociados a su asignatura. Revisa la fecha y la vigencia del contenido antes de utilizarlos."
+  },
+  "subject": {
+    "metaDescription": "Apuntes y recursos de estudio de {name} ({acronym}), asignatura de la Facultad de Informática de Barcelona (FIB). Encuentra materiales compartidos por estudiantes.",
+    "eyebrow": "ESPACIO DE ESTUDIO",
+    "codeLabel": "Código UPC",
+    "codeUnavailable": "No disponible",
+    "languagesLabel": "Idiomas",
+    "specialtyLabel": "Especialidad",
+    "historicalNote": "Asignatura no vigente · materiales históricos",
+    "currentNote": "Materiales compartidos por la comunidad Fibers.",
+    "backLink": "Vuelve a todas las asignaturas",
+    "languages": {
+      "ca": "Catalán",
+      "es": "Castellano",
+      "en": "Inglés"
+    }
+  },
+  "subjectExplorer": {
+    "search": "Busca por nombre o acrónimo",
+    "filter": "Filtra asignaturas",
+    "filters": "Filtros",
+    "all": "Todas",
+    "categories": "Categorías",
+    "specialties": "Especialidades",
+    "validity": "Vigencia",
+    "current": "Vigentes",
+    "historical": "Históricas",
+    "sort": "Ordena asignaturas",
+    "sortBy": "Ordena por",
+    "sortAcronymAsc": "Acrónimo (A-Z)",
+    "sortAcronymDesc": "Acrónimo (Z-A)",
+    "sortNewest": "Contenido más reciente",
+    "sortOldest": "Contenido más antiguo",
+    "loadingDates": "Cargando fechas de publicación…",
+    "datesError": "No se han podido cargar las fechas de publicación.",
+    "countersError": "No se han podido cargar los contadores de archivos.",
+    "countsLoading": "Cargando contador de archivos",
+    "unavailable": "No disponible",
+    "filesOne": "{count} archivo",
+    "filesMany": "{count} archivos",
+    "noFiles": "Sin archivos",
+    "historicalTooltip": "Asignatura histórica",
+    "cardDescription": "Materiales compartidos de la asignatura.",
+    "open": "Ver asignatura",
+    "resultsOne": "{count} asignatura",
+    "resultsMany": "{count} asignaturas",
+    "emptyTitle": "No hemos encontrado ninguna asignatura",
+    "emptyLead": "Prueba con otro nombre o acrónimo, o cambia los filtros."
+  },
+  "subjectStatus": {
+    "heading": "Materiales",
+    "filesOne": "{count} archivo",
+    "filesMany": "{count} archivos",
+    "recoveredAlert": "Archivos recuperados de la web anterior; comprueba si el material sigue vigente.",
+    "emptyAlert": "No se han recuperado archivos para esta asignatura de la web anterior.",
+    "helpCopy": "Si tienes apuntes propios o ejercicios resueltos, puedes ayudar a completar el espacio de {name} ({acronym}).",
+    "contributeCta": "Aporta material"
+  },
+  "approvedMaterials": {
+    "heading": "Aportaciones de la comunidad",
+    "loading": "Cargando…",
+    "error": "No se han podido cargar los materiales aprobados.",
+    "attributedTo": "Aportado por {alias}",
+    "unknownAuthor": "Estudiante",
+    "downloadFile": "Descarga el archivo",
+    "openExternal": "Abre el enlace externo"
+  },
+  "admin": {
+    "eyebrow": "GESTIÓN",
+    "checkingPermissions": "Comprobando permisos",
+    "refreshList": "Actualiza la lista",
+    "signIn": "Inicia sesión",
+    "supabaseMissing": "Falta configurar Supabase.",
+    "contributions": {
+      "meta": {
+        "title": "Revisión de aportaciones",
+        "description": "Área privada de revisión de aportaciones de Fibers."
+      },
+      "title": "Revisión de aportaciones",
+      "lead": "Revisa el contenido y apruébalo o deniégalo antes de publicarlo.",
+      "signInPrompt": "Inicia sesión con una cuenta autorizada para continuar.",
+      "noPermission": "No tienes permisos para revisar aportaciones.",
+      "loading": "Cargando aportaciones",
+      "empty": "No hay aportaciones pendientes.",
+      "subjectUnavailable": "Asignatura no disponible",
+      "noteLabel": "Nota de revisión (opcional)",
+      "approve": "Aprueba",
+      "reject": "Deniega",
+      "approved": "Aportación aprobada.",
+      "rejected": "Aportación denegada.",
+      "loadError": "No se han podido cargar las aportaciones pendientes.",
+      "filesError": "No se han podido preparar los archivos para revisarlos.",
+      "saveError": "No se ha podido guardar la revisión.",
+      "staleError": "Esta aportación ya no está pendiente de revisión. Actualiza la lista."
+    },
+    "users": {
+      "meta": {
+        "title": "Gestión de usuarios",
+        "description": "Área privada de gestión de usuarios de Fibers."
+      },
+      "title": "Gestión de usuarios",
+      "lead": "Actualiza los alias y asigna el rol de administrador. El superadmin no se puede reasignar.",
+      "signInPrompt": "Inicia sesión con la cuenta superadmin para continuar.",
+      "noPermission": "Solo el superadmin puede gestionar usuarios.",
+      "loading": "Cargando usuarios",
+      "noEmail": "Cuenta sin correo",
+      "protectedSuperadmin": "Superadmin protegido.",
+      "aliasLabel": "Alias público",
+      "roleLabel": "Rol",
+      "roleUser": "Usuario",
+      "roleAdmin": "Administrador",
+      "save": "Guarda cambios",
+      "aliasError": "El alias debe tener entre 2 y 40 caracteres.",
+      "loadError": "No se ha podido cargar la lista de usuarios.",
+      "saveError": "No se ha podido guardar el perfil. Puede que el rol ya haya cambiado.",
+      "notFoundError": "No se ha podido encontrar el perfil para actualizar.",
+      "saved": "Se ha guardado el perfil de {email}."
+    }
+  },
+  "materials": {
+    "sections": {
+      "recoveries": "Recuperaciones",
+      "helpDocumentation": "Documentación de ayuda",
+      "generalDocuments": "Documentos generales",
+      "supplementary": "Material complementario",
+      "proceduresAndTriggers": "Procedimientos y disparadores",
+      "jdbc": "Java Database Connectivity",
+      "sql": "SQL y álgebra relacional",
+      "trackingExercises": "Ejercicios de seguimiento",
+      "transversal": "Transversal",
+      "chapterSummaries": "Resúmenes de capítulos",
+      "sortingAlgorithms": "Algoritmos de ordenación",
+      "algorithmAnalysis": "Análisis de algoritmos",
+      "laboratories": "Laboratorios",
+      "estatus": "E-status",
+      "labMaterials": "Materiales de laboratorio",
+      "economicsManualAnswers": "Respuestas del manual de economía",
+      "syllabusAndRecoveries": "Temario y recuperaciones",
+      "subjectMaterials": "Materiales de la asignatura"
+    },
+    "displayTitles": {
+      "index": "Índice de materiales",
+      "indexDocumentation": "Índice de documentación",
+      "indexRecoveries": "Índice de recuperaciones",
+      "supplementaryNotes": "Notas complementarias",
+      "sqlPreview": "Vista previa SQL",
+      "convalidations": "Convalidaciones",
+      "opinionsAndAdvice": "Opiniones y consejos"
+    }
+  }
+}

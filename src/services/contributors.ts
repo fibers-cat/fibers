@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/services/supabase";
 
 export type Contributor = { alias: string; count: number };
 

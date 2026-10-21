@@ -17,7 +17,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import CloseRounded from '@mui/icons-material/CloseRounded';
 import GitHub from '@mui/icons-material/GitHub';
 import VisibilityOutlined from '@mui/icons-material/VisibilityOutlined';
-import { fibersTheme } from '@/components/theme';
+import { fibersTheme } from '@/components/shared/theme';
+import { getDictionary, useTranslations, type Locale } from '@/i18n';
 
 type MilestoneLink = {
   href: string;
@@ -38,103 +39,9 @@ type Milestone = {
   links?: MilestoneLink[];
 };
 
-const milestones: Milestone[] = [
-    {
-    label: 'Versió 3.0',
-    date: '2 d’octubre de 2026',
-    dateTime: '2026-10-02',
-    title: 'Reinici del projecte',
-    description: [
-      'En 2026, 10 anys després, amb l’experiència acumulada i els avenços de la IA, es decideix reiniciar-lo amb Astro, MUI i Supabase.',
-    ],
-    side: 'left' as const,
-    links: [
-      { href: 'https://github.com/fibers-cat/fibers/', ariaLabel: 'Obre el repositori actual de Fibers a GitHub', kind: 'external' as const, icon: 'github' as const },
-    ],
-  },
-  {
-    label: 'Intent de rellançament',
-    date: '20 de setembre de 2022',
-    dateTime: '2022-09-20',
-    title: 'Un nou intent amb Next.js',
-    description: ['S’intenta rellançar Fibers amb Next.js, MUI i Firebase, però el projecte no arriba a materialitzar-se.'],
-    side: 'right' as const,
-  },
-  {
-    label: 'Versió 2.0',
-    date: '8 de juliol de 2017',
-    dateTime: '2017-07-08',
-    title: 'Publicació dinàmica amb PHP',
-    description: [
-      'S’intenta crear una nova web en PHP amb un sistema de publicació de continguts que mostra els usuaris col·laboradors com a autors i deixa enrere la gestió de les aportacions per correu electrònic.',
-      'Es treballa en un redisseny de la web, amb una nova navegació i una nova manera d’interactuar.',
-    ],
-    note: 'Aquesta versió, no arribará a publicarse.',
-    side: 'left' as const,
-    links: [
-      { href: 'https://github.com/fibers-cat/fibers-old/tree/v-2017', ariaLabel: 'Obre el repositori de Fibers a GitHub', kind: 'external' as const, icon: 'github' as const },
-      { href: '/history/fibers-v2/index.html', ariaLabel: 'Previsualitza Fibers v2.0', kind: 'preview' as const },
-      { href: '/history/fibers-v2/index.html', text: 'Fibers v2.0', kind: 'external' as const }
-    ],
-  },
-  {
-    label: 'Primer aportador',
-    date: '18 d’octubre de 2016',
-    dateTime: '2016-10-18',
-    title: 'Pau Risa comparteix material d’EEE',
-    description: ['Pau Risa es converteix en el primer aportador de Fibers, amb material de l’assignatura EEE.'],
-    side: 'right' as const,
-  },
-  {
-    label: 'Versió 1.0',
-    date: '8 d’octubre de 2026',
-    dateTime: '2026-10-08',
-    title: 'La nova etapa de Fibers',
-    description: ['La versió 1.0 estrena una nova web feta amb Materialize i obre el correu fiberscat@gmail.com per rebre i compartir material dels estudiants.'],
-    side: 'left' as const,
-    links: [
-      { href: 'https://github.com/fibers-cat/fibers-old/tree/v-2016', ariaLabel: 'Obre el repositori de Fibers a GitHub', kind: 'external' as const, icon: 'github' as const },
-      { href: '/history/fibers-v1/index.html', ariaLabel: 'Previsualitza Fibers v1.0', kind: 'preview' as const },
-      { href: '/history/fibers-v1/index.html', text: 'Fibers v1.0', kind: 'external' as const }
-    ],
-  },
-  {
-    label: 'Versió 0.1',
-    date: '22 de setembre de 2026',
-    dateTime: '2026-09-22',
-    title: 'Primera publicació',
-    description: ['Fibers reprèn el projecte amb una primera versió pública, gratuïta i oberta, feta amb Bootstrap.'],
-    side: 'left' as const,
-    links: [
-      { href: '/history/fibers-v0/index.html', ariaLabel: 'Previsualitza Fibers v0', kind: 'preview' as const },
-      { href: '/history/fibers-v0/index.html', text: 'Fibers v0.1', kind: 'external' as const },
-    ],
-  },
-  {
-    label: 'Neix Fibers',
-    date: '22 de setembre de 2016',
-    dateTime: '2016-09-22',
-    title: 'Una alternativa gratuïta i oberta',
-    description: [
-      'Alex Calle (estudiant de la FIB) i Paul Guillamón (estudiant de DAW) s’uneixen per mantenir una web amb el mateix propòsit.',
-      'Es publica fibers.cat per mantenir accessibles a tothom els apunts i recursos que hi havia publicats a www.melocuenta.com.',
-    ],
-    side: 'right' as const,
-  },
-  {
-    label: 'Fi d’una etapa',
-    date: '2014–2016',
-    title: 'Melocuenta anuncia el final del servei',
-    description: ['Yeison Melo comunica que deixarà d’oferir el servei Melocuenta (www.melocuenta.com). El seu projecte dedicat a la divulgació.'],
-    side: 'right' as const,
-    links: [
-      { href: '/history/melocuenta/index.html', ariaLabel: 'Previsualitza Melocuenta', kind: 'preview' as const },
-      { href: '/history/melocuenta/index.html', text: 'Obre la versió de Melocuenta', kind: 'external' as const }
-    ],
-  },
-];
-
-export default function ProjectTimeline() {
+export default function ProjectTimeline({ locale }: { locale: Locale }) {
+  const t = useTranslations(locale);
+  const milestones = getDictionary(locale).timeline.milestones as Milestone[];
   const [preview, setPreview] = useState<{
     href: string;
     label: string;
@@ -292,11 +199,11 @@ export default function ProjectTimeline() {
                 {preview.openLink.text} ↗
               </Button>
             )}
-            <IconButton aria-label="Tanca la previsualització" onClick={() => setPreview(null)} sx={{ flexShrink: 0 }}>
+            <IconButton aria-label={t('timeline.closePreview')} onClick={() => setPreview(null)} sx={{ flexShrink: 0 }}>
               <CloseRounded />
             </IconButton>
           </Box>
-          {preview && <iframe title={`Previsualització: ${preview.title}`} src={preview.href} style={{ flex: 1, width: '100%', border: 0 }} />}
+          {preview && <iframe title={t('timeline.previewTitle', { title: preview.title })} src={preview.href} style={{ flex: 1, width: '100%', border: 0 }} />}
         </Box>
       </Drawer>
       </>
