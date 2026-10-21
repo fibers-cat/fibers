@@ -771,21 +771,24 @@ textarea {
   border: 1px solid transparent;
   border-radius: 16px !important;
   background: #fff;
+  box-shadow: 0 1px 2px rgba(32, 36, 44, .025);
   transition:
-    transform 320ms cubic-bezier(.2, .8, .2, 1),
-    box-shadow 320ms cubic-bezier(.2, .8, .2, 1),
-    border-color 320ms cubic-bezier(.2, .8, .2, 1);
+    transform 420ms cubic-bezier(.22, 1, .36, 1),
+    box-shadow 460ms cubic-bezier(.22, 1, .36, 1),
+    border-color 340ms cubic-bezier(.22, 1, .36, 1);
 }
 
 .subject-card-action.MuiCardActionArea-root {
-  transition: background-color 280ms cubic-bezier(.2, .8, .2, 1);
+  transition: background-color 360ms cubic-bezier(.22, 1, .36, 1);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .subject-card:hover {
     transform: translateY(-2px);
-    border-color: #d7dbe1;
-    box-shadow: 0 10px 24px rgba(32, 36, 44, .065);
+    border-color: #e2e6eb;
+    box-shadow:
+      0 2px 4px rgba(32, 36, 44, .035),
+      0 12px 28px rgba(32, 36, 44, .07);
   }
 }
 
