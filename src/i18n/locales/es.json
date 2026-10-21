@@ -307,12 +307,37 @@
     "titleLine1": "Comparte lo que",
     "titleLine2": "te ha ayudado a aprender.",
     "lead": "Los apuntes personales, los ejercicios resueltos y las guías creadas por estudiantes facilitan el camino de las personas que vienen detrás.",
+    "processEyebrow": "EL PROCESO",
+    "processTitle": "Del archivo al catálogo",
+    "processLead": "Sin intermediarios: revisamos el material a mano y lo publicamos con tu atribución cuando está listo.",
+    "process": [
+      {
+        "label": "Prepara",
+        "title": "Elige y describe",
+        "text": "Indica la asignatura y escribe un título y una descripción que expliquen qué contiene el archivo."
+      },
+      {
+        "label": "Envía",
+        "title": "Adjunta el material",
+        "text": "PDF, imágenes, código, Office o ZIP. Hasta 50 MB por archivo."
+      },
+      {
+        "label": "Publica",
+        "title": "Revisión y catálogo",
+        "text": "Comprobamos que el material sea propio y se pueda abrir. Si todo está bien, aparece en el catálogo."
+      }
+    ],
+    "rulesEyebrow": "CONDICIONES",
     "rulesTitle": "Antes de enviar",
     "rules": [
       "Comparte solo material propio o con permiso.",
       "No se aceptan apuntes facilitados por el profesorado.",
       "No adjuntes libros ni contenido protegido por derechos de autor."
     ],
+    "rulesNote": "Si tienes dudas sobre un material, consulta las condiciones de uso o escríbenos antes de publicarlo.",
+    "termsLink": "Condiciones de uso",
+    "contactLink": "Contacta con el equipo",
+    "formEyebrow": "TU APORTACIÓN",
     "formTitle": "Detalles de la aportación",
     "formLead": "Indícanos qué quieres compartir con la comunidad."
   },
@@ -329,6 +354,11 @@
     "titleLabel": "Título del material",
     "descriptionLabel": "Descripción",
     "attachFiles": "Adjunta archivos",
+    "attachFilesAction": "Elige uno o más archivos",
+    "attachFilesHint": "PDF, imágenes, código, Office o ZIP · hasta 50 MB por archivo",
+    "filesTitle": "Archivos adjuntos",
+    "filesTotalSize": "Tamaño total",
+    "removeFile": "Eliminar el archivo",
     "acknowledgement": "Confirmo que tengo derecho a compartir este material y que no incluye contenido protegido.",
     "errors": {
       "subject": "Selecciona una asignatura.",

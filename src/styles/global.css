@@ -1389,12 +1389,31 @@ textarea {
   }
 }
 
-.form-layout {
+.contribution-layout {
   display: grid;
-  grid-template-columns: minmax(0, .85fr) minmax(360px, 1.15fr);
-  gap: clamp(34px, 6vw, 80px);
+  grid-template-columns: minmax(0, 1fr) minmax(380px, .92fr);
+  grid-template-areas:
+    "heading form"
+    "support form";
+  column-gap: clamp(34px, 5vw, 76px);
+  row-gap: 31px;
   align-items: start;
   margin-top: 43px;
+}
+
+.contribution-heading {
+  grid-area: heading;
+}
+
+.contribution-form-card {
+  grid-area: form;
+  grid-row: 1 / span 2;
+  width: 100%;
+}
+
+.contribution-support {
+  grid-area: support;
+  min-width: 0;
 }
 
 .form-heading {
@@ -1409,25 +1428,272 @@ textarea {
   font-size: var(--text-md);
 }
 
-.contribution-rules {
-  margin-top: 35px;
-  padding-top: 23px;
-  border-top: 1px solid var(--line);
+.contribution-heading .eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 1.4px;
 }
 
-.contribution-rules h2 {
-  margin: 0 0 13px;
-  font-size: var(--text-md);
+.contribution-heading h1 {
+  margin: 12px 0 12px;
+  font-size: clamp(30px, 3.1vw, 40px);
+  letter-spacing: -1.5px;
 }
 
-.contribution-rules ul {
-  display: grid;
-  gap: 11px;
-  margin: 0;
-  padding-left: 19px;
-  color: var(--muted);
+.contribution-heading>p {
   font-size: var(--text-base);
   line-height: 1.65;
+}
+
+.contribution-process {
+  margin-top: 34px;
+}
+
+.contribution-section-heading h2 {
+  margin: 7px 0 5px;
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+  letter-spacing: -.5px;
+}
+
+.contribution-section-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.contribution-steps {
+  position: relative;
+  display: grid;
+  gap: 17px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contribution-steps::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  bottom: 22px;
+  left: 20px;
+  width: 1px;
+  background: linear-gradient(#f0c7c2, #e5eaee);
+}
+
+.contribution-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.contribution-step-marker {
+  z-index: 1;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid #f0c9c4;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--coral);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+
+.contribution-step-label {
+  color: var(--coral);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.contribution-step h3 {
+  margin: 3px 0 4px;
+  font-size: var(--text-base);
+  letter-spacing: -.1px;
+  line-height: 1.4;
+}
+
+.contribution-step p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.58;
+}
+
+.contribution-rules {
+  position: relative;
+  margin-top: 34px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+}
+
+.contribution-rules-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.contribution-rules-heading .eyebrow {
+  color: var(--coral);
+}
+
+.contribution-rules-heading h2 {
+  margin: 6px 0 0;
+  color: var(--ink);
+  font-size: 1.3125rem;
+  letter-spacing: -.5px;
+  line-height: 1.3;
+}
+
+.contribution-rules-mark {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #fff;
+}
+
+.contribution-rules-mark svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.contribution-rule-list {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contribution-rule-list li {
+  position: relative;
+  padding-left: 30px;
+  color: #333d4a;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.contribution-rule-list li::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--teal);
+}
+
+.contribution-rule-list li::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 6px;
+  width: 7px;
+  height: 3.5px;
+  border-bottom: 1.8px solid #fff;
+  border-left: 1.8px solid #fff;
+  transform: rotate(-45deg);
+}
+
+.contribution-rules-note {
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: #4d5765;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.contribution-rules-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.contribution-rules-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 15px;
+  border: 1px solid rgba(233, 75, 80, .3);
+  border-radius: 999px;
+  background: #fff;
+  color: #2f3946;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+
+.contribution-rules-links a span {
+  color: var(--coral);
+  transition: transform .2s ease;
+}
+
+.contribution-rules-links a:hover {
+  border-color: var(--coral);
+  background: rgba(233, 75, 80, .07);
+  color: var(--coral);
+}
+
+.contribution-rules-links a:hover span {
+  transform: translateX(2px);
+}
+
+.contribution-form-card>.eyebrow {
+  display: flex;
+  margin-bottom: 4px;
+  color: var(--coral);
+}
+
+@media (max-width: 1180px) {
+  .contribution-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "heading"
+      "form"
+      "support";
+    row-gap: 30px;
+    max-width: 760px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .contribution-form-card {
+    grid-row: auto;
+  }
+}
+
+@media (min-width: 1181px) {
+  .contribution-process {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1181px) and (min-height: 760px) {
+  .contribution-form-card {
+    position: sticky;
+    top: 24px;
+  }
 }
 
 .form-card {
@@ -1491,22 +1757,83 @@ textarea {
   font-weight: 700;
 }
 
-.file-picker {
-  min-height: 45px;
-  justify-content: flex-start !important;
-  border-style: dashed !important;
-  border-radius: 11px !important;
-  color: #57616e !important;
+.contribution-files {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.file-picker.file-picker--error {
-  border-color: #d32f2f !important;
-  color: #d32f2f !important;
+.contribution-field-label {
+  color: #4a5462;
+  font-size: 0.8125rem;
+  font-weight: 700;
 }
 
-.file-picker.file-picker--error:hover {
-  border-color: #c62828 !important;
-  background: rgba(211, 47, 47, 0.04);
+.file-input {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  white-space: nowrap;
+}
+
+.file-dropzone {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 17px;
+  border: 1.5px dashed #c8d0d8;
+  border-radius: 14px;
+  background: #fbfcfd;
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease;
+}
+
+.file-dropzone:hover {
+  border-color: var(--coral);
+  background: #fff8f7;
+}
+
+.file-input:focus-visible+.file-dropzone {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+}
+
+.file-dropzone--error,
+.file-dropzone--error:hover {
+  border-color: #d32f2f;
+  background: rgba(211, 47, 47, .04);
+}
+
+.file-dropzone-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(233, 75, 80, .1);
+  color: var(--coral);
+}
+
+.file-dropzone-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.file-dropzone-title {
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.file-dropzone-hint {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.45;
 }
 
 .contribution-field-error {
@@ -1514,14 +1841,107 @@ textarea {
   font-size: var(--text-sm) !important;
 }
 
+.contribution-files .contribution-field-error {
+  margin: 0 !important;
+}
+
 .contribution-checkbox-group .contribution-field-error {
   margin: 0 14px !important;
 }
 
 .file-list {
-  overflow-wrap: anywhere;
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.file-list-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.file-list-title {
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-wrap: wrap;
+  word-wrap: break-word;
+}
+
+.file-list-meta {
   color: var(--muted);
-  font-size: var(--text-base) !important;
+  font-size: 0.8125rem;
+}
+
+.file-items {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.file-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 8px 8px 8px 9px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.file-item-ext {
+  display: grid;
+  width: 40px;
+  height: 34px;
+  flex: 0 0 40px;
+  place-items: center;
+  margin-top: 2px;
+  border-radius: 9px;
+  background: #f1f4f6;
+  color: #4a5462;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.file-item-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.file-item-name {
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  text-wrap: wrap;
+  word-wrap: break-word;
+}
+
+.file-item-size {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.file-item-remove {
+  flex: 0 0 auto;
+  margin-top: -5px;
+  color: #8b929d;
+  transition: background .2s ease, color .2s ease;
+}
+
+.file-item-remove:hover {
+  background: rgba(233, 75, 80, .1);
+  color: var(--coral);
 }
 
 .contribution-form .MuiFormControlLabel-root {
@@ -2487,11 +2907,6 @@ textarea {
   .site-footer {
     padding: 22px 28px;
   }
-
-  .form-layout {
-    grid-template-columns: minmax(0, .9fr) minmax(340px, 1.1fr);
-    gap: 30px;
-  }
 }
 
 @media (max-width: 680px) {
@@ -2660,14 +3075,31 @@ textarea {
     padding: 19px !important;
   }
 
-  .form-layout {
-    grid-template-columns: 1fr;
-    gap: 29px;
-    margin-top: 34px;
+  .contribution-layout {
+    row-gap: 26px;
+  }
+
+  .contribution-process,
+  .contribution-rules {
+    margin-top: 28px;
+  }
+
+  .contribution-rules {
+    padding: 20px;
+    border-radius: 17px;
+  }
+
+  .contribution-rules-links {
+    gap: 8px 14px;
   }
 
   .form-heading h1 {
     font-size: var(--text-display);
+  }
+
+  .contribution-heading h1 {
+    font-size: clamp(1.875rem, 7.4vw, 2.25rem);
+    letter-spacing: -1.2px;
   }
 
   .form-card {

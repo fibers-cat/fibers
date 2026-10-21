@@ -307,12 +307,37 @@
     "titleLine1": "Comparteix el que",
     "titleLine2": "t’ha ajudat a aprendre.",
     "lead": "Els apunts personals, els exercicis resolts i les guies creades per estudiants fan més fàcil el camí de les persones que venen darrere.",
+    "processEyebrow": "EL PROCÉS",
+    "processTitle": "Del fitxer al catàleg",
+    "processLead": "Sense intermediaris: revisem el material a mà i el publiquem amb la teva atribució quan està llest.",
+    "process": [
+      {
+        "label": "Prepara",
+        "title": "Tria i descriu",
+        "text": "Indica l’assignatura i escriu un títol i una descripció que expliquin què conté el fitxer."
+      },
+      {
+        "label": "Envia",
+        "title": "Adjunta el material",
+        "text": "PDF, imatges, codi, Office o ZIP. Fins a 50 MB per fitxer."
+      },
+      {
+        "label": "Publica",
+        "title": "Revisió i catàleg",
+        "text": "Comprovem que el material sigui propi i es pugui obrir. Si tot està bé, apareix al catàleg."
+      }
+    ],
+    "rulesEyebrow": "CONDICIONS",
     "rulesTitle": "Abans d’enviar",
     "rules": [
       "Comparteix només material propi o amb permís.",
       "No s’accepten apunts facilitats pel professorat.",
       "No adjuntis llibres ni contingut protegit per drets d’autor."
     ],
+    "rulesNote": "Si tens dubtes sobre un material, consulta les condicions d’ús o escriu-nos abans de publicar-lo.",
+    "termsLink": "Condicions d’ús",
+    "contactLink": "Contacta amb l’equip",
+    "formEyebrow": "LA TEVA APORTACIÓ",
     "formTitle": "Detalls de l’aportació",
     "formLead": "Indica’ns què vols compartir amb la comunitat."
   },
@@ -329,6 +354,11 @@
     "titleLabel": "Títol del material",
     "descriptionLabel": "Descripció",
     "attachFiles": "Adjunta arxius",
+    "attachFilesAction": "Tria un o més fitxers",
+    "attachFilesHint": "PDF, imatges, codi, Office o ZIP · fins a 50 MB per fitxer",
+    "filesTitle": "Fitxers adjuntats",
+    "filesTotalSize": "Mida total",
+    "removeFile": "Elimina el fitxer",
     "acknowledgement": "Confirmo que tinc dret a compartir aquest material i que no inclou contingut protegit.",
     "errors": {
       "subject": "Selecciona una assignatura.",

@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
+import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
@@ -12,14 +13,23 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import AttachFileRounded from "@mui/icons-material/AttachFileRounded";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
+import CloseRounded from "@mui/icons-material/CloseRounded";
 import ErrorOutlineRounded from "@mui/icons-material/ErrorOutlineRounded";
 import { hasSupabaseConfig, type Subject } from "@/services/supabase";
 import { getSession } from "@/services/auth";
 import { listSubjectsForContribution, submitContribution } from "@/services/contributions";
+import { formatFileSize } from "@/data/materials";
 import { localizePath, useTranslations, type Locale } from "@/i18n";
 
 type Props = { initialSubject?: string; locale: Locale };
 const maxFileSize = 50 * 1024 * 1024;
+
+/** Short uppercase tag with the extension of a file name. */
+function fileExtension(name: string): string {
+  const index = name.lastIndexOf(".");
+  if (index <= 0 || index === name.length - 1) return "FILE";
+  return name.slice(index + 1).toUpperCase().slice(0, 4);
+}
 
 export default function ContributionForm({ initialSubject = "", locale }: Props) {
   const t = useTranslations(locale);
@@ -58,6 +68,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   }, [initialSubject]);
 
   const needsLogin = Boolean(hasSupabaseConfig && authLoaded && !authError && !userId);
+  const totalSize = files.reduce((sum, file) => sum + file.size, 0);
   const fieldErrors = {
     subject: !subjectId ? t("contributionForm.errors.subject") : "",
     title:
@@ -216,20 +227,21 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
           }}
           fullWidth
         />
-        <Button
-          className={`file-picker ${showValidationErrors && fieldErrors.files ? "file-picker--error" : ""}`}
-          component="label"
-          variant="outlined"
-          startIcon={<AttachFileRounded />}
-        >
-          {t("contributionForm.attachFiles")}
+        <div className="contribution-files">
+          <span className="contribution-field-label" id="contribution-files-label">
+            {t("contributionForm.attachFiles")}
+          </span>
           <input
-            hidden
+            id="contribution-files-input"
+            className="file-input"
             type="file"
             multiple
             accept=".pdf,.txt,.c,.cpp,.png,.jpg,.jpeg,.webp,.zip,.rar,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
+            aria-labelledby="contribution-files-label"
+            aria-describedby="contribution-files-hint"
             onChange={(event) => {
               const selected = Array.from(event.target.files ?? []);
+              event.target.value = "";
               if (selected.some((file) => file.size > maxFileSize)) {
                 setFileSizeError(true);
                 return;
@@ -238,15 +250,61 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
               setFiles(selected);
             }}
           />
-        </Button>
-        {showValidationErrors && fieldErrors.files && (
-          <FormHelperText error className="contribution-field-error">
-            {fieldErrors.files}
-          </FormHelperText>
-        )}
-        <Typography className="file-list">
-          {files.map((file) => file.name).join(", ")}
-        </Typography>
+          <label
+            className={`file-dropzone ${showValidationErrors && fieldErrors.files ? "file-dropzone--error" : ""}`}
+            htmlFor="contribution-files-input"
+          >
+            <span className="file-dropzone-icon" aria-hidden="true">
+              <AttachFileRounded fontSize="small" />
+            </span>
+            <span className="file-dropzone-copy">
+              <span className="file-dropzone-title">{t("contributionForm.attachFilesAction")}</span>
+              <span className="file-dropzone-hint" id="contribution-files-hint">
+                {t("contributionForm.attachFilesHint")}
+              </span>
+            </span>
+          </label>
+          {showValidationErrors && fieldErrors.files && (
+            <FormHelperText error className="contribution-field-error">
+              {fieldErrors.files}
+            </FormHelperText>
+          )}
+          {files.length > 0 && (
+            <div className="file-list">
+              <div className="file-list-head">
+                <span className="file-list-title">{t("contributionForm.filesTitle")}</span>
+                <span className="file-list-meta">
+                  {t("contributionForm.filesTotalSize")}: {formatFileSize(totalSize)}
+                </span>
+              </div>
+              <ul className="file-items">
+                {files.map((file, index) => (
+                  <li className="file-item" key={`${file.name}-${file.size}-${index}`}>
+                    <span className="file-item-ext" aria-hidden="true">
+                      {fileExtension(file.name)}
+                    </span>
+                    <span className="file-item-copy">
+                      <span className="file-item-name" title={file.name}>
+                        {file.name}
+                      </span>
+                      <span className="file-item-size">{formatFileSize(file.size)}</span>
+                    </span>
+                    <IconButton
+                      className="file-item-remove"
+                      size="small"
+                      aria-label={t("contributionForm.removeFile")}
+                      onClick={() =>
+                        setFiles((current) => current.filter((_, position) => position !== index))
+                      }
+                    >
+                      <CloseRounded fontSize="small" />
+                    </IconButton>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
         <Stack spacing={0.5} useFlexGap className="contribution-checkbox-group">
           <FormControlLabel
             control={
