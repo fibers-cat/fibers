@@ -1,5 +1,6 @@
 ﻿import { useEffect, useMemo, useRef, useState, type SyntheticEvent } from "react";
 import Alert from "@mui/material/Alert";
+import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -18,7 +19,6 @@ import LogoutRounded from "@mui/icons-material/LogoutRounded";
 import MenuBookRounded from "@mui/icons-material/MenuBookRounded";
 import PersonOutlineRounded from "@mui/icons-material/PersonOutlineRounded";
 import UploadFileRounded from "@mui/icons-material/UploadFileRounded";
-import { ThemeProvider } from "@mui/material/styles";
 import { hasSupabaseConfig } from "@/services/supabase";
 import {
   getSession,
@@ -34,7 +34,6 @@ import { fetchContributorStanding, type ContributorStanding } from "@/services/c
 import { toSafeLocalPath } from "@/services/safeRedirect";
 import { getSocialAvatar } from "@/services/socialAvatar";
 import type { AppRole } from "@/services/roles";
-import { fibersTheme } from "@/styles/theme";
 import { localizePath, locales, useTranslations, type Locale } from "@/i18n";
 
 type Props = { locale: Locale };
@@ -356,7 +355,7 @@ export default function ProfilePage({ locale }: Props) {
 
   if (status === "loading") {
     return (
-      <ThemeProvider theme={fibersTheme}>
+      <AppThemeProvider>
         <div className="profile-dashboard" aria-busy="true">
           <span className="profile-visually-hidden" role="status" aria-live="polite">
             {t("profilePage.loading")}
@@ -395,13 +394,13 @@ export default function ProfilePage({ locale }: Props) {
             </div>
           </div>
         </div>
-      </ThemeProvider>
+      </AppThemeProvider>
     );
   }
 
   if (status === "signedOut" || status === "error") {
     return (
-      <ThemeProvider theme={fibersTheme}>
+      <AppThemeProvider>
         <div className="profile-signin">
           {message && (
             <Alert severity={messageIsError ? "error" : "info"} sx={{ mb: 2 }}>{message}</Alert>
@@ -512,7 +511,7 @@ export default function ProfilePage({ locale }: Props) {
             </Stack>
           )}
         </div>
-      </ThemeProvider>
+      </AppThemeProvider>
     );
   }
 
@@ -525,7 +524,7 @@ export default function ProfilePage({ locale }: Props) {
   const aliasChanged = alias.trim() !== savedAlias && alias.trim().length >= 2 && alias.trim().length <= 40;
 
   return (
-    <ThemeProvider theme={fibersTheme}>
+    <AppThemeProvider>
       <div className="profile-dashboard">
         <section className="profile-hero">
           <Avatar
@@ -694,6 +693,6 @@ export default function ProfilePage({ locale }: Props) {
           </section>
         </div>
       </div>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

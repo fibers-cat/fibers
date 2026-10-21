@@ -1,4 +1,5 @@
 import { useEffect, useState, type SyntheticEvent } from "react";
+import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -12,11 +13,9 @@ import Typography from "@mui/material/Typography";
 import AttachFileRounded from "@mui/icons-material/AttachFileRounded";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
 import ErrorOutlineRounded from "@mui/icons-material/ErrorOutlineRounded";
-import { ThemeProvider } from "@mui/material/styles";
 import { hasSupabaseConfig, type Subject } from "@/services/supabase";
 import { getSession } from "@/services/auth";
 import { listSubjectsForContribution, submitContribution } from "@/services/contributions";
-import { fibersTheme } from "@/styles/theme";
 import { localizePath, useTranslations, type Locale } from "@/i18n";
 
 type Props = { initialSubject?: string; locale: Locale };
@@ -120,7 +119,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   };
 
   return (
-    <ThemeProvider theme={fibersTheme}>
+    <AppThemeProvider>
       <Stack
         component="form"
         spacing={2.5}
@@ -303,6 +302,6 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
           {busy ? t("contributionForm.sending") : t("contributionForm.submit")}
         </Button>
       </Stack>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

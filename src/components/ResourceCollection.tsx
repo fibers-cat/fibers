@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,14 +13,12 @@ import Typography from "@mui/material/Typography";
 import CloseRounded from "@mui/icons-material/CloseRounded";
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded";
 import VisibilityRounded from "@mui/icons-material/VisibilityRounded";
-import { ThemeProvider } from "@mui/material/styles";
 import type { Material } from "@/data/materials";
 import {
   formatFileSize,
   getMaterialGroups,
   materialUrl,
 } from "@/data/materials";
-import { fibersTheme } from "@/styles/theme";
 import { hasSupabaseConfig } from "@/services/supabase";
 import { fetchMaterialAttributionRows } from "@/services/materialAttributions";
 import { intlLocale, useTranslations, type Locale } from "@/i18n";
@@ -369,8 +368,8 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
 
 export default function ResourceCollection({ materials, attributions, locale }: Props) {
   return (
-    <ThemeProvider theme={fibersTheme}>
+    <AppThemeProvider>
       <Collection materials={materials} attributions={attributions} locale={locale} />
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

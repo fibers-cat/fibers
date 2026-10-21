@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -7,8 +8,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { ThemeProvider } from '@mui/material/styles';
-import { fibersTheme } from '@/styles/theme';
 import { hasSupabaseConfig } from '@/services/supabase';
 import { fetchPendingContributions, reviewContribution, type PendingContribution } from '@/services/contributions';
 import { useCurrentRole } from '@/services/useCurrentRole';
@@ -64,7 +63,7 @@ export default function AdminContributionsPage({ locale }: { locale: Locale }) {
   };
 
   return (
-    <ThemeProvider theme={fibersTheme}>
+    <AppThemeProvider>
       <Stack spacing={2.5} className="admin-page">
         <header className="page-heading">
           <span className="eyebrow">{t('admin.eyebrow')}</span>
@@ -132,6 +131,6 @@ export default function AdminContributionsPage({ locale }: { locale: Locale }) {
           </>
         )}
       </Stack>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

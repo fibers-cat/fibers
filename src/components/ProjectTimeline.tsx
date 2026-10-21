@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,11 +14,9 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import { ThemeProvider } from '@mui/material/styles';
 import CloseRounded from '@mui/icons-material/CloseRounded';
 import GitHub from '@mui/icons-material/GitHub';
 import VisibilityOutlined from '@mui/icons-material/VisibilityOutlined';
-import { fibersTheme } from '@/styles/theme';
 import { getDictionary, useTranslations, type Locale } from '@/i18n';
 
 type MilestoneLink = {
@@ -50,7 +49,7 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
   } | null>(null);
 
   return (
-    <ThemeProvider theme={fibersTheme}>
+    <AppThemeProvider>
       <>
       <Timeline
         position="right"
@@ -207,6 +206,6 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
         </Box>
       </Drawer>
       </>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

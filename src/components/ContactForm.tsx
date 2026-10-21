@@ -1,4 +1,5 @@
 import { useState, type SyntheticEvent } from "react";
+import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -6,8 +7,6 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
 import ErrorOutlineRounded from "@mui/icons-material/ErrorOutlineRounded";
-import { ThemeProvider } from "@mui/material/styles";
-import { fibersTheme } from "@/styles/theme";
 import { localizePath, useTranslations, type Locale } from "@/i18n";
 
 type Submission = {
@@ -95,7 +94,7 @@ export default function ContactForm({ locale }: Props) {
   };
 
   return (
-    <ThemeProvider theme={fibersTheme}>
+    <AppThemeProvider>
       <Stack
         component="form"
         className="contact-form"
@@ -224,6 +223,6 @@ export default function ContactForm({ locale }: Props) {
           {busy ? t("contactForm.sending") : t("contactForm.submit")}
         </Button>
       </Stack>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

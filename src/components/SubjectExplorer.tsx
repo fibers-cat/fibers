@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -22,11 +23,9 @@ import FilterListRounded from '@mui/icons-material/FilterListRounded';
 import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
 import SearchRounded from '@mui/icons-material/SearchRounded';
 import SwapVertRounded from '@mui/icons-material/SwapVertRounded';
-import { ThemeProvider } from '@mui/material/styles';
 import type { Subject } from '@/data/subjects';
 import { hasSupabaseConfig } from '@/services/supabase';
 import { fetchSubjectMaterialCounts, fetchLatestMaterialDates } from '@/services/subjectMaterialCounts';
-import { fibersTheme } from '@/styles/theme';
 import { localizePath, useTranslations, type Locale } from '@/i18n';
 
 type Props = {
@@ -190,7 +189,7 @@ export default function SubjectExplorer({
   };
 
   return (
-    <ThemeProvider theme={fibersTheme}>
+    <AppThemeProvider>
       <div className="subject-explorer">
         <div className="explorer-toolbar">
           <div className="explorer-filters">
@@ -444,6 +443,6 @@ export default function SubjectExplorer({
           </div>
         )}
       </div>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }
