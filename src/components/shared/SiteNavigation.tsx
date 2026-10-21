@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
+import { CacheProvider } from '@emotion/react';
+import createCache, { type EmotionCache } from '@emotion/cache';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -50,6 +52,33 @@ const socialLinks = [
   { href: 'https://www.facebook.com/fibers.cat/', label: 'Facebook', icon: siFacebook },
   { href: 'https://discord.gg/pqsbcBb', label: 'Discord', icon: siDiscord },
 ];
+
+/**
+ * Keeps the navigation's Emotion styles outside <body>.
+ * ClientRouter swaps <head> and <body> on navigation, which would otherwise
+ * remove the generated MUI styles even though the sidebar itself persists.
+ */
+function NavigationStyleBoundary({ children }: { children: ReactNode }) {
+  const [cache, setCache] = useState<EmotionCache | null>(null);
+
+  useEffect(() => {
+    const existing = document.getElementById('site-nav-emotion-styles');
+    existing?.remove();
+
+    const container = document.createElement('div');
+    container.id = 'site-nav-emotion-styles';
+    container.style.display = 'none';
+    document.documentElement.appendChild(container);
+
+    setCache(createCache({ key: 'site-nav', container }));
+
+    return () => {
+      container.remove();
+    };
+  }, []);
+
+  return cache ? <CacheProvider value={cache}>{children}</CacheProvider> : children;
+}
 
 function SocialLinks({ className, locale }: { className: string; locale: Locale }) {
   const t = useTranslations(locale);
@@ -142,7 +171,17 @@ export default function SiteNavigation({ currentPath, returnTo, locale }: Props)
   const [role, setRole] = useState<AppRole | null>(null);
   const [currentUrl, setCurrentUrl] = useState(returnTo ?? localizePath(currentPath, locale));
   useEffect(() => {
-    setCurrentUrl(`${window.location.pathname}${window.location.search}${window.location.hash}`);
+    const syncCurrentUrl = () => {
+      setCurrentUrl(`${window.location.pathname}${window.location.search}${window.location.hash}`);
+      setOpen(false);
+    };
+    syncCurrentUrl();
+    document.addEventListener('astro:page-load', syncCurrentUrl);
+    window.addEventListener('popstate', syncCurrentUrl);
+    return () => {
+      document.removeEventListener('astro:page-load', syncCurrentUrl);
+      window.removeEventListener('popstate', syncCurrentUrl);
+    };
   }, []);
   useEffect(() => {
     if (!hasSupabaseConfig) return;
@@ -197,55 +236,17 @@ export default function SiteNavigation({ currentPath, returnTo, locale }: Props)
   );
 
   return (
-    <ThemeProvider theme={fibersTheme}>
-      <aside className="desktop-sidebar">
-        <div className="sidebar-brand">{brand}</div>
-        <div className="sidebar-label">{t('sidebar.label')}</div>
-        <NavigationLinks currentPath={currentPath} locale={locale} role={role} />
-        <div className="sidebar-bottom">
-          <SocialLinks className="desktop-socials" locale={locale} />
-          <LocaleSwitcher currentPath={currentPath} locale={locale} tooltipVariant="sidebar" />
-          <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow variant="sidebar">
-            <IconButton component="a" href={profileHref} className="profile-link" aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}>
-              {signedIn ? (
-                <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
-                  <PersonOutlineRounded fontSize="small" />
-                </Avatar>
-              ) : <PersonOutlineRounded />}
-            </IconButton>
-          </AppTooltip>
-        </div>
-      </aside>
-
-      <AppBar className="mobile-appbar" position="fixed" elevation={0}>
-        <Toolbar className="mobile-toolbar">
-          <IconButton aria-label={t('menu.open')} color="inherit" edge="start" onClick={() => setOpen(true)}>
-            <MenuRounded />
-          </IconButton>
-          {brand}
-          <LocaleSwitcher currentPath={currentPath} locale={locale} />
-          <Button className="mobile-contribute" href={localizePath('/aporta/', locale)} variant="contained" size="small">{t('nav.contributeShort')}</Button>
-        </Toolbar>
-      </AppBar>
-
-      <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
-        <Box className="mobile-drawer">
-          <div className="drawer-heading">
-            {brand}
-            <IconButton color="inherit" aria-label={t('menu.close')} onClick={() => setOpen(false)}><CloseRounded /></IconButton>
-          </div>
+    <NavigationStyleBoundary>
+      <ThemeProvider theme={fibersTheme}>
+        <aside className="desktop-sidebar">
+          <div className="sidebar-brand">{brand}</div>
           <div className="sidebar-label">{t('sidebar.label')}</div>
-          <NavigationLinks currentPath={currentPath} locale={locale} role={role} onNavigate={() => setOpen(false)} />
-          <div className="drawer-bottom">
-            <SocialLinks className="drawer-socials" locale={locale} />
+          <NavigationLinks currentPath={currentPath} locale={locale} role={role} />
+          <div className="sidebar-bottom">
+            <SocialLinks className="desktop-socials" locale={locale} />
             <LocaleSwitcher currentPath={currentPath} locale={locale} tooltipVariant="sidebar" />
             <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow variant="sidebar">
-              <IconButton
-                component="a"
-                href={profileHref}
-                className="profile-link"
-                aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}
-              >
+              <IconButton component="a" href={profileHref} className="profile-link" aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}>
                 {signedIn ? (
                   <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
                     <PersonOutlineRounded fontSize="small" />
@@ -254,8 +255,48 @@ export default function SiteNavigation({ currentPath, returnTo, locale }: Props)
               </IconButton>
             </AppTooltip>
           </div>
-        </Box>
-      </Drawer>
-    </ThemeProvider>
+        </aside>
+
+        <AppBar className="mobile-appbar" position="fixed" elevation={0}>
+          <Toolbar className="mobile-toolbar">
+            <IconButton aria-label={t('menu.open')} color="inherit" edge="start" onClick={() => setOpen(true)}>
+              <MenuRounded />
+            </IconButton>
+            {brand}
+            <LocaleSwitcher currentPath={currentPath} locale={locale} />
+            <Button className="mobile-contribute" href={localizePath('/aporta/', locale)} variant="contained" size="small">{t('nav.contributeShort')}</Button>
+          </Toolbar>
+        </AppBar>
+
+        <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
+          <Box className="mobile-drawer">
+            <div className="drawer-heading">
+              {brand}
+              <IconButton color="inherit" aria-label={t('menu.close')} onClick={() => setOpen(false)}><CloseRounded /></IconButton>
+            </div>
+            <div className="sidebar-label">{t('sidebar.label')}</div>
+            <NavigationLinks currentPath={currentPath} locale={locale} role={role} onNavigate={() => setOpen(false)} />
+            <div className="drawer-bottom">
+              <SocialLinks className="drawer-socials" locale={locale} />
+              <LocaleSwitcher currentPath={currentPath} locale={locale} tooltipVariant="sidebar" />
+              <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow variant="sidebar">
+                <IconButton
+                  component="a"
+                  href={profileHref}
+                  className="profile-link"
+                  aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}
+                >
+                  {signedIn ? (
+                    <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
+                      <PersonOutlineRounded fontSize="small" />
+                    </Avatar>
+                  ) : <PersonOutlineRounded />}
+                </IconButton>
+              </AppTooltip>
+            </div>
+          </Box>
+        </Drawer>
+      </ThemeProvider>
+    </NavigationStyleBoundary>
   );
 }

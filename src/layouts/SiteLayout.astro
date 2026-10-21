@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import SiteNavigation from '@/components/shared/SiteNavigation';
 import {
   canonicalPath,
@@ -93,6 +94,7 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <ClientRouter />
     <meta name="theme-color" content="#f6f7f9" />
     <meta name="description" content={description} />
     <meta name="author" content="Fibers" />
@@ -140,7 +142,7 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
     )}
   </head>
   <body>
-    <SiteNavigation client:load currentPath={basePath} returnTo={returnTo} locale={currentLocale} />
+    <SiteNavigation client:load transition:persist="site-navigation" currentPath={basePath} returnTo={returnTo} locale={currentLocale} />
     <main class="site-main">
       <slot />
       <footer class="site-footer">
