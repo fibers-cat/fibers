@@ -390,6 +390,7 @@
       "descriptionLong": "La descripció no pot superar els 3000 caràcters.",
       "filesRequired": "Adjunta almenys un fitxer per enviar l’aportació.",
       "filesTooLarge": "Cada fitxer ha de pesar com a màxim 50 MB.",
+      "filesInvalidType": "Format no admès. Formats permesos: PDF, imatges, codi, Office o ZIP.",
       "acknowledgement": "Confirma que tens dret a compartir aquest material."
     },
     "submit": "Enviar per revisió",

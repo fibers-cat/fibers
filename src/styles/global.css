@@ -2009,6 +2009,12 @@ textarea {
 
 .contribution-checkbox-group .contribution-field-error {
   margin: 0 14px !important;
+  font-size: 0.8125rem;
+}
+
+.contribution-acknowledgement-label {
+  font-size: 0.8125rem;
+  line-height: 1.4;
 }
 
 .file-list {
@@ -2084,9 +2090,7 @@ textarea {
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.4;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: anywhere;
 }
 
 .file-item-size {

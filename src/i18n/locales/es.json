@@ -390,6 +390,7 @@
       "descriptionLong": "La descripción no puede superar los 3000 caracteres.",
       "filesRequired": "Adjunta al menos un archivo para enviar la aportación.",
       "filesTooLarge": "Cada archivo debe pesar como máximo 50 MB.",
+      "filesInvalidType": "Formato no admitido. Formatos permitidos: PDF, imágenes, código, Office o ZIP.",
       "acknowledgement": "Confirma que tienes derecho a compartir este material."
     },
     "submit": "Enviar para revisión",
