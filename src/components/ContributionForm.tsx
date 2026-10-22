@@ -13,7 +13,6 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import AttachFileRounded from "@mui/icons-material/AttachFileRounded";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
-import CheckCircleRounded from "@mui/icons-material/CheckCircleRounded";
 import CloseRounded from "@mui/icons-material/CloseRounded";
 import ErrorOutlineRounded from "@mui/icons-material/ErrorOutlineRounded";
 import LockOutlined from "@mui/icons-material/LockOutlined";
@@ -363,14 +362,6 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
             >
               {gate.action}
             </Button>
-            <ul className="contribution-gate-points">
-              {gate.benefits.map((point) => (
-                <li key={point}>
-                  <CheckCircleRounded aria-hidden="true" fontSize="small" />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
           </div>
         </Stack>
       </AppThemeProvider>

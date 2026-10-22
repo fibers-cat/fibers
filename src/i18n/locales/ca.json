@@ -373,14 +373,9 @@
     "removeFile": "Elimina el fitxer",
     "acknowledgement": "Confirmo que tinc dret a compartir aquest material i que no inclou contingut protegit.",
     "gate": {
-      "title": "Inicia sessió per compartir material",
-      "text": "Per enviar una aportació necessites un compte de Fibers. Inicia sessió i el formulari s’obrirà buit i amb tot el que escriguis quedarà a salvo.",
-      "action": "Inicia sessió",
-      "benefits": [
-        "El formulari només s’obre amb la sessió iniciada.",
-        "Si tornes més tard, el material continuarà esperant-te.",
-        "Cada aportació es revisarà abans de publicar-se."
-      ]
+      "title": "Inicia sessió per aportar",
+      "text": "Necessites un compte de Fibers. Revisarem el material abans de publicar-lo.",
+      "action": "Inicia sessió"
     },
     "errors": {
       "subject": "Selecciona una assignatura.",

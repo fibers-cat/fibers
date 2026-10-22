@@ -373,14 +373,9 @@
     "removeFile": "Eliminar el archivo",
     "acknowledgement": "Confirmo que tengo derecho a compartir este material y que no incluye contenido protegido.",
     "gate": {
-      "title": "Inicia sesión para compartir material",
-      "text": "Para enviar una aportación necesitas una cuenta de Fibers. Inicia sesión y el formulario se abrirá vacío y todo lo que escribas quedará a salvo.",
-      "action": "Inicia sesión",
-      "benefits": [
-        "El formulario solo se abre con la sesión iniciada.",
-        "Si vuelves más tarde, el material seguirá esperándote.",
-        "Cada aportación se revisará antes de publicarse."
-      ]
+      "title": "Inicia sesión para aportar",
+      "text": "Necesitas una cuenta de Fibers. Revisaremos el material antes de publicarlo.",
+      "action": "Inicia sesión"
     },
     "errors": {
       "subject": "Selecciona una asignatura.",

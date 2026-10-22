@@ -172,7 +172,7 @@ textarea {
 
 .sidebar-bottom {
   margin-top: auto;
-  padding: 14px 14px 0px;
+  padding: 14px 14px 4px;
   border-top: 1px solid rgba(255, 255, 255, .1);
   display: flex;  
   justify-content: space-between;
@@ -2169,29 +2169,27 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 14px;
-  padding: 30px 28px;
-  border: 1px solid #f0e0dc;
-  border-radius: 16px;
-  background:
-    radial-gradient(circle at 92% 4%, rgba(233, 75, 80, .08), transparent 42%),
-    linear-gradient(140deg, #fffdfc, #fff7f4);
+  gap: 12px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
 }
 
 .contribution-gate-icon {
   display: grid;
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   place-items: center;
-  border-radius: 14px;
-  background: rgba(233, 75, 80, .1);
-  color: var(--coral);
+  border-radius: 12px;
+  background: #f2f4f6;
+  color: var(--muted);
 }
 
 .contribution-gate-title {
   margin: 0;
   color: var(--ink);
-  font-size: 1.3125rem;
+  font-size: 1.125rem;
   font-weight: 700;
   letter-spacing: -.4px;
   line-height: 1.25;
@@ -2202,34 +2200,11 @@ textarea {
   margin: 0;
   color: var(--muted);
   font-size: var(--text-base);
-  line-height: 1.65;
+  line-height: 1.55;
 }
 
 .contribution-gate-action {
   align-self: flex-start;
-}
-
-.contribution-gate-points {
-  display: grid;
-  gap: 9px;
-  margin: 4px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.contribution-gate-points li {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  color: #4a5462;
-  font-size: var(--text-sm);
-  line-height: 1.5;
-}
-
-.contribution-gate-points svg {
-  margin-top: 2px;
-  flex: 0 0 auto;
-  color: var(--teal);
 }
 
 .guide-hero {
