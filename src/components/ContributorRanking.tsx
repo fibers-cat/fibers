@@ -1,8 +1,23 @@
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import type { Contributor } from "@/services/contributors";
 import { useTranslations, type Locale } from "@/i18n";
 
 type Props = { contributors: Contributor[]; locale: Locale };
+
+const TIER_THRESHOLDS = [1, 5, 10, 25, 50];
+
+function nextThreshold(count: number): number {
+  for (const threshold of TIER_THRESHOLDS) {
+    if (count < threshold) return threshold;
+  }
+  return TIER_THRESHOLDS[TIER_THRESHOLDS.length - 1]!;
+}
+
+
 
 export default function ContributorRanking({ contributors, locale }: Props) {
   const t = useTranslations(locale);
@@ -12,20 +27,79 @@ export default function ContributorRanking({ contributors, locale }: Props) {
         {t("contributorRanking.empty")}
       </Alert>
     );
+
+  const totalContributors = contributors.length;
+  const totalMaterials = contributors.reduce((sum, person) => sum + person.count, 0);
+
   return (
-    <ol className="contributor-ranking">
-      {contributors.map((person, index) => (
-        <li key={`${person.alias}-${index}`}>
-          <span className="ranking-position">{index + 1}</span>
-          <span className="ranking-alias">{person.alias}</span>
-          <span className="ranking-count">
-            {person.count}{" "}
-            {person.count === 1
-              ? t("contributorRanking.materialsOne")
-              : t("contributorRanking.materialsMany")}
-          </span>
-        </li>
-      ))}
-    </ol>
+    <Box className="contributor-ranking-wrapper">
+      {/* Stats */}
+      <Box className="contributor-stats">
+        <Box className="contributor-stat">
+          <Typography variant="h4" sx={{ fontWeight: 700, color: "text.primary" }}>
+            {totalContributors}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {t("contributorRanking.totalContributors")}
+          </Typography>
+        </Box>
+        <Box className="contributor-stat">
+          <Typography variant="h4" sx={{ fontWeight: 700, color: "text.primary" }}>
+            {totalMaterials}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {t("contributorRanking.totalMaterials")}
+          </Typography>
+        </Box>
+      </Box>
+
+      {/* Ranking header */}
+      <Box sx={{ display: 'grid', gridTemplateColumns: '48px minmax(0, 1fr) minmax(200px, 2fr)', gap: 2, px: 2, py: 1, borderBottom: '2px solid', borderColor: 'divider', mb: 1, textAlign: 'left' }}>
+        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>#</Typography>
+        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>COL·LABORADOR</Typography>
+        <span />
+      </Box>
+
+      {/* Ranking list */}
+      <ol className="contributor-ranking">
+        {contributors.map((person, index) => {
+          const next = nextThreshold(person.count);
+          const progress = Math.min(100, (person.count / next) * 100);
+          return (
+            <li key={`${person.alias}-${index}`} className={index < 3 ? "ranking-top" : ""}>
+              <span className="ranking-position">
+                {index + 1}
+              </span>
+              <Box sx={{ minWidth: 0, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography sx={{ fontSize: 18, lineHeight: 1 }}>
+                  {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}
+                </Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>{person.alias}</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, width: '100%' }}>
+                <Typography variant="body2" sx={{ textAlign: 'right' }}>
+                  {person.count}{" "}
+                  {person.count === 1
+                    ? t("contributorRanking.materialsOne")
+                    : t("contributorRanking.materialsMany")}
+                </Typography>
+                <Tooltip title={`${person.count}/${next} — ${t("contributorRanking.nextTier")}`} arrow>
+                  <LinearProgress
+                    variant="determinate"
+                    value={progress}
+                    sx={{
+                      height: 6,
+                      borderRadius: 3,
+                      bgcolor: "rgba(0,0,0,.06)",
+                      "& .MuiLinearProgress-bar": { borderRadius: 3, bgcolor: "#e94b50" },
+                    }}
+                  />
+                </Tooltip>
+              </Box>
+            </li>
+          );
+        })}
+      </ol>
+    </Box>
   );
 }

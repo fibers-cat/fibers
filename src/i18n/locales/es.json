@@ -528,7 +528,16 @@
   "contributorRanking": {
     "empty": "Todavía no hay aportaciones aprobadas. Sé la primera persona en compartir material.",
     "materialsOne": "material",
-    "materialsMany": "materiales"
+    "materialsMany": "materiales",
+    "totalContributors": "Colaboradores",
+    "totalMaterials": "Materiales compartidos",
+    "tierNovice": "Novato",
+    "tierContributor": "Colaborador",
+    "tierExpert": "Experto",
+    "tierMaster": "Maestro",
+    "tierLegend": "Leyenda",
+    "nextTier": "Hasta el siguiente nivel",
+    "topContributor": "Top colaborador"
   },
   "terms": {
     "meta": {
