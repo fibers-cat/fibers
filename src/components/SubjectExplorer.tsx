@@ -32,11 +32,12 @@ type Props = {
   subjects: Subject[];
   featured?: boolean;
   initialMaterialCounts?: Record<string, number>;
+  initialLatestMaterialDates?: Record<string, string>;
   showCategoryFilter?: boolean;
   locale: Locale;
 };
 
-const featuredCodes = new Set(['F', 'FM', 'M2', 'BD', 'EDA', 'PE', 'SO', 'EEE', 'XC']);
+const FEATURED_SUBJECT_LIMIT = 9;
 const categoryClasses: Record<string, string> = {
   'Obligatòries': 'category-chip--obligatories',
   'Especialitat': 'category-chip--specialty',
@@ -49,6 +50,7 @@ export default function SubjectExplorer({
   subjects: allSubjects,
   featured = false,
   initialMaterialCounts,
+  initialLatestMaterialDates,
   showCategoryFilter = !featured,
   locale,
 }: Props) {
@@ -60,17 +62,26 @@ export default function SubjectExplorer({
     initialMaterialCounts === undefined,
   );
   const [countLoadError, setCountLoadError] = useState(false);
-  const [latestMaterialDates, setLatestMaterialDates] = useState<Record<string, string>>({});
-  const [loadingDates, setLoadingDates] = useState(true);
+  const [latestMaterialDates, setLatestMaterialDates] = useState<Record<string, string>>(
+    initialLatestMaterialDates ?? {},
+  );
+  const [loadingDates, setLoadingDates] = useState(initialLatestMaterialDates === undefined);
   const [dateLoadError, setDateLoadError] = useState(false);
   const [query, setQuery] = useState('');
   const [categoryAnchor, setCategoryAnchor] = useState<HTMLElement | null>(null);
   const [sortAnchor, setSortAnchor] = useState<HTMLElement | null>(null);
   const [sortOrder, setSortOrder] = useState<SubjectSortOrder>('acronym');
-  const subjects = useMemo(
-    () => featured ? allSubjects.filter((subject) => featuredCodes.has(subject.acronym)) : allSubjects,
-    [allSubjects, featured],
-  );
+  const [onlyWithMaterials, setOnlyWithMaterials] = useState(false);
+  const subjects = useMemo(() => {
+    if (!featured) return allSubjects;
+    return allSubjects
+      .filter((subject) => Boolean(latestMaterialDates[subject.id]))
+      .sort((a, b) => {
+        const dateComparison = (latestMaterialDates[b.id] ?? '').localeCompare(latestMaterialDates[a.id] ?? '');
+        return dateComparison || a.acronym.localeCompare(b.acronym, locale);
+      })
+      .slice(0, FEATURED_SUBJECT_LIMIT);
+  }, [allSubjects, featured, latestMaterialDates, locale]);
   const categories = useMemo(
     () => [...new Set(subjects.map((subject) => subject.category))].sort((a, b) => a.localeCompare(b, locale)),
     [subjects, locale],
@@ -81,13 +92,10 @@ export default function SubjectExplorer({
     [subjects, locale],
   );
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    () => [...new Set(allSubjects
-      .filter((subject) => !featured || featuredCodes.has(subject.acronym))
-      .map((subject) => subject.category))],
+    () => [...new Set(allSubjects.map((subject) => subject.category))],
   );
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>(() => [
     ...new Set(allSubjects
-      .filter((subject) => !featured || featuredCodes.has(subject.acronym))
       .flatMap((subject) => subject.specialty ? [subject.specialty] : [])),
   ]);
   const [selectedStatuses, setSelectedStatuses] = useState<('current' | 'historical')[]>([
@@ -119,7 +127,7 @@ export default function SubjectExplorer({
   }, [initialMaterialCounts]);
 
   useEffect(() => {
-    if (!showCategoryFilter) return;
+    if (initialLatestMaterialDates !== undefined || (!showCategoryFilter && !featured)) return;
     let active = true;
     const loadLatestMaterialDates = async () => {
       if (!hasSupabaseConfig) {
@@ -139,17 +147,19 @@ export default function SubjectExplorer({
     };
     void loadLatestMaterialDates();
     return () => { active = false; };
-  }, [showCategoryFilter]);
+  }, [featured, initialLatestMaterialDates, showCategoryFilter]);
 
   const visibleSubjects = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase(locale);
-    const filteredSubjects = subjects.filter((subject) =>
+    const filteredSubjects = subjects.filter((subject) => featured || (
       (!normalized || `${subject.acronym} ${subject.name}`.toLocaleLowerCase(locale).includes(normalized)) &&
       selectedCategories.includes(subject.category) &&
-      (selectedSpecialties.length === specialties.length ||
-        (subject.specialty !== null && selectedSpecialties.includes(subject.specialty))) &&
-      selectedStatuses.includes(subject.is_current ? 'current' : 'historical'),
+        (selectedSpecialties.length === specialties.length ||
+          (subject.specialty !== null && selectedSpecialties.includes(subject.specialty))) &&
+        selectedStatuses.includes(subject.is_current ? 'current' : 'historical') &&
+        (!onlyWithMaterials || (materialCounts[subject.id] ?? 0) > 0)),
     );
+    if (featured) return filteredSubjects;
     return filteredSubjects.sort((a, b) => {
       if (sortOrder === 'newest' || sortOrder === 'oldest') {
         const aDate = latestMaterialDates[a.id] ?? '';
@@ -164,7 +174,7 @@ export default function SubjectExplorer({
       const acronymComparison = a.acronym.localeCompare(b.acronym, locale);
       return sortOrder === 'acronym-desc' ? -acronymComparison : acronymComparison;
     });
-  }, [query, selectedCategories, selectedSpecialties, selectedStatuses, specialties.length, subjects, sortOrder, latestMaterialDates, locale]);
+  }, [featured, query, selectedCategories, selectedSpecialties, selectedStatuses, specialties.length, subjects, sortOrder, latestMaterialDates, materialCounts, onlyWithMaterials, locale]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((current) =>
@@ -191,21 +201,22 @@ export default function SubjectExplorer({
   return (
     <AppThemeProvider>
       <div className="subject-explorer">
-        <div className="explorer-toolbar">
-          <div className="explorer-filters">
-            <TextField
-              id="subject-search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              label={t('subjectExplorer.search')}
-              size="small"
-              className="subject-search"
-              slotProps={{
-                input: {
-                  endAdornment: <InputAdornment position="end"><SearchRounded color="action" /></InputAdornment>,
-                },
-              }}
-            />
+        {!featured && (
+          <div className="explorer-toolbar">
+            <div className="explorer-filters">
+              <TextField
+                id="subject-search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                label={t('subjectExplorer.search')}
+                size="small"
+                className="subject-search"
+                slotProps={{
+                  input: {
+                    endAdornment: <InputAdornment position="end"><SearchRounded color="action" /></InputAdornment>,
+                  },
+                }}
+              />
             {showCategoryFilter && (
               <>
                 <AppTooltip title={t('subjectExplorer.filter')} arrow>
@@ -364,15 +375,27 @@ export default function SubjectExplorer({
                     )}
                   </div>
                 </Popover>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={onlyWithMaterials}
+                      onChange={(event) => setOnlyWithMaterials(event.target.checked)}
+                      size="small"
+                      disabled={loadingCounts || countLoadError}
+                    />
+                  }
+                  label={t('subjectExplorer.onlyWithMaterials')}
+                />
               </>
             )}
+            </div>
+            <Typography className="results-count" aria-live="polite">
+              {visibleSubjects.length === 1
+                ? t('subjectExplorer.resultsOne', { count: visibleSubjects.length })
+                : t('subjectExplorer.resultsMany', { count: visibleSubjects.length })}
+            </Typography>
           </div>
-          <Typography className="results-count" aria-live="polite">
-            {visibleSubjects.length === 1
-              ? t('subjectExplorer.resultsOne', { count: visibleSubjects.length })
-              : t('subjectExplorer.resultsMany', { count: visibleSubjects.length })}
-          </Typography>
-        </div>
+        )}
         {countLoadError && <Alert severity="error">{t('subjectExplorer.countersError')}</Alert>}
         {visibleSubjects.length > 0 ? (
           <div className="subject-grid">

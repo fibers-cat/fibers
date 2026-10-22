@@ -8,17 +8,6 @@ import { useTranslations, type Locale } from "@/i18n";
 
 type Props = { contributors: Contributor[]; locale: Locale };
 
-const TIER_THRESHOLDS = [1, 5, 10, 25, 50];
-
-function nextThreshold(count: number): number {
-  for (const threshold of TIER_THRESHOLDS) {
-    if (count < threshold) return threshold;
-  }
-  return TIER_THRESHOLDS[TIER_THRESHOLDS.length - 1]!;
-}
-
-
-
 export default function ContributorRanking({ contributors, locale }: Props) {
   const t = useTranslations(locale);
   if (!contributors.length)
@@ -30,6 +19,9 @@ export default function ContributorRanking({ contributors, locale }: Props) {
 
   const totalContributors = contributors.length;
   const totalMaterials = contributors.reduce((sum, person) => sum + person.count, 0);
+  const maxLogCount = Math.log1p(
+    contributors.reduce((max, person) => Math.max(max, person.count), 0),
+  );
 
   return (
     <Box className="contributor-ranking-wrapper">
@@ -57,14 +49,20 @@ export default function ContributorRanking({ contributors, locale }: Props) {
       <Box sx={{ display: 'grid', gridTemplateColumns: '48px minmax(0, 1fr) minmax(200px, 2fr)', gap: 2, px: 2, py: 1, borderBottom: '2px solid', borderColor: 'divider', mb: 1, textAlign: 'left' }}>
         <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>#</Typography>
         <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>COL·LABORADOR</Typography>
-        <span />
+        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>
+          {t("contributorRanking.logScale")}
+        </Typography>
       </Box>
 
       {/* Ranking list */}
       <ol className="contributor-ranking">
         {contributors.map((person, index) => {
-          const next = nextThreshold(person.count);
-          const progress = Math.min(100, (person.count / next) * 100);
+          const progress = maxLogCount > 0
+            ? (Math.log1p(person.count) / maxLogCount) * 100
+            : 0;
+          const materialLabel = person.count === 1
+            ? t("contributorRanking.materialsOne")
+            : t("contributorRanking.materialsMany");
           return (
             <li key={`${person.alias}-${index}`} className={index < 3 ? "ranking-top" : ""}>
               <span className="ranking-position">
@@ -83,10 +81,12 @@ export default function ContributorRanking({ contributors, locale }: Props) {
                     ? t("contributorRanking.materialsOne")
                     : t("contributorRanking.materialsMany")}
                 </Typography>
-                <Tooltip title={`${person.count}/${next} — ${t("contributorRanking.nextTier")}`} arrow>
+                <Tooltip title={`${person.count} ${materialLabel} · ${t("contributorRanking.logScaleNote")}`} arrow>
                   <LinearProgress
                     variant="determinate"
                     value={progress}
+                    aria-label={`${person.alias}: ${person.count} ${materialLabel}`}
+                    aria-valuetext={`${person.count} ${materialLabel}`}
                     sx={{
                       height: 6,
                       borderRadius: 3,
