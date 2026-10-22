@@ -2,31 +2,29 @@
 import SiteLayout from "@/layouts/SiteLayout.astro";
 // import SiteBreadcrumbs from '@/components/shared/SiteBreadcrumbs';
 import ContributionForm from "@/components/ContributionForm";
-import { getDictionary, getLocaleFromUrl, isLocale, useTranslations } from "@/i18n";
+import { getDictionary, getLocaleFromUrl, isLocale, localizePath, useTranslations } from "@/i18n";
 
+// The subject can be preselected with ?assignatura=ACR. The site is
+// prerendered, so the form reads that query string on the client.
 const initialSubject = Astro.url.searchParams.get("assignatura") ?? "";
 const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
-const rules = getDictionary(locale).contribute.rules;
+const contribute = getDictionary(locale).contribute;
+const { process, rules } = contribute;
 ---
 
 <SiteLayout title={t('contribute.meta.title')} description={t('contribute.meta.description')}>
   <div class="page-content inner-page contribution-page">
     <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Aporta material' }]} /> -->
-    <div class="form-layout">
-      <header class="page-heading form-heading">
+    <div class="contribution-layout">
+      <header class="page-heading form-heading contribution-heading">
         <span class="eyebrow">{t('contribute.eyebrow')}</span>
         <h1>{t('contribute.titleLine1')}<br />{t('contribute.titleLine2')}</h1>
         <p>{t('contribute.lead')}</p>
-        <div class="contribution-rules">
-          <h2>{t('contribute.rulesTitle')}</h2><ul>
-            {rules.map((rule) => (
-              <li>{rule}</li>
-            ))}
-          </ul>
-        </div>
       </header>
-      <section class="form-card" aria-labelledby="form-title">
+
+      <section class="form-card contribution-form-card" aria-labelledby="form-title">
+        <span class="eyebrow">{t('contribute.formEyebrow')}</span>
         <h2 id="form-title">{t('contribute.formTitle')}</h2>
         <p>{t('contribute.formLead')}</p>
         <ContributionForm
@@ -35,6 +33,62 @@ const rules = getDictionary(locale).contribute.rules;
           locale={locale}
         />
       </section>
+
+      <div class="contribution-support">
+        <section class="contribution-process" aria-labelledby="contribution-process-title">
+          <div class="contribution-section-heading">
+            <span class="eyebrow">{t('contribute.processEyebrow')}</span>
+            <h2 id="contribution-process-title">{t('contribute.processTitle')}</h2>
+            <p>{t('contribute.processLead')}</p>
+          </div>
+
+          <ol class="contribution-steps">
+            {process.map((step, index) => (
+              <li class="contribution-step">
+                <span class="contribution-step-marker" aria-hidden="true">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <div>
+                  <span class="contribution-step-label">{step.label}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section class="contribution-rules" aria-labelledby="contribution-rules-title">
+          <div class="contribution-rules-heading">
+            <div>
+              <span class="eyebrow">{t('contribute.rulesEyebrow')}</span>
+              <h2 id="contribution-rules-title">{t('contribute.rulesTitle')}</h2>
+            </div>
+            <span class="contribution-rules-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="m5 12 4.5 4.5L19 7" />
+              </svg>
+            </span>
+          </div>
+
+          <ul class="contribution-rule-list">
+            {rules.map((rule) => (
+              <li>{rule}</li>
+            ))}
+          </ul>
+
+          <p class="contribution-rules-note">{t('contribute.rulesNote')}</p>
+
+          <div class="contribution-rules-links">
+            <a href={localizePath('/condicions-us/', locale)}>
+              {t('contribute.termsLink')} <span aria-hidden="true">→</span>
+            </a>
+            <a href={localizePath('/contacte/', locale)}>
+              {t('contribute.contactLink')} <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
 </SiteLayout>

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,21 +13,21 @@ import Typography from "@mui/material/Typography";
 import CloseRounded from "@mui/icons-material/CloseRounded";
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded";
 import VisibilityRounded from "@mui/icons-material/VisibilityRounded";
-import { ThemeProvider } from "@mui/material/styles";
+import CodeBlock from "@/components/shared/CodeBlock";
+import { detectLanguage, languageFromFileName } from "@/data/codeLanguage";
 import type { Material } from "@/data/materials";
 import {
   formatFileSize,
   getMaterialGroups,
   materialUrl,
 } from "@/data/materials";
-import { fibersTheme } from "@/components/shared/theme";
 import { hasSupabaseConfig } from "@/services/supabase";
 import { fetchMaterialAttributionRows } from "@/services/materialAttributions";
 import { intlLocale, useTranslations, type Locale } from "@/i18n";
 
 type Props = {
   materials: Material[];
-  attributions?: Record<string, string>;
+  attributions?: Record<string, string> | undefined;
   locale: Locale;
 };
 
@@ -123,6 +124,13 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
   const isText = Boolean(
     selectedExtension && textExtensions.has(selectedExtension),
   );
+  /** Language of the preview: by extension, or guessed from the content. */
+  const previewLanguage = useMemo(() => {
+    if (!selectedMaterial) return { language: "text", label: "Text" };
+    const byName = languageFromFileName(selectedMaterial.path);
+    if (byName.language !== "text") return byName;
+    return detectLanguage(textContent);
+  }, [selectedMaterial, textContent]);
   const closePreview = () => setSelectedMaterial(null);
 
   return (
@@ -236,7 +244,7 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
                   variant="h6"
                   sx={{
                     overflowWrap: "anywhere",
-                    fontSize: 17,
+                    fontSize: 20,
                     fontWeight: 700,
                   }}
                 >
@@ -294,27 +302,14 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
                     </Alert>
                   )}
                   {!loadingText && !textError && (
-                    <Box
-                      component="pre"
-                      sx={{
-                        m: 0,
-                        p: { xs: 2, sm: 3 },
-                        overflowX: "auto",
-                        border: "1px solid",
-                        borderColor: "divider",
-                        borderRadius: 2,
-                        bgcolor: "background.paper",
-                        color: "text.primary",
-                        fontFamily:
-                          "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
-                        fontSize: 14,
-                        lineHeight: 1.65,
-                        whiteSpace: "pre-wrap",
-                        overflowWrap: "anywhere",
-                      }}
-                    >
-                      {textContent || t("resourceCollection.emptyText")}
-                    </Box>
+                    <CodeBlock
+                      code={textContent || t("resourceCollection.emptyText")}
+                      language={previewLanguage.language}
+                      label={previewLanguage.label}
+                      wrap={previewLanguage.language === "text"}
+                      showLabel
+                      locale={locale}
+                    />
                   )}
                 </Box>
               )}
@@ -367,10 +362,10 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
   );
 }
 
-export default function ResourceCollection({ materials }: Props) {
+export default function ResourceCollection({ materials, attributions, locale }: Props) {
   return (
-    <ThemeProvider theme={fibersTheme}>
-      <Collection materials={materials} />
-    </ThemeProvider>
+    <AppThemeProvider>
+      <Collection materials={materials} attributions={attributions} locale={locale} />
+    </AppThemeProvider>
   );
 }

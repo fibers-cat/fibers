@@ -3,11 +3,16 @@ import SiteLayout from '@/layouts/SiteLayout.astro';
 import ProfilePage from '@/components/ProfilePage';
 import { getLocaleFromUrl, isLocale, useTranslations } from '@/i18n';
 
-const requestedReturn = Astro.url.searchParams.get('returnTo') ?? '/';
-const returnTo = requestedReturn.startsWith('/') && !requestedReturn.startsWith('//') ? requestedReturn : '/';
 const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
 ---
 <SiteLayout title={t('profilePage.meta.title')} description={t('profilePage.meta.description')} noindex>
-  <div class="page-content inner-page"><section class="form-card profile-panel"><span class="eyebrow">{t('profilePage.eyebrow')}</span><h1>{t('profilePage.heading')}</h1><ProfilePage client:load returnTo={returnTo} locale={locale} /></section></div>
+  <div class="page-content inner-page profile-page">
+    <header class="page-heading">
+      <span class="eyebrow">{t('profilePage.eyebrow')}</span>
+      <h1>{t('profilePage.heading')}</h1>
+      <p>{t('profilePage.lead')}</p>
+    </header>
+    <ProfilePage client:load locale={locale} />
+  </div>
 </SiteLayout>

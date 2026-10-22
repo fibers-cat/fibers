@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -22,12 +23,10 @@ import FilterListRounded from '@mui/icons-material/FilterListRounded';
 import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
 import SearchRounded from '@mui/icons-material/SearchRounded';
 import SwapVertRounded from '@mui/icons-material/SwapVertRounded';
-import { ThemeProvider } from '@mui/material/styles';
 import type { Subject } from '@/data/subjects';
 import { hasSupabaseConfig } from '@/services/supabase';
 import { fetchSubjectMaterialCounts, fetchLatestMaterialDates } from '@/services/subjectMaterialCounts';
-import { fibersTheme } from '@/components/shared/theme';
-import { intlLocale, localizePath, useTranslations, type Locale } from '@/i18n';
+import { localizePath, useTranslations, type Locale } from '@/i18n';
 
 type Props = {
   subjects: Subject[];
@@ -54,7 +53,6 @@ export default function SubjectExplorer({
   locale,
 }: Props) {
   const t = useTranslations(locale);
-  const dateFormatter = new Intl.DateTimeFormat(intlLocale(locale));
   const [materialCounts, setMaterialCounts] = useState<Record<string, number>>(
     initialMaterialCounts ?? {},
   );
@@ -191,7 +189,7 @@ export default function SubjectExplorer({
   };
 
   return (
-    <ThemeProvider theme={fibersTheme}>
+    <AppThemeProvider>
       <div className="subject-explorer">
         <div className="explorer-toolbar">
           <div className="explorer-filters">
@@ -429,8 +427,10 @@ export default function SubjectExplorer({
                     </div>
                   
                     <Typography component="h3" variant="h6" className="subject-name">{subject.name}</Typography>
-                    <Typography className="subject-description">{t('subjectExplorer.cardDescription')}</Typography>
-                    <Button className="subject-open" size="small" endIcon={<ArrowForwardRounded />}>{t('subjectExplorer.open')}</Button>
+                    <span className="subject-open">
+                      {t('subjectExplorer.open')}
+                      <ArrowForwardRounded aria-hidden="true" />
+                    </span>
                   </CardContent>
                 </CardActionArea>
               </Card>;
@@ -443,6 +443,6 @@ export default function SubjectExplorer({
           </div>
         )}
       </div>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

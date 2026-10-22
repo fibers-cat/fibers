@@ -1,17 +1,131 @@
 ---
 import SiteLayout from '@/layouts/SiteLayout.astro';
-// import SiteBreadcrumbs from '../shared/SiteBreadcrumbs';
 import { getDictionary, getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
 
 const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
-const rules = getDictionary(locale).terms.rules;
+const terms = getDictionary(locale).terms;
+const { principles, scope, review, allowed, use, contact } = terms;
 ---
 
 <SiteLayout title={t('terms.meta.title')} description={t('terms.meta.description')}>
-  <div class="page-content inner-page legal-page">
-    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Condicions d’ús' }]} /> -->
-    <header class="page-heading"><span class="eyebrow">{t('terms.eyebrow')}</span><h1>{t('terms.title')}</h1><p>{t('terms.lead')}</p></header>
-    <div class="legal-copy"><ul>{rules.map((rule) => (<li>{rule}</li>))}</ul><p>{t('terms.disclaimerBefore')}<a href={localizePath('/contacte/', locale)}>{t('terms.disclaimerLink')}</a>{t('terms.disclaimerAfter')}</p></div>
+  <div class="page-content inner-page terms-page">
+    <section class="terms-hero" aria-labelledby="terms-title">
+      <header class="page-heading terms-heading">
+        <span class="eyebrow">{t('terms.eyebrow')}</span>
+        <h1 id="terms-title">{t('terms.title')}</h1>
+        <p>{t('terms.lead')}</p>
+      </header>
+    </section>
+
+    <section class="terms-section" aria-labelledby="terms-principles-title">
+      <div class="terms-section-heading">
+        <span class="eyebrow">{principles.eyebrow}</span>
+        <h2 id="terms-principles-title">{principles.title}</h2>
+        <p>{principles.lead}</p>
+      </div>
+
+      <div class="terms-principle-grid">
+        {principles.items.map((item) => (
+          <article class="terms-principle">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="terms-scope" aria-labelledby="terms-scope-title">
+      <div class="terms-scope-heading">
+        <span class="eyebrow">{scope.eyebrow}</span>
+        <h2 id="terms-scope-title">{scope.title}</h2>
+        <p>{scope.lead}</p>
+      </div>
+      <div class="terms-scope-grid">
+        {scope.items.map((item) => (
+          <div class="terms-scope-item">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="terms-section" aria-labelledby="terms-review-title">
+      <div class="terms-section-heading">
+        <span class="eyebrow">{review.eyebrow}</span>
+        <h2 id="terms-review-title">{review.title}</h2>
+        <p>{review.lead}</p>
+      </div>
+
+      <ol class="terms-review-list">
+        {review.items.map((item, index) => (
+          <li>
+            <span class="terms-review-index" aria-hidden="true">{index + 1}</span>
+            <div>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="terms-section" aria-labelledby="terms-allowed-title">
+      <div class="terms-section-heading">
+        <span class="eyebrow">{allowed.eyebrow}</span>
+        <h2 id="terms-allowed-title">{allowed.title}</h2>
+        <p>{allowed.lead}</p>
+      </div>
+
+      <div class="terms-allowed-grid">
+        <article class="terms-allowed-card terms-allowed-yes">
+          <h3>
+            <span class="terms-allowed-mark" aria-hidden="true">✓</span>
+            {allowed.okTitle}
+          </h3>
+          <ul>
+            {allowed.okItems.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+
+        <article class="terms-allowed-card terms-allowed-no">
+          <h3>
+            <span class="terms-allowed-mark" aria-hidden="true">×</span>
+            {allowed.noTitle}
+          </h3>
+          <ul>
+            {allowed.noItems.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="terms-use" aria-labelledby="terms-use-title">
+      <div class="terms-use-heading">
+        <span class="eyebrow">{use.eyebrow}</span>
+        <h2 id="terms-use-title">{use.title}</h2>
+        <p>{use.lead}</p>
+      </div>
+      <div class="terms-use-grid">
+        {use.items.map((item) => (
+          <div class="terms-use-item">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="terms-contact" aria-labelledby="terms-contact-title">
+      <div>
+        <span class="eyebrow">{contact.eyebrow}</span>
+        <h2 id="terms-contact-title">{contact.title}</h2>
+        <p>{contact.text}</p>
+      </div>
+      <a class="button-secondary" href={localizePath('/contacte/', locale)}>
+        {contact.link} <span aria-hidden="true">→</span>
+      </a>
+    </section>
   </div>
 </SiteLayout>

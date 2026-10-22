@@ -2,21 +2,51 @@
 import SiteLayout from '@/layouts/SiteLayout.astro';
 // import SiteBreadcrumbs from '../shared/SiteBreadcrumbs';
 import ContactForm from '@/components/ContactForm';
-import { getLocaleFromUrl, isLocale, useTranslations } from '@/i18n';
+import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
 
 const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
+const contactEmail = 'fiberscat@gmail.com';
 ---
 
 <SiteLayout title={t('contact.meta.title')} description={t('contact.meta.description')}>
   <div class="page-content inner-page contact-page">
     <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { label: 'Contacte' }]} /> -->
     <div class="contact-layout">
-      <header class="page-heading form-heading">
-        <span class="eyebrow">{t('contact.eyebrow')}</span>
-        <h1>{t('contact.titleLine1')}<br />{t('contact.titleLine2')}</h1>
-        <p>{t('contact.lead')}</p>
-      </header>
+      <div class="contact-intro">
+        <header class="page-heading form-heading">
+          <span class="eyebrow">{t('contact.eyebrow')}</span>
+          <h1>{t('contact.titleLine1')}<br />{t('contact.titleLine2')}</h1>
+          <p>{t('contact.lead')}</p>
+        </header>
+
+        <section class="contact-direct" aria-labelledby="contact-direct-title">
+          <h2 id="contact-direct-title" class="contact-direct-label">{t('contact.directLabel')}</h2>
+          <a class="contact-email" href={`mailto:${contactEmail}`}>
+            <span class="contact-email-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <path d="m4 7 8 6 8-6"></path>
+              </svg>
+            </span>
+            <span>{contactEmail}</span>
+          </a>
+          <p>{t('contact.directText')}</p>
+        </section>
+
+        <section class="contact-help" aria-labelledby="contact-help-title">
+          <h2 id="contact-help-title">{t('contact.helpTitle')}</h2>
+          <p>{t('contact.helpLead')}</p>
+          <nav class="contact-help-links" aria-label={t('contact.helpTitle')}>
+            <a href={localizePath('/com-funciona/', locale)}>
+              {t('contact.helpGuide')} <span aria-hidden="true">→</span>
+            </a>
+            <a href={localizePath('/condicions-us/', locale)}>
+              {t('contact.helpTerms')} <span aria-hidden="true">→</span>
+            </a>
+          </nav>
+        </section>
+      </div>
 
       <section class="form-card contact-form-card" aria-labelledby="contact-form-title">
         <h2 id="contact-form-title">{t('contact.formTitle')}</h2>

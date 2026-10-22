@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,11 +14,9 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import { ThemeProvider } from '@mui/material/styles';
 import CloseRounded from '@mui/icons-material/CloseRounded';
 import GitHub from '@mui/icons-material/GitHub';
 import VisibilityOutlined from '@mui/icons-material/VisibilityOutlined';
-import { fibersTheme } from '@/components/shared/theme';
 import { getDictionary, useTranslations, type Locale } from '@/i18n';
 
 type MilestoneLink = {
@@ -46,11 +45,11 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
     href: string;
     label: string;
     title: string;
-    openLink?: { href: string; text: string };
+    openLink?: { href: string; text: string } | undefined;
   } | null>(null);
 
   return (
-    <ThemeProvider theme={fibersTheme}>
+    <AppThemeProvider>
       <>
       <Timeline
         position="right"
@@ -82,7 +81,7 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
               <Typography component="div" variant="overline" sx={{ color: 'primary.main', fontWeight: 800, letterSpacing: '1px', lineHeight: 1.5 }}>
                 {item.label}
               </Typography>
-              <Typography component="time" dateTime={item.dateTime} variant="body2" sx={{ display: 'block', mt: 0.5, color: '#42536a', fontSize: 14 }}>
+              <Typography component="time" dateTime={item.dateTime} variant="body2" sx={{ display: 'block', mt: 0.5, color: '#42536a', fontSize: 15 }}>
                 {item.date}
               </Typography>
             </TimelineOppositeContent>
@@ -96,11 +95,11 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
                   <Typography variant="overline" sx={{ color: 'primary.main', fontWeight: 800, letterSpacing: '1px', lineHeight: 1.5 }}>
                     {item.label}
                   </Typography>
-                  <Typography component="time" dateTime={item.dateTime} variant="body2" sx={{ flexShrink: 0, color: '#42536a', fontSize: 14 }}>
+                  <Typography component="time" dateTime={item.dateTime} variant="body2" sx={{ flexShrink: 0, color: '#42536a', fontSize: 15 }}>
                     {item.date}
                   </Typography>
                 </Box>
-                <Typography component="h3" variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.125rem' }, fontWeight: 750, letterSpacing: '-.25px', mb: 0.75, color: '#20242c' }}>
+                <Typography component="h3" variant="h6" sx={{ fontSize: { xs: '1.0625rem', sm: '1.25rem' }, fontWeight: 750, letterSpacing: '-.25px', mb: 0.75, color: '#20242c' }}>
                   {item.title}
                 </Typography>
                 {item.description.map((paragraph, paragraphIndex) => (
@@ -108,7 +107,7 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
                     key={`${item.label}-description-${paragraphIndex}`}
                     component="p"
                     variant="body2"
-                    sx={{ mb: paragraphIndex < item.description.length - 1 ? 1 : 0, color: '#52627a', fontSize: 14, lineHeight: 1.7 }}
+                    sx={{ mb: paragraphIndex < item.description.length - 1 ? 1 : 0, color: '#52627a', fontSize: 16, lineHeight: 1.7 }}
                   >
                     {paragraph}
                   </Typography>
@@ -207,6 +206,6 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
         </Box>
       </Drawer>
       </>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

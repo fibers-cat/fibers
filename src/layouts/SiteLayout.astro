@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import SiteNavigation from '@/components/shared/SiteNavigation';
 import {
   canonicalPath,
@@ -33,6 +34,7 @@ const description = Astro.props.description ?? t('meta.siteDescription');
 const currentPath = Astro.url.pathname;
 // Canonical (Catalan) logical path, e.g. `/es/acerca/` → `/sobre/`.
 const basePath = canonicalPath(currentPath, currentLocale);
+const returnTo = localizePath(basePath, currentLocale);
 const site = Astro.site ?? new URL('https://fibers.cat');
 const siteOrigin = site.origin;
 const canonicalUrl = new URL(localizePath(basePath, currentLocale), site).href;
@@ -92,6 +94,7 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <ClientRouter />
     <meta name="theme-color" content="#f6f7f9" />
     <meta name="description" content={description} />
     <meta name="author" content="Fibers" />
@@ -139,14 +142,14 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
     )}
   </head>
   <body>
-    <SiteNavigation client:load currentPath={basePath} locale={currentLocale} />
+    <SiteNavigation client:load transition:persist="site-navigation" currentPath={basePath} returnTo={returnTo} locale={currentLocale} />
     <main class="site-main">
       <slot />
       <footer class="site-footer">
         <div><span>© 2016-{new Date().getFullYear()} Fibers</span><span>{t('footer.tagline')}</span></div>
         <nav aria-label={t('footer.linksLabel')}>
-          <a href={localizePath('/guia/', currentLocale)}>{t('footer.howItWorks')}</a>
-          <a href={localizePath('/condicions/', currentLocale)}>{t('footer.terms')}</a>
+          <a href={localizePath('/com-funciona/', currentLocale)}>{t('footer.howItWorks')}</a>
+          <a href={localizePath('/condicions-us/', currentLocale)}>{t('footer.terms')}</a>
           <a href={localizePath('/contacte/', currentLocale)}>{t('footer.contact')}</a>
         </nav>
       </footer>

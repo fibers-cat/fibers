@@ -1,12 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
+import CodeBlock from "@/components/shared/CodeBlock";
+import { detectLanguage } from "@/data/codeLanguage";
 import { hasSupabaseConfig } from "@/services/supabase";
 import { fetchApprovedMaterials, type ApprovedContribution, type LegacyMaterial } from "@/services/contributions";
 import { intlLocale, useTranslations, type Locale } from "@/i18n";
 
 type Props = { subjectId: string; locale: Locale };
+
+/** Inline code of a legacy material, highlighted with the detected language. */
+function LegacyCode({ content, locale }: { content: string; locale: Locale }) {
+  const language = useMemo(() => detectLanguage(content), [content]);
+  return (
+    <CodeBlock
+      code={content.trim()}
+      language={language.language}
+      label={language.label}
+      showLabel
+      locale={locale}
+    />
+  );
+}
 
 export default function ApprovedMaterials({ subjectId, locale }: Props) {
   const t = useTranslations(locale);
@@ -88,7 +104,7 @@ export default function ApprovedMaterials({ subjectId, locale }: Props) {
               </a>
             )}
             {item.content_text && (
-              <pre className="legacy-code-content">{item.content_text.trim()}</pre>
+              <LegacyCode content={item.content_text} locale={locale} />
             )}
           </article>
         ))}

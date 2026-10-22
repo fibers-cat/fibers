@@ -43,43 +43,50 @@ export function stripLocalePrefix(pathname: string): string {
  */
 export const routeSlugs: Record<string, Record<Locale, string>> = {
   'sobre': { ca: 'sobre', es: 'acerca' },
-  'guia': { ca: 'guia', es: 'guia' },
+  'com-funciona': { ca: 'com-funciona', es: 'como-funciona' },
   'recursos': { ca: 'recursos', es: 'recursos' },
   'contacte': { ca: 'contacte', es: 'contacto' },
   'aporta': { ca: 'aporta', es: 'aporta' },
   'perfil': { ca: 'perfil', es: 'perfil' },
-  'condicions': { ca: 'condicions', es: 'condiciones' },
+  'condicions-us': { ca: 'condicions-us', es: 'condiciones-uso' },
   'col-laboradors': { ca: 'col-laboradors', es: 'colaboradores' },
   'assignatures': { ca: 'assignatures', es: 'asignaturas' },
   'admin/aportacions': { ca: 'admin/aportacions', es: 'admin/aportaciones' },
   'admin/usuaris': { ca: 'admin/usuaris', es: 'admin/usuarios' },
 };
 
-/** Splits a path into its leading route segment and the remaining suffix. */
-function splitLead(path: string): { lead: string; rest: string } {
+/** Returns the longest canonical route key that matches the start of a path. */
+function matchRouteKey(path: string): string | null {
   const normalized = path.replace(/^\/+|\/+$/g, '');
-  const slashIndex = normalized.indexOf('/');
-  if (slashIndex === -1) return { lead: normalized, rest: '' };
-  return { lead: normalized.slice(0, slashIndex), rest: normalized.slice(slashIndex) };
+  const keys = Object.keys(routeSlugs).sort((a, b) => b.length - a.length);
+  return keys.find((key) => normalized === key || normalized.startsWith(`${key}/`)) ?? null;
 }
 
-/** Maps the leading segment of a canonical path to its localized slug. */
+/** Maps a canonical path to its localized slug, including nested routes. */
 function translateSlug(base: string, locale: Locale): string {
-  const { lead, rest } = splitLead(base);
-  const localized = routeSlugs[lead]?.[locale];
-  const localizedLead = localized ? localized.split('/')[0] : lead;
-  const localizedRest = localized && localized.includes('/') ? localized.slice(localized.indexOf('/')) : rest;
-  const result = `${localizedLead}${localizedRest}`;
+  const key = matchRouteKey(base);
+  if (!key) return base;
+  const normalized = base.replace(/^\/+|\/+$/g, '');
+  const slugs = routeSlugs[key];
+  if (!slugs) return base;
+  const localized = slugs[locale];
+  const rest = normalized.slice(key.length);
+  const result = `${localized}${rest}`;
   return result ? `/${result}/` : base;
 }
 
 /** Reverses a localized slug back to the canonical (Catalan) path. */
 function canonicalizeSlug(localizedPath: string, locale: Locale): string {
-  const { lead, rest } = splitLead(localizedPath);
-  const key = Object.keys(routeSlugs).find((candidate) => routeSlugs[candidate][locale].split('/')[0] === lead);
-  if (!key) return localizedPath;
-  const canonical = key.includes('/') ? key.slice(key.indexOf('/')) : rest;
-  const result = `${key.split('/')[0]}${canonical}`;
+  const normalized = localizedPath.replace(/^\/+|\/+$/g, '');
+  const entries = Object.entries(routeSlugs)
+    .map(([canonical, slugs]) => ({ canonical, localized: slugs[locale] }))
+    .sort((a, b) => b.localized.length - a.localized.length);
+  const match = entries.find(
+    ({ localized }) => normalized === localized || normalized.startsWith(`${localized}/`),
+  );
+  if (!match) return localizedPath;
+  const rest = normalized.slice(match.localized.length);
+  const result = `${match.canonical}${rest}`;
   return result ? `/${result}/` : localizedPath;
 }
 
@@ -88,10 +95,13 @@ function canonicalizeSlug(localizedPath: string, locale: Locale): string {
  * e.g. `/sobre/` + `es` → `/es/acerca/`.
  */
 export function localizePath(path: string, locale: Locale): string {
-  const base = stripLocalePrefix(path);
+  const queryIndex = path.search(/[?#]/);
+  const pathname = queryIndex === -1 ? path : path.slice(0, queryIndex);
+  const suffix = queryIndex === -1 ? '' : path.slice(queryIndex);
+  const base = stripLocalePrefix(pathname);
   const localizedBase = translateSlug(base, locale);
-  if (locale === defaultLocale) return localizedBase;
-  return `/${locale}${localizedBase}`;
+  const localized = locale === defaultLocale ? localizedBase : `/${locale}${localizedBase}`;
+  return `${localized}${suffix}`;
 }
 
 /**

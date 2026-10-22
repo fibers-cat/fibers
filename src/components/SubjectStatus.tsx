@@ -1,4 +1,5 @@
 import Alert from '@mui/material/Alert';
+import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
@@ -6,11 +7,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import VolunteerActivismOutlined from '@mui/icons-material/VolunteerActivismOutlined';
-import { ThemeProvider } from '@mui/material/styles';
 import ResourceCollection from '@/components/ResourceCollection';
 import ApprovedMaterials from '@/components/ApprovedMaterials';
 import { materialsForSubject } from '@/data/materials';
-import { fibersTheme } from '@/components/shared/theme';
 import { localizePath, useTranslations, type Locale } from '@/i18n';
 
 type Props = {
@@ -24,9 +23,9 @@ export default function SubjectStatus({ subjectId, subjectName, subjectAcronym, 
   const t = useTranslations(locale);
   const materials = materialsForSubject(subjectAcronym);
   return (
-    <ThemeProvider theme={fibersTheme}>
+    <AppThemeProvider>
       <Paper className="subject-status-panel" elevation={0}>
-        <Stack direction="row" alignItems="center" spacing={1.5} className="status-heading">
+        <Stack direction="row" spacing={1.5} className="status-heading" sx={{ alignItems: 'center' }}>
           <Typography variant="h5" component="h2">{t('subjectStatus.heading')}</Typography>
           <Chip
             label={
@@ -60,6 +59,6 @@ export default function SubjectStatus({ subjectId, subjectName, subjectAcronym, 
         </Button>
         <ApprovedMaterials subjectId={subjectId} locale={locale} />
       </Paper>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

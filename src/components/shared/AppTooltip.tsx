@@ -1,5 +1,25 @@
 import type { ReactElement } from 'react';
-import Tooltip, { type TooltipProps } from '@mui/material/Tooltip';
+import Tooltip, { type TooltipOwnerState, type TooltipProps } from '@mui/material/Tooltip';
+import type { SxProps, Theme } from '@mui/material/styles';
+
+type SlotWithSx = { sx?: SxProps<Theme> | undefined };
+
+function mergeSlotSx<T extends SlotWithSx>(
+  slot: T | ((ownerState: TooltipOwnerState) => T) | undefined,
+  baseSx: SxProps<Theme>,
+): T | ((ownerState: TooltipOwnerState) => T) {
+  const merge = (sx: SxProps<Theme> | undefined) =>
+    [baseSx, ...(Array.isArray(sx) ? sx : sx ? [sx] : [])] as SxProps<Theme>;
+
+  if (typeof slot === 'function') {
+    return (ownerState: TooltipOwnerState) => {
+      const resolved = slot(ownerState);
+      return { ...resolved, sx: merge(resolved.sx) };
+    };
+  }
+
+  return { ...slot, sx: merge(slot?.sx) } as T;
+}
 
 /**
  * App-styled tooltip.
@@ -25,31 +45,19 @@ export default function AppTooltip({ slotProps, variant = 'dark', ...props }: Ap
       {...props}
       slotProps={{
         ...slotProps,
-        tooltip: {
-          ...slotProps?.tooltip,
-          sx: [
-            {
-              backgroundColor,
-              color,
-              borderRadius: '10px',
-              padding: '7px 11px',
-              fontSize: 12,
-              fontWeight: 600,
-              lineHeight: 1.35,
-              letterSpacing: '0.2px',
-              maxWidth: 260,
-              boxShadow: '0 8px 24px rgba(32, 36, 44, 0.22)',
-            },
-            ...(Array.isArray(slotProps?.tooltip?.sx) ? slotProps.tooltip.sx : [slotProps?.tooltip?.sx]),
-          ],
-        },
-        arrow: {
-          ...slotProps?.arrow,
-          sx: [
-            { color: backgroundColor },
-            ...(Array.isArray(slotProps?.arrow?.sx) ? slotProps.arrow.sx : [slotProps?.arrow?.sx]),
-          ],
-        },
+        tooltip: mergeSlotSx(slotProps?.tooltip, {
+          backgroundColor,
+          color,
+          borderRadius: '10px',
+          padding: '7px 11px',
+          fontSize: 13,
+          fontWeight: 600,
+          lineHeight: 1.35,
+          letterSpacing: '0.2px',
+          maxWidth: 260,
+          boxShadow: '0 8px 24px rgba(32, 36, 44, 0.22)',
+        }),
+        arrow: mergeSlotSx(slotProps?.arrow, { color: backgroundColor }),
       }}
     />
   );

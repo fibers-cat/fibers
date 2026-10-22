@@ -27,6 +27,8 @@ export type LegacyMaterial = {
   profiles: { alias: string } | null;
 };
 
+export type PendingContributionFile = Omit<ApprovedFile, 'url'> & { storage_path: string };
+
 export type PendingContribution = {
   id: string;
   title: string;
@@ -35,8 +37,16 @@ export type PendingContribution = {
   created_at: string;
   profiles: { alias: string } | null;
   subjects: { acronym: string; name: string } | null;
-  contribution_files: (Omit<ApprovedFile, 'url'> & { storage_path: string })[];
+  contribution_files: (PendingContributionFile & { url: string })[];
 };
+
+type ProfileRef = { alias: string } | { alias: string }[] | null | undefined;
+
+/** PostgREST may infer a to-one relation as an array; keep the first row. */
+function firstProfile(profiles: ProfileRef): { alias: string } | null {
+  if (!profiles) return null;
+  return Array.isArray(profiles) ? profiles[0] ?? null : profiles;
+}
 
 function client() {
   if (!supabase) {
@@ -97,15 +107,25 @@ export async function fetchApprovedMaterials(subjectId: string): Promise<{
         id: entry.id,
         title: entry.title,
         description: entry.description,
-        profiles: entry.profiles,
+        profiles: firstProfile(entry.profiles),
         files,
       };
     }),
   );
 
-  const legacyMaterials = (legacyResult.data ?? [])
-    .map((entry) => entry.legacy_materials)
-    .filter((item) => item && !item.path) as unknown as LegacyMaterial[];
+  type LegacyMaterialRow = Omit<LegacyMaterial, 'profiles'> & { profiles: ProfileRef };
+  type LegacyJoinRow = { legacy_materials: LegacyMaterialRow | LegacyMaterialRow[] | null };
+
+  const legacyMaterials: LegacyMaterial[] = ((legacyResult.data ?? []) as unknown as LegacyJoinRow[])
+    .flatMap((entry) =>
+      Array.isArray(entry.legacy_materials)
+        ? entry.legacy_materials
+        : entry.legacy_materials
+          ? [entry.legacy_materials]
+          : [],
+    )
+    .filter((item) => !item.path)
+    .map((item) => ({ ...item, profiles: firstProfile(item.profiles) }));
 
   return { contributions, legacyMaterials };
 }
@@ -123,17 +143,35 @@ export async function fetchPendingContributions(): Promise<PendingContribution[]
 
   if (error) throw error;
 
+  type PendingContributionRow = Omit<PendingContribution, 'profiles' | 'contribution_files'> & {
+    profiles: ProfileRef;
+    contribution_files: PendingContributionFile[];
+  };
+
+  const rows = (data ?? []) as unknown as PendingContributionRow[];
+
   return Promise.all(
-    ((data ?? []) as unknown as PendingContribution[]).map(async (item) => {
+    rows.map(async (item) => {
       const contribution_files = await Promise.all(
         item.contribution_files.map(async (file) => ({
           ...file,
           url: await createSignedFileUrl(file.storage_path),
         })),
       );
-      return { ...item, contribution_files };
+      return { ...item, profiles: firstProfile(item.profiles), contribution_files };
     }),
   );
+}
+
+/** Counts the contributions of the given user that are still waiting for review. */
+export async function fetchPendingContributionCount(authorId: string): Promise<number> {
+  const { count, error } = await client()
+    .from('contributions')
+    .select('*', { count: 'exact', head: true })
+    .eq('author_id', authorId)
+    .eq('status', 'pending');
+  if (error) throw error;
+  return count ?? 0;
 }
 
 export type ContributionInput = {

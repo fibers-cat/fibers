@@ -1,0 +1,167 @@
+---
+import SiteLayout from '@/layouts/SiteLayout.astro';
+import { getDictionary, getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
+
+const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
+const t = useTranslations(locale);
+const guide = getDictionary(locale).guide;
+const { process, types, review, faq, cta } = guide;
+---
+
+<SiteLayout title={t('guide.meta.title')} description={t('guide.meta.description')}>
+  <div class="page-content inner-page guide-page">
+    <header class="page-heading guide-hero">
+      <span class="eyebrow">{t('guide.eyebrow')}</span>
+      <h1>{t('guide.titleLine1')}<br />{t('guide.titleLine2')}</h1>
+      <p>{t('guide.lead')}</p>
+      <div class="guide-hero-actions">
+        <a class="button-primary" href={localizePath('/aporta/', locale)}>
+          {t('guide.heroPrimary')} <span aria-hidden="true">→</span>
+        </a>
+        <a class="button-secondary" href={localizePath('/assignatures/', locale)}>
+          {t('guide.heroSecondary')}
+        </a>
+      </div>
+      <ul class="guide-facts">
+        {guide.heroFacts.map((fact) => (
+          <li>
+            <strong>{fact.value}</strong>
+            <span>{fact.label}</span>
+          </li>
+        ))}
+      </ul>
+    </header>
+
+    <section class="guide-section guide-process" aria-labelledby="guide-process-title">
+      <div class="section-heading guide-section-heading">
+        <div>
+          <span class="eyebrow">{process.eyebrow}</span>
+          <h2 id="guide-process-title">{process.title}</h2>
+          <p>{process.lead}</p>
+        </div>
+      </div>
+
+      <ol class="guide-steps">
+        {process.steps.map((step, index) => (
+          <li class="guide-step">
+            <div class="guide-step-marker" aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </div>
+            <div class="guide-step-card">
+              <span class="guide-step-label">{step.label}</span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+              <p class="guide-step-note">{step.note}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="guide-section guide-types" aria-labelledby="guide-types-title">
+      <div class="section-heading guide-section-heading">
+        <div>
+          <span class="eyebrow">{types.eyebrow}</span>
+          <h2 id="guide-types-title">{types.title}</h2>
+          <p>{types.lead}</p>
+        </div>
+      </div>
+
+      <div class="guide-type-grid">
+        {types.items.map((item, index) => (
+          <article class="guide-type-card">
+            <span class="guide-type-icon" aria-hidden="true">
+              {index === 0 && (
+                <svg viewBox="0 0 24 24">
+                  <path d="M7 3h7l4 4v14H7z" />
+                  <path d="M14 3v5h5" />
+                  <path d="M10 13h7M10 17h5" />
+                </svg>
+              )}
+              {index === 1 && (
+                <svg viewBox="0 0 24 24">
+                  <rect x="4" y="3" width="16" height="18" rx="2" />
+                  <path d="m8 12 2.5 2.5L16 9" />
+                </svg>
+              )}
+              {index === 2 && (
+                <svg viewBox="0 0 24 24">
+                  <path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14" />
+                </svg>
+              )}
+              {index === 3 && (
+                <svg viewBox="0 0 24 24">
+                  <rect x="4" y="5" width="6" height="5" rx="1" />
+                  <rect x="14" y="14" width="6" height="5" rx="1" />
+                  <path d="M10 7.5h4a3 3 0 0 1 3 3V14M7 10v4a3 3 0 0 0 3 3h4" />
+                </svg>
+              )}
+            </span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="guide-section guide-review" aria-labelledby="guide-review-title">
+      <div class="section-heading guide-section-heading">
+        <div>
+          <span class="eyebrow">{review.eyebrow}</span>
+          <h2 id="guide-review-title">{review.title}</h2>
+          <p>{review.lead}</p>
+        </div>
+      </div>
+
+      <div class="guide-review-grid">
+        <div class="guide-review-card">
+          <ul class="guide-checklist">
+            {review.items.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+        <aside class="guide-note">
+          <span class="guide-note-icon" aria-hidden="true">?</span>
+          <p>{review.note}</p>
+          <div class="guide-note-links">
+            <a href={localizePath('/condicions-us/', locale)}>{review.termsLink} <span aria-hidden="true">→</span></a>
+            <a href={localizePath('/contacte/', locale)}>{review.contactLink} <span aria-hidden="true">→</span></a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="guide-section guide-faq" aria-labelledby="guide-faq-title">
+      <div class="section-heading guide-section-heading">
+        <div>
+          <span class="eyebrow">{faq.eyebrow}</span>
+          <h2 id="guide-faq-title">{faq.title}</h2>
+        </div>
+      </div>
+
+      <div class="guide-faq-list">
+        {faq.items.map((item) => (
+          <details class="guide-faq-item">
+            <summary>
+              <span>{item.question}</span>
+              <span class="guide-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <p>{item.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="guide-cta" aria-labelledby="guide-cta-title">
+      <div>
+        <h2 id="guide-cta-title">{cta.title}</h2>
+        <p>{cta.text}</p>
+      </div>
+      <div class="guide-cta-actions">
+        <a class="button-primary" href={localizePath('/aporta/', locale)}>
+          {cta.primary} <span aria-hidden="true">→</span>
+        </a>
+        <a class="button-secondary" href={localizePath('/assignatures/', locale)}>{cta.secondary}</a>
+      </div>
+    </section>
+  </div>
+</SiteLayout>
