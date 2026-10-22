@@ -1,18 +1,30 @@
 import { useCallback, useEffect, useState } from 'react';
 import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from '@mui/material/Alert';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { hasSupabaseConfig } from '@/services/supabase';
+import AppTooltip from '@/components/shared/AppTooltip';
+import CheckRounded from '@mui/icons-material/CheckRounded';
+import ContentCopyRounded from '@mui/icons-material/ContentCopyRounded';
 import { fetchManagedUsers, updateManagedUser, type ManagedRole, type ManagedUser } from '@/services/adminUsers';
 import { useCurrentRole } from '@/services/useCurrentRole';
-import { localizePath, useTranslations, type Locale } from '@/i18n';
+import { intlLocale, localizePath, useTranslations, type Locale } from '@/i18n';
 
 type Draft = { alias: string; role: ManagedRole };
 
@@ -21,8 +33,12 @@ export default function AdminUsersPage({ locale }: { locale: Locale }) {
   const { role, loading: roleLoading, error: roleError } = useCurrentRole();
   const [users, setUsers] = useState<ManagedUser[]>([]);
   const [drafts, setDrafts] = useState<Record<string, Draft>>({});
+  const [search, setSearch] = useState('');
+  const [orderBy, setOrderBy] = useState<'user' | 'alias' | 'role' | 'created_at' | 'last_sign_in_at'>('created_at');
+  const [order, setOrder] = useState<'asc' | 'desc'>('desc');
   const [loading, setLoading] = useState(false);
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -77,6 +93,59 @@ export default function AdminUsersPage({ locale }: { locale: Locale }) {
     setSavingId(null);
   };
 
+  const filteredUsers = users
+    .filter((user) => {
+      const query = search.trim().toLowerCase();
+      if (!query) return true;
+      return (
+        (user.email ?? '').toLowerCase().includes(query) ||
+        user.alias.toLowerCase().includes(query) ||
+        user.user_id.toLowerCase().includes(query)
+      );
+    })
+    .sort((a, b) => {
+      const direction = order === 'asc' ? 1 : -1;
+      const getValue = (user: ManagedUser) => {
+        switch (orderBy) {
+          case 'user':
+            return (user.email ?? user.user_id).toLowerCase();
+          case 'alias':
+            return user.alias.toLowerCase();
+          case 'role':
+            return user.role;
+          case 'created_at':
+            return new Date(user.created_at).getTime() || 0;
+          case 'last_sign_in_at':
+            return user.last_sign_in_at ? new Date(user.last_sign_in_at).getTime() : 0;
+          default:
+            return 0;
+        }
+      };
+      const va = getValue(a);
+      const vb = getValue(b);
+      if (va < vb) return -1 * direction;
+      if (va > vb) return 1 * direction;
+      return 0;
+    });
+
+  const handleSort = (key: 'user' | 'alias' | 'role' | 'created_at' | 'last_sign_in_at') => {
+    if (orderBy === key) {
+      setOrder((current) => (current === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setOrderBy(key);
+      setOrder('asc');
+    }
+  };
+
+  const isDirty = (user: ManagedUser) => {
+    const draft = drafts[user.user_id];
+    if (!draft) return false;
+    return (
+      draft.alias.trim() !== user.alias ||
+      draft.role !== (user.role === 'admin' ? 'admin' : 'user')
+    );
+  };
+
   return (
     <AppThemeProvider>
       <Stack spacing={2.5} className="admin-page">
@@ -98,74 +167,181 @@ export default function AdminUsersPage({ locale }: { locale: Locale }) {
         {error && <Alert severity="error">{error}</Alert>}
         {role === 'superadmin' && (
           <>
-            <Button onClick={() => void loadUsers()} disabled={loading} variant="outlined" sx={{ alignSelf: 'flex-start' }}>
-              {t('admin.refreshList')}
-            </Button>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ alignItems: { sm: 'center' } }}>
+              <TextField
+                size="small"
+                label={t('admin.users.searchLabel')}
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                sx={{ minWidth: 240 }}
+              />
+              <Button onClick={() => void loadUsers()} disabled={loading} variant="outlined">
+                {t('admin.refreshList')}
+              </Button>
+            </Stack>
             {loading && <CircularProgress aria-label={t('admin.users.loading')} />}
-            {users.map((user) => {
-              const draft = drafts[user.user_id];
-              return (
-                <Card key={user.user_id} variant="outlined">
-                  <CardContent>
-                    <Stack spacing={2}>
-                      <div>
-                        <Typography component="h2" variant="h6">{user.email ?? t('admin.users.noEmail')}</Typography>
-                        <Typography color="text.secondary">{user.user_id}</Typography>
-                      </div>
-                      {user.role === 'superadmin' ? (
-                        <Alert severity="info">{t('admin.users.protectedSuperadmin')}</Alert>
-                      ) : (
-                        <>
-                          <TextField
-                            label={t('admin.users.aliasLabel')}
-                            value={draft?.alias ?? ''}
-                            onChange={(event) => setDrafts((current) => {
-                              const currentDraft = current[user.user_id] ?? {
-                                alias: user.alias,
-                                role: user.role === 'admin' ? 'admin' : 'user',
-                              };
-                              return {
-                                ...current,
-                                [user.user_id]: { ...currentDraft, alias: event.target.value },
-                              };
-                            })}
-                            slotProps={{ htmlInput: { minLength: 2, maxLength: 40 } }}
-                          />
-                          <TextField
-                            select
-                            label={t('admin.users.roleLabel')}
-                            value={draft?.role ?? 'user'}
-                            onChange={(event) => setDrafts((current) => {
-                              const currentDraft = current[user.user_id] ?? {
-                                alias: user.alias,
-                                role: user.role === 'admin' ? 'admin' : 'user',
-                              };
-                              return {
-                                ...current,
-                                [user.user_id]: {
-                                  ...currentDraft,
-                                  role: event.target.value === 'admin' ? 'admin' : 'user',
-                                },
-                              };
-                            })}
-                          >
-                            <MenuItem value="user">{t('admin.users.roleUser')}</MenuItem>
-                            <MenuItem value="admin">{t('admin.users.roleAdmin')}</MenuItem>
-                          </TextField>
-                          <Button
-                            variant="contained"
-                            disabled={savingId !== null || loading || (draft?.alias.trim() ?? '').length < 2}
-                            onClick={() => void saveUser(user)}
-                          >
-                            {t('admin.users.save')}
-                          </Button>
-                        </>
-                      )}
-                    </Stack>
-                  </CardContent>
-                </Card>
-              );
-            })}
+            {!loading && filteredUsers.length === 0 && (
+              <Alert severity="info">{t('admin.users.empty')}</Alert>
+            )}
+            <TableContainer component={Paper} variant="outlined">
+              <Table size="small" stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      <TableSortLabel active={orderBy === 'user'} direction={orderBy === 'user' ? order : 'asc'} onClick={() => handleSort('user')}>
+                        {t('admin.users.userColumn')}
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      <TableSortLabel active={orderBy === 'alias'} direction={orderBy === 'alias' ? order : 'asc'} onClick={() => handleSort('alias')}>
+                        {t('admin.users.aliasLabel')}
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      <TableSortLabel active={orderBy === 'role'} direction={orderBy === 'role' ? order : 'asc'} onClick={() => handleSort('role')}>
+                        {t('admin.users.roleLabel')}
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      <TableSortLabel active={orderBy === 'created_at'} direction={orderBy === 'created_at' ? order : 'asc'} onClick={() => handleSort('created_at')}>
+                        {t('admin.users.createdAt')}
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      <TableSortLabel active={orderBy === 'last_sign_in_at'} direction={orderBy === 'last_sign_in_at' ? order : 'asc'} onClick={() => handleSort('last_sign_in_at')}>
+                        {t('admin.users.lastAccess')}
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>{t('admin.users.actions')}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredUsers.map((user) => {
+                    const draft = drafts[user.user_id];
+                    const protectedUser = user.role === 'superadmin';
+                    return (
+                      <TableRow key={user.user_id} hover>
+                        <TableCell>
+                          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                            <Avatar sx={{ width: 28, height: 28, fontSize: 12, bgcolor: 'primary.main' }}>
+                              {(user.alias || user.email || '?').slice(0, 2).toUpperCase()}
+                            </Avatar>
+                            <div>
+                              <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                                <Typography variant="body2">{user.email ?? t('admin.users.noEmail')}</Typography>
+                                <Chip
+                                  size="small"
+                                  label={user.role === 'superadmin' ? t('admin.users.roleSuperadmin') : user.role === 'admin' ? t('admin.users.roleAdmin') : t('admin.users.roleUser')}
+                                  color={user.role === 'superadmin' ? 'secondary' : user.role === 'admin' ? 'primary' : 'default'}
+                                  sx={{ fontSize: '0.7rem', height: 20 }}
+                                />
+                              </Stack>
+                              <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', fontFamily: 'monospace' }}>
+                                  {user.user_id}
+                                </Typography>
+                                <AppTooltip title={copiedId === user.user_id ? 'Copiat!' : 'Copiar identificador'} arrow>
+                                  <IconButton
+                                    size="small"
+                                    aria-label="Copiar identificador"
+                                    onClick={() => {
+                                      void navigator.clipboard?.writeText(user.user_id);
+                                      setCopiedId(user.user_id);
+                                      window.setTimeout(() => setCopiedId(null), 1500);
+                                    }}
+                                    sx={{ p: 0.25 }}
+                                  >
+                                    {copiedId === user.user_id ? (
+                                      <CheckRounded sx={{ fontSize: 12 }} />
+                                    ) : (
+                                      <ContentCopyRounded sx={{ fontSize: 12 }} />
+                                    )}
+                                  </IconButton>
+                                </AppTooltip>
+                              </Stack>
+                            </div>
+                          </Stack>
+                        </TableCell>
+                        <TableCell>
+                          {protectedUser ? (
+                            <Typography variant="body2">{user.alias}</Typography>
+                          ) : (
+                            <TextField
+                              size="small"
+                              value={draft?.alias ?? ''}
+                              onChange={(event) => setDrafts((current) => {
+                                const currentDraft = current[user.user_id] ?? {
+                                  alias: user.alias,
+                                  role: user.role === 'admin' ? 'admin' : 'user',
+                                };
+                                return {
+                                  ...current,
+                                  [user.user_id]: { ...currentDraft, alias: event.target.value },
+                                };
+                              })}
+                              slotProps={{ htmlInput: { minLength: 2, maxLength: 40 } }}
+                              sx={{ minWidth: 160 }}
+                            />
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {protectedUser ? (
+                            <Typography variant="body2">{t('admin.users.roleSuperadmin')}</Typography>
+                          ) : (
+                            <TextField
+                              size="small"
+                              select
+                              value={draft?.role ?? 'user'}
+                              onChange={(event) => setDrafts((current) => {
+                                const currentDraft = current[user.user_id] ?? {
+                                  alias: user.alias,
+                                  role: user.role === 'admin' ? 'admin' : 'user',
+                                };
+                                return {
+                                  ...current,
+                                  [user.user_id]: {
+                                    ...currentDraft,
+                                    role: event.target.value === 'admin' ? 'admin' : 'user',
+                                  },
+                                };
+                              })}
+                              sx={{ minWidth: 120 }}
+                            >
+                              <MenuItem value="user">{t('admin.users.roleUser')}</MenuItem>
+                              <MenuItem value="admin">{t('admin.users.roleAdmin')}</MenuItem>
+                            </TextField>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {user.created_at && !Number.isNaN(new Date(user.created_at).getTime())
+                            ? new Intl.DateTimeFormat(intlLocale(locale), { dateStyle: 'short', timeStyle: 'short' }).format(new Date(user.created_at))
+                            : '—'}
+                        </TableCell>
+                        <TableCell>
+                          {user.last_sign_in_at && !Number.isNaN(new Date(user.last_sign_in_at).getTime())
+                            ? new Intl.DateTimeFormat(intlLocale(locale), { dateStyle: 'short', timeStyle: 'short' }).format(new Date(user.last_sign_in_at))
+                            : '—'}
+                        </TableCell>
+                        <TableCell>
+                          {protectedUser ? (
+                            <Typography variant="caption" color="text.secondary">{t('admin.users.protectedSuperadmin')}</Typography>
+                          ) : (
+                            <Button
+                              size="small"
+                              variant="contained"
+                              disabled={savingId !== null || loading || !isDirty(user) || (draft?.alias.trim() ?? '').length < 2}
+                              onClick={() => void saveUser(user)}
+                            >
+                              {t('admin.users.save')}
+                            </Button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </>
         )}
       </Stack>

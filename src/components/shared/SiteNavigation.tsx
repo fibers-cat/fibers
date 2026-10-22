@@ -138,6 +138,7 @@ export default function SiteNavigation({ currentPath, returnTo, locale }: Props)
   const [open, setOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [userAlias, setUserAlias] = useState<string | null>(null);
   const [role, setRole] = useState<AppRole | null>(null);
   const [currentUrl, setCurrentUrl] = useState(returnTo ?? localizePath(currentPath, locale));
   useEffect(() => {
@@ -160,6 +161,7 @@ export default function SiteNavigation({ currentPath, returnTo, locale }: Props)
       if (!user) {
         if (active) {
           setAvatarUrl(null);
+          setUserAlias(null);
           setRole(null);
         }
         return;
@@ -170,6 +172,7 @@ export default function SiteNavigation({ currentPath, returnTo, locale }: Props)
         const profile = await fetchUserProfile(user.id);
         if (active) {
           setAvatarUrl(socialAvatar ?? profile.avatarUrl ?? null);
+          setUserAlias(profile.alias);
           setRole(profile.role);
         }
       } catch (error) {
@@ -217,8 +220,8 @@ export default function SiteNavigation({ currentPath, returnTo, locale }: Props)
           <AppTooltip title={signedIn ? t('profile.yourProfile') : t('profile.signIn')} arrow variant="sidebar">
             <IconButton component="a" href={profileHref} className="profile-link" aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}>
               {signedIn ? (
-                <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
-                  <PersonOutlineRounded fontSize="small" />
+                <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: avatarUrl ? 'rgba(255,255,255,.18)' : '#e94b50', color: '#fff', fontWeight: 700 }}>
+                  {avatarUrl ? <PersonOutlineRounded fontSize="small" /> : (userAlias ?? '?').slice(0, 2).toUpperCase()}
                 </Avatar>
               ) : <PersonOutlineRounded />}
             </IconButton>
@@ -256,8 +259,8 @@ export default function SiteNavigation({ currentPath, returnTo, locale }: Props)
                 aria-label={signedIn ? t('profile.yourProfile') : t('profile.signIn')}
               >
                 {signedIn ? (
-                  <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: 'rgba(255,255,255,.18)', color: '#fff' }}>
-                    <PersonOutlineRounded fontSize="small" />
+                  <Avatar src={avatarUrl ?? undefined} sx={{ width: 40, height: 40, bgcolor: avatarUrl ? 'rgba(255,255,255,.18)' : '#e94b50', color: '#fff', fontWeight: 700 }}>
+                    {avatarUrl ? <PersonOutlineRounded fontSize="small" /> : (userAlias ?? '?').slice(0, 2).toUpperCase()}
                   </Avatar>
                 ) : <PersonOutlineRounded />}
               </IconButton>
