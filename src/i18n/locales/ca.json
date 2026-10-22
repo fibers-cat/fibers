@@ -528,7 +528,16 @@
   "contributorRanking": {
     "empty": "Encara no hi ha aportacions aprovades. Sigues la primera persona a compartir material.",
     "materialsOne": "material",
-    "materialsMany": "materials"
+    "materialsMany": "materials",
+    "totalContributors": "Col·laboradors",
+    "totalMaterials": "Materials compartits",
+    "tierNovice": "Novell",
+    "tierContributor": "Col·laborador",
+    "tierExpert": "Expert",
+    "tierMaster": "Mestre",
+    "tierLegend": "Llegenda",
+    "nextTier": "Fins al següent nivell",
+    "topContributor": "Top col·laborador"
   },
   "terms": {
     "meta": {
