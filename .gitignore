@@ -12,6 +12,8 @@ supabase/*
 !/supabase/migrations/
 # !/supabase/migrations/*.sql
 /supabase/migrations/*.sql
+!/supabase/functions/
+!/supabase/functions/**
 
 !/supabase/emails/
 !/supabase/emails/src/
