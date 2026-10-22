@@ -7,6 +7,9 @@ export type ManagedUser = {
   email: string | null;
   alias: string;
   role: 'user' | 'admin' | 'superadmin';
+  avatar_url: string | null;
+  created_at: string;
+  last_sign_in_at: string | null;
 };
 
 function client() {

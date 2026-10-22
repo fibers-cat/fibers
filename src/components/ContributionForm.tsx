@@ -11,7 +11,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import AttachFileRounded from "@mui/icons-material/AttachFileRounded";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
 import CheckCircleRounded from "@mui/icons-material/CheckCircleRounded";
@@ -87,6 +86,8 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   const [sessionLost, setSessionLost] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [fileSizeError, setFileSizeError] = useState(false);
+  const [fileFormatError, setFileFormatError] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [subjectId, setSubjectId] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -96,6 +97,8 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   const [showValidationErrors, setShowValidationErrors] = useState(false);
 
   const lastUserId = useRef<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const subjectsLoaded = useRef(false);
   /** Subject requested through the query string, read on the client. */
   const requestedSubject = useRef(initialSubject);
@@ -203,6 +206,39 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   }, [loadSubjects, loadIdentity]);
 
   const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+
+  const allowedExtensions = new Set([
+    "pdf", "txt", "c", "cpp", "png", "jpg", "jpeg", "webp", "zip", "rar",
+    "doc", "docx", "ppt", "pptx", "xls", "xlsx",
+  ]);
+
+  /** Validates and stores a batch of files coming from the picker or a drop. */
+  const acceptFiles = (selected: File[]) => {
+    if (selected.length === 0) return;
+    if (selected.some((file) => file.size > maxFileSize)) {
+      setFileSizeError(true);
+      setFileFormatError(false);
+      return;
+    }
+    const hasInvalidFormat = selected.some((file) => {
+      const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+      return !allowedExtensions.has(ext);
+    });
+    if (hasInvalidFormat) {
+      setFileSizeError(false);
+      setFileFormatError(true);
+      return;
+    }
+    setFileSizeError(false);
+    setFileFormatError(false);
+    setFiles(selected);
+    const input = fileInputRef.current;
+    if (input) {
+      const transfer = new DataTransfer();
+      selected.forEach((file) => transfer.items.add(file));
+      input.files = transfer.files;
+    }
+  };
   const selectedSubject = useMemo(
     () => subjects.find((item) => item.id === subjectId) ?? null,
     [subjects, subjectId],
@@ -224,9 +260,11 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
     files:
       fileSizeError
         ? t("contributionForm.errors.filesTooLarge")
-        : files.length === 0
-          ? t("contributionForm.errors.filesRequired")
-          : "",
+        : fileFormatError
+          ? t("contributionForm.errors.filesInvalidType")
+          : files.length === 0
+            ? t("contributionForm.errors.filesRequired")
+            : "",
     acknowledgement: acknowledged
       ? ""
       : t("contributionForm.errors.acknowledgement"),
@@ -258,10 +296,17 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
         files,
       });
       setMessage(t("contributionForm.success"));
+      setShowValidationErrors(false);
+      setTimeout(() => {
+        formRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+      }, 0);
       setFiles([]);
+      setSubjectId("");
       setTitle("");
       setDescription("");
       setAcknowledged(false);
+      setFileSizeError(false);
+      setFileFormatError(false);
     } catch (error) {
       setMessage(
         error instanceof Error
@@ -335,6 +380,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   return (
     <AppThemeProvider>
       <Stack
+        ref={formRef}
         component="form"
         spacing={2.5}
         className="contribution-form"
@@ -356,18 +402,6 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
         )}
         {subjectsError && (
           <Alert severity="warning">{t("contributionForm.subjectsError")}</Alert>
-        )}
-        {message && (
-          <Typography
-            className={`contribution-status ${
-              message.startsWith(t("contributionForm.success"))
-                ? "contribution-status--success"
-                : "contribution-status--error"
-            }`}
-            role="status"
-          >
-            {message}
-          </Typography>
         )}
         <Autocomplete
           options={subjects}
@@ -475,6 +509,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
             </span>
           </span>
           <input
+            ref={fileInputRef}
             id="contribution-files-input"
             className="file-input"
             type="file"
@@ -487,17 +522,37 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
             onChange={(event) => {
               const selected = Array.from(event.target.files ?? []);
               event.target.value = "";
-              if (selected.some((file) => file.size > maxFileSize)) {
-                setFileSizeError(true);
-                return;
-              }
-              setFileSizeError(false);
-              setFiles(selected);
+              acceptFiles(selected);
             }}
           />
           <label
-            className={`file-dropzone ${showValidationErrors && fieldErrors.files ? "file-dropzone--error" : ""}`}
+            className={`file-dropzone ${isDragging ? "file-dropzone--dragging" : ""} ${showValidationErrors && fieldErrors.files ? "file-dropzone--error" : ""}`}
             htmlFor="contribution-files-input"
+            onDragEnter={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              setIsDragging(true);
+            }}
+            onDragOver={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              event.dataTransfer.dropEffect = "copy";
+              setIsDragging(true);
+            }}
+            onDragLeave={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                setIsDragging(false);
+              }
+            }}
+            onDrop={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              setIsDragging(false);
+              const dropped = Array.from(event.dataTransfer.files ?? []);
+              acceptFiles(dropped);
+            }}
           >
             <span className="file-dropzone-icon" aria-hidden="true">
               <AttachFileRounded fontSize="small" />
@@ -509,7 +564,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
               </span>
             </span>
           </label>
-          {showValidationErrors && fieldErrors.files && (
+          {(fileSizeError || fileFormatError || (showValidationErrors && fieldErrors.files)) && (
             <FormHelperText error className="contribution-field-error">
               {fieldErrors.files}
             </FormHelperText>
@@ -564,7 +619,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
               />
             }
             label={
-              <span>{t("contributionForm.acknowledgement")}</span>
+              <span className="contribution-acknowledgement-label">{t("contributionForm.acknowledgement")}</span>
             }
           />
           {showValidationErrors && fieldErrors.acknowledgement && (
@@ -573,6 +628,15 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
             </FormHelperText>
           )}
         </Stack>
+        {message && (
+          <Alert
+            severity={message.startsWith(t("contributionForm.success")) ? "success" : "error"}
+            role="status"
+            className="contribution-status-alert"
+          >
+            {message}
+          </Alert>
+        )}
         <Button
           className="primary-action-button"
           type="submit"
