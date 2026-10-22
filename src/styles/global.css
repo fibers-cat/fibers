@@ -1952,6 +1952,11 @@ textarea {
   background: #fff8f7;
 }
 
+.file-dropzone--dragging {
+  border-color: var(--coral);
+  background: #fff1ef;
+}
+
 .file-input:focus-visible+.file-dropzone {
   outline: 2px solid var(--coral);
   outline-offset: 2px;
@@ -2079,9 +2084,9 @@ textarea {
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.4;
-  overflow-wrap: anywhere;
-  text-wrap: wrap;
-  word-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .file-item-size {

@@ -87,6 +87,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   const [sessionLost, setSessionLost] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [fileSizeError, setFileSizeError] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [subjectId, setSubjectId] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -96,6 +97,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   const [showValidationErrors, setShowValidationErrors] = useState(false);
 
   const lastUserId = useRef<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const subjectsLoaded = useRef(false);
   /** Subject requested through the query string, read on the client. */
   const requestedSubject = useRef(initialSubject);
@@ -203,6 +205,23 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   }, [loadSubjects, loadIdentity]);
 
   const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+
+  /** Validates and stores a batch of files coming from the picker or a drop. */
+  const acceptFiles = (selected: File[]) => {
+    if (selected.length === 0) return;
+    if (selected.some((file) => file.size > maxFileSize)) {
+      setFileSizeError(true);
+      return;
+    }
+    setFileSizeError(false);
+    setFiles(selected);
+    const input = fileInputRef.current;
+    if (input) {
+      const transfer = new DataTransfer();
+      selected.forEach((file) => transfer.items.add(file));
+      input.files = transfer.files;
+    }
+  };
   const selectedSubject = useMemo(
     () => subjects.find((item) => item.id === subjectId) ?? null,
     [subjects, subjectId],
@@ -475,6 +494,7 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
             </span>
           </span>
           <input
+            ref={fileInputRef}
             id="contribution-files-input"
             className="file-input"
             type="file"
@@ -487,17 +507,37 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
             onChange={(event) => {
               const selected = Array.from(event.target.files ?? []);
               event.target.value = "";
-              if (selected.some((file) => file.size > maxFileSize)) {
-                setFileSizeError(true);
-                return;
-              }
-              setFileSizeError(false);
-              setFiles(selected);
+              acceptFiles(selected);
             }}
           />
           <label
-            className={`file-dropzone ${showValidationErrors && fieldErrors.files ? "file-dropzone--error" : ""}`}
+            className={`file-dropzone ${isDragging ? "file-dropzone--dragging" : ""} ${showValidationErrors && fieldErrors.files ? "file-dropzone--error" : ""}`}
             htmlFor="contribution-files-input"
+            onDragEnter={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              setIsDragging(true);
+            }}
+            onDragOver={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              event.dataTransfer.dropEffect = "copy";
+              setIsDragging(true);
+            }}
+            onDragLeave={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                setIsDragging(false);
+              }
+            }}
+            onDrop={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              setIsDragging(false);
+              const dropped = Array.from(event.dataTransfer.files ?? []);
+              acceptFiles(dropped);
+            }}
           >
             <span className="file-dropzone-icon" aria-hidden="true">
               <AttachFileRounded fontSize="small" />
