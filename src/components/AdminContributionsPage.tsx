@@ -147,11 +147,9 @@ export default function AdminContributionsPage({ locale }: { locale: Locale }) {
               </Button>
             </Stack>
             {loading && <CircularProgress aria-label={t('admin.contributions.loading')} />}
-            {!loading && !error && items.length === 0 && (
-              <Alert severity="info">{t('admin.contributions.empty')}</Alert>
-            )}
-            <TableContainer component={Paper} variant="outlined">
-              <Table size="small" stickyHeader>
+            {(items.length > 0 || (!loading && !error)) && (
+              <TableContainer component={Paper} variant="outlined">
+                <Table size="small" stickyHeader>
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ whiteSpace: 'nowrap' }}>
@@ -182,8 +180,14 @@ export default function AdminContributionsPage({ locale }: { locale: Locale }) {
                     <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>Accions</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {sortedItems.map((item) => (
+                  <TableBody>
+                    {sortedItems.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6}>
+                          <Alert severity="info">{t('admin.contributions.empty')}</Alert>
+                        </TableCell>
+                      </TableRow>
+                    ) : sortedItems.map((item) => (
                     <TableRow key={item.id} hover onClick={() => setDrawerItem(item)} sx={{ cursor: 'pointer' }}>
                       <TableCell>
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.title}</Typography>
@@ -215,10 +219,11 @@ export default function AdminContributionsPage({ locale }: { locale: Locale }) {
                         </Button>
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
           </>
         )}
       </Stack>
@@ -306,7 +311,7 @@ export default function AdminContributionsPage({ locale }: { locale: Locale }) {
                   disabled={actionId !== null}
                   startIcon={<CancelRounded />}
                   onClick={() => void review(drawerItem, 'rejected')}
-                  sx={{ textTransform: 'none', borderRadius: 1.5, px: 2.5 }}
+                  sx={{ textTransform: 'none', px: 2.5 }}
                 >
                   {t('admin.contributions.reject')}
                 </Button>
@@ -315,7 +320,7 @@ export default function AdminContributionsPage({ locale }: { locale: Locale }) {
                   disabled={actionId !== null}
                   startIcon={<CheckCircleRounded />}
                   onClick={() => void review(drawerItem, 'approved')}
-                  sx={{ textTransform: 'none', borderRadius: 1.5, px: 2.5, boxShadow: 'none', bgcolor: '#158b84', '&:hover': { bgcolor: '#0f6f69' } }}
+                  sx={{ textTransform: 'none', px: 2.5, boxShadow: 'none', bgcolor: '#158b84', '&:hover': { bgcolor: '#0f6f69' } }}
                 >
                   {t('admin.contributions.approve')}
                 </Button>

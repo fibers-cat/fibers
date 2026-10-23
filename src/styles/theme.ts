@@ -24,7 +24,10 @@ export const fibersTheme = createTheme({
     button: { textTransform: 'none', fontWeight: 700, fontSize: '1rem' },
   },
   components: {
-    MuiButton: { defaultProps: { disableElevation: true } },
+    MuiButton: {
+      defaultProps: { disableElevation: true },
+      styleOverrides: { root: { borderRadius: 'var(--button-radius)' } },
+    },
     MuiCard: { styleOverrides: { root: { border: '1px solid #e6e8ec' } } },
     MuiFormHelperText: {
       styleOverrides: { root: { fontSize: '0.875rem', lineHeight: 1.5 } },

@@ -101,7 +101,7 @@ export default function ProfileSignInPanel({
           sx={{
             minHeight: 40,
             borderColor: '#d0d5dd',
-            borderRadius: '50px',
+            borderRadius: 'var(--button-radius)',
             bgcolor: '#fff',
             color: '#1f1f1f',
             fontFamily: '"Roboto Variable", Roboto, Arial, sans-serif',
@@ -123,7 +123,7 @@ export default function ProfileSignInPanel({
           sx={{
             minHeight: 40,
             borderColor: '#d0d5dd',
-            borderRadius: '50px',
+            borderRadius: 'var(--button-radius)',
             bgcolor: '#fff',
             color: 'text.primary',
             '&:hover': { borderColor: '#b8bec8', bgcolor: '#f6f7f9' },

@@ -702,14 +702,13 @@
     "filesOne": "{count} archivo",
     "filesMany": "{count} archivos",
     "recoveredAlert": "Archivos recuperados de la web anterior; comprueba si el material sigue vigente.",
-    "emptyAlert": "No se han recuperado archivos para esta asignatura de la web anterior.",
-    "helpCopy": "Si tienes apuntes propios o ejercicios resueltos, puedes ayudar a completar el espacio de {name} ({acronym}).",
     "contributeCta": "Aporta material"
   },
   "approvedMaterials": {
     "heading": "Materiales",
     "loading": "Cargando…",
     "error": "No se han podido cargar los materiales aprobados.",
+    "emptyAlert": "No hay materiales para esta asignatura. Si tienes apuntes propios o ejercicios resueltos, puedes ayudar a completar el espacio de {name} ({acronym}).",
     "attributedTo": "Aportado por {alias}",
     "unknownAuthor": "Estudiante",
     "downloadFile": "Descarga el archivo",
@@ -771,6 +770,7 @@
       "aliasError": "El alias debe tener entre 2 y 40 caracteres.",
       "loadError": "No se ha podido cargar la lista de usuarios.",
       "empty": "No hay usuarios.",
+      "emptySearch": "Ningún usuario coincide con la búsqueda.",
       "selectPrompt": "Selecciona un usuario para editarlo.",
       "saveError": "No se ha podido guardar el perfil. Puede que el rol ya haya cambiado.",
       "notFoundError": "No se ha podido encontrar el perfil para actualizar.",

@@ -180,11 +180,9 @@ export default function AdminUsersPage({ locale }: { locale: Locale }) {
               </Button>
             </Stack>
             {loading && <CircularProgress aria-label={t('admin.users.loading')} />}
-            {!loading && filteredUsers.length === 0 && (
-              <Alert severity="info">{t('admin.users.empty')}</Alert>
-            )}
-            <TableContainer component={Paper} variant="outlined">
-              <Table size="small" stickyHeader>
+            {(users.length > 0 || (!loading && !error)) && (
+              <TableContainer component={Paper} variant="outlined">
+                <Table size="small" stickyHeader>
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ whiteSpace: 'nowrap' }}>
@@ -215,8 +213,16 @@ export default function AdminUsersPage({ locale }: { locale: Locale }) {
                     <TableCell sx={{ whiteSpace: 'nowrap' }}>{t('admin.users.actions')}</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {filteredUsers.map((user) => {
+                  <TableBody>
+                    {filteredUsers.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6}>
+                          <Alert severity="info">
+                            {t(search.trim() ? 'admin.users.emptySearch' : 'admin.users.empty')}
+                          </Alert>
+                        </TableCell>
+                      </TableRow>
+                    ) : filteredUsers.map((user) => {
                     const draft = drafts[user.user_id];
                     const protectedUser = user.role === 'superadmin';
                     return (
@@ -338,10 +344,11 @@ export default function AdminUsersPage({ locale }: { locale: Locale }) {
                         </TableCell>
                       </TableRow>
                     );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
           </>
         )}
       </Stack>

@@ -702,14 +702,13 @@
     "filesOne": "{count} fitxer",
     "filesMany": "{count} fitxers",
     "recoveredAlert": "Fitxers recuperats de la web anterior; comprova si el material continua vigent.",
-    "emptyAlert": "No s’han recuperat fitxers per a aquesta assignatura de la web anterior.",
-    "helpCopy": "Si tens apunts propis o exercicis resolts, pots ajudar a completar l’espai de {name} ({acronym}).",
     "contributeCta": "Aporta material"
   },
   "approvedMaterials": {
     "heading": "Materials",
     "loading": "Carregant…",
     "error": "No s’han pogut carregar els materials aprovats.",
+    "emptyAlert": "No hi ha materials per a aquesta assignatura. Si tens apunts propis o exercicis resolts, pots ajudar a completar l’espai de {name} ({acronym}).",
     "attributedTo": "Aportat per {alias}",
     "unknownAuthor": "Estudiant",
     "downloadFile": "Descarrega el fitxer",
@@ -771,6 +770,7 @@
       "aliasError": "L’àlies ha de tenir entre 2 i 40 caràcters.",
       "loadError": "No s’ha pogut carregar la llista d’usuaris.",
       "empty": "No hi ha usuaris.",
+      "emptySearch": "Cap usuari coincideix amb la cerca.",
       "selectPrompt": "Selecciona un usuari per editar-lo.",
       "saveError": "No s’ha pogut desar el perfil. Pot ser que el rol ja hagi canviat.",
       "notFoundError": "No s’ha pogut trobar el perfil per actualitzar.",
