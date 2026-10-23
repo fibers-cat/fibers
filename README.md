@@ -27,7 +27,10 @@ Requereix Node.js i npm.
    npm install
    ```
 
-2. Copia `.env.example` a `.env` i configura `PUBLIC_SUPABASE_URL` i `PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+2. Copia `.env.example` a `.env` i configura aquestes variables:
+   - `PUBLIC_SUPABASE_URL`: URL del projecte Supabase.
+   - `PUBLIC_SUPABASE_PUBLISHABLE_KEY`: clau publicable del projecte (`sb_publishable_…`).
+   - `SUPABASE_PROJECT_ID`: referència del projecte; és necessària per a `npm run test:rls` i opcional per seleccionar el projecte en altres eines.
 3. Inicia el servidor local:
 
    ```sh
@@ -62,3 +65,7 @@ El catàleg conserva l’acrònim que s’utilitza als enllaços i als materials
 El domini canònic es configura a `astro.config.mjs`. Astro genera el sitemap durant la compilació i `public/robots.txt` n’indica l’adreça. Perquè el formulari de contacte funcioni a Netlify, activa **Form detection** a la configuració del lloc i torna’l a desplegar. El formulari d’aportacions obre el programa de correu; els fitxers s’han d’adjuntar manualment.
 
 Els 54 fitxers recuperats es conserven a `public/files/`. `src/data/materials.json` en manté el catàleg i `src/data/materials.ts` associa cada recurs amb una assignatura o amb la pàgina de recursos generals.
+
+## Llicència
+
+El codi es distribueix amb la [PolyForm Shield License 1.0.0](LICENSE). És una llicència *source-available*, no una llicència de codi obert aprovada per l’OSI: permet usos no competidors, però no oferir un producte o servei que competeixi amb Fibers. Consulta el text complet abans de reutilitzar-lo.
