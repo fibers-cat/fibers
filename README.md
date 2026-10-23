@@ -27,7 +27,10 @@ Requereix Node.js i npm.
    npm install
    ```
 
-2. Copia `.env.example` a `.env` i configura `PUBLIC_SUPABASE_URL` i `PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+2. Copia `.env.example` a `.env` i configura aquestes variables:
+   - `PUBLIC_SUPABASE_URL`: URL del projecte Supabase.
+   - `PUBLIC_SUPABASE_PUBLISHABLE_KEY`: clau publicable del projecte (`sb_publishable_…`).
+   - `SUPABASE_PROJECT_ID`: referència del projecte; és necessària per a `npm run test:rls` i opcional per seleccionar el projecte en altres eines.
 3. Inicia el servidor local:
 
    ```sh
