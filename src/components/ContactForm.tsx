@@ -189,7 +189,7 @@ export default function ContactForm({ locale }: Props) {
           name="message"
           label={t("contactForm.message")}
           multiline
-          minRows={5}
+          rows={5}
           error={Boolean(validationErrors.message)}
           helperText={validationErrors.message}
           slotProps={{
