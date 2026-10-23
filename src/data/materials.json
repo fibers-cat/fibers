@@ -52,7 +52,7 @@
         "path":  "bases-de-dades/practica_procedimientos_y_disparadores.txt",
         "title":  "Pràctica de procediments i disparadors",
         "extension":  "txt",
-        "sizeBytes":  2006,
+        "sizeBytes":  1971,
         "subjectCode":  "BD"
     },
     {
@@ -123,13 +123,6 @@
         "title":  "Treballs en equip: com enfrentar-se als \u0027jetas\u0027 i als \u0027mantes\u0027",
         "extension":  "pdf",
         "sizeBytes":  102592,
-        "subjectCode":  null
-    },
-    {
-        "path":  "documentacio-ajuda/indice.txt",
-        "title":  "indice",
-        "extension":  "txt",
-        "sizeBytes":  106,
         "subjectCode":  null
     },
     {
@@ -273,13 +266,6 @@
         "subjectCode":  "PE"
     },
     {
-        "path":  "recuperacions/indice.txt",
-        "title":  "indice",
-        "extension":  "txt",
-        "sizeBytes":  84,
-        "subjectCode":  null
-    },
-    {
         "path":  "recuperacions/Reavaluacio_FM.pdf",
         "title":  "Fonaments Matemàtics",
         "extension":  "pdf",
@@ -292,6 +278,20 @@
         "extension":  "pdf",
         "sizeBytes":  15547,
         "subjectCode":  "M2"
+    },
+    {
+        "path":  "recuperacions/Reavaluacio_FM.pdf",
+        "title":  "Fonaments Matemàtics",
+        "extension":  "pdf",
+        "sizeBytes":  19675,
+        "subjectCode":  null
+    },
+    {
+        "path":  "recuperacions/Reavaluacio_M2.pdf",
+        "title":  "Matemàtiques 2",
+        "extension":  "pdf",
+        "sizeBytes":  15547,
+        "subjectCode":  null
     },
     {
         "path":  "recuperacions/texto.txt",
