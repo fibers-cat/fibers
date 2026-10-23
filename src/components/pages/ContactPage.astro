@@ -6,7 +6,7 @@ import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18
 
 const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
-const contactEmail = 'fiberscat@gmail.com';
+const contactEmail = 'fibers.cat@gmail.com';
 ---
 
 <SiteLayout title={t('contact.meta.title')} description={t('contact.meta.description')}>
@@ -22,6 +22,7 @@ const contactEmail = 'fiberscat@gmail.com';
 
         <section class="contact-direct" aria-labelledby="contact-direct-title">
           <h2 id="contact-direct-title" class="contact-direct-label">{t('contact.directLabel')}</h2>
+          <!--email_off-->
           <a class="contact-email" href={`mailto:${contactEmail}`}>
             <span class="contact-email-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -31,6 +32,7 @@ const contactEmail = 'fiberscat@gmail.com';
             </span>
             <span>{contactEmail}</span>
           </a>
+          <!--/email_off-->
           <p>{t('contact.directText')}</p>
         </section>
 

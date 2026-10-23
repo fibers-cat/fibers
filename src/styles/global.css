@@ -816,7 +816,16 @@ textarea {
 
 .subject-card:focus-within {
   border-color: #d7dbe1;
-  box-shadow: 0 0 0 3px rgba(21, 139, 132, .12);
+  box-shadow: 0 0 0 3px rgba(32, 36, 44, .08);
+}
+
+/* Evita el efecto ripple/wave oscuro del CardActionArea */
+.subject-card-action .MuiTouchRipple-root {
+  display: none;
+}
+
+.subject-card-action .MuiCardActionArea-focusHighlight {
+  opacity: 0 !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3688,7 +3697,7 @@ textarea {
   padding: 21px 23px;
   border: 1px solid #f1ded9;
   border-radius: 18px;
-  background: linear-gradient(135deg, #fffdfc, #fff7f5);
+  background: #fff;
 }
 
 .contact-direct-label {
