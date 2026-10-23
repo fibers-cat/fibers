@@ -698,7 +698,7 @@
     "emptyLead": "Prueba con otro nombre o acrónimo, o cambia los filtros."
   },
   "subjectStatus": {
-    "heading": "Materiales",
+    "heading": "Materiales legacy",
     "filesOne": "{count} archivo",
     "filesMany": "{count} archivos",
     "recoveredAlert": "Archivos recuperados de la web anterior; comprueba si el material sigue vigente.",
@@ -707,7 +707,7 @@
     "contributeCta": "Aporta material"
   },
   "approvedMaterials": {
-    "heading": "Aportaciones de la comunidad",
+    "heading": "Materiales",
     "loading": "Cargando…",
     "error": "No se han podido cargar los materiales aprobados.",
     "attributedTo": "Aportado por {alias}",

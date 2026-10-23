@@ -71,6 +71,7 @@ const subjectCourseSchema = {
         <p class="subject-note">{subject.is_current ? t('subject.currentNote') : t('subject.historicalNote')}</p>
       </div>
     </header>
+    <a class="back-link" href={localizePath('/assignatures/', locale)}>← {t('subject.backLink')}</a>
     <SubjectStatus client:load subjectId={subject.id} subjectName={subject.name} subjectAcronym={subject.acronym} locale={locale} />
     <a class="back-link" href={localizePath('/assignatures/', locale)}>← {t('subject.backLink')}</a>
   </div>

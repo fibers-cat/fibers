@@ -698,7 +698,7 @@
     "emptyLead": "Prova amb un altre nom o acrònim, o canvia els filtres."
   },
   "subjectStatus": {
-    "heading": "Materials",
+    "heading": "Materials legacy",
     "filesOne": "{count} fitxer",
     "filesMany": "{count} fitxers",
     "recoveredAlert": "Fitxers recuperats de la web anterior; comprova si el material continua vigent.",
@@ -707,7 +707,7 @@
     "contributeCta": "Aporta material"
   },
   "approvedMaterials": {
-    "heading": "Aportacions de la comunitat",
+    "heading": "Materials",
     "loading": "Carregant…",
     "error": "No s’han pogut carregar els materials aprovats.",
     "attributedTo": "Aportat per {alias}",
