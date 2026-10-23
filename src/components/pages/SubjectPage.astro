@@ -1,6 +1,5 @@
 ---
 import SiteLayout from '@/layouts/SiteLayout.astro';
-import SiteBreadcrumbs from '@/components/shared/SiteBreadcrumbs.astro';
 import SubjectStatus from '@/components/SubjectStatus';
 import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
 import type { Subject } from '@/services/supabase';
@@ -46,7 +45,6 @@ const subjectCourseSchema = {
   additionalStructuredData={[subjectCourseSchema]}
 >
   <div class="page-content inner-page subject-page">
-    <SiteBreadcrumbs items={breadcrumbs} ariaLabel={t('breadcrumbs.ariaLabel')} />
     <header class="subject-title-panel">
       <span class="subject-code subject-code-large">{subject.acronym}</span>
       <div class="subject-title-body">

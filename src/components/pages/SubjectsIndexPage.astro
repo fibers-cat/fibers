@@ -1,6 +1,5 @@
 ---
 import SiteLayout from '@/layouts/SiteLayout.astro';
-import SiteBreadcrumbs from '@/components/shared/SiteBreadcrumbs.astro';
 import SubjectExplorer from '@/components/SubjectExplorer';
 import { fetchSubjects } from '@/services/subjects';
 import { fetchSubjectMaterialCounts } from '@/services/subjectMaterialCounts';
@@ -18,7 +17,6 @@ const breadcrumbs = [
 
 <SiteLayout title={t('catalog.meta.title')} description={t('catalog.meta.description')} breadcrumbs={breadcrumbs}>
   <div class="page-content inner-page">
-    <SiteBreadcrumbs items={breadcrumbs} ariaLabel={t('breadcrumbs.ariaLabel')} />
     <header class="page-heading">
       <span class="eyebrow">{t('catalog.eyebrow')}</span>
       <h1>{t('catalog.title')}</h1>
