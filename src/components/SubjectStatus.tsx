@@ -23,10 +23,16 @@ export default function SubjectStatus({ subjectId, subjectName, subjectAcronym, 
   return (
     <AppThemeProvider>
       <Paper className="subject-status-panel" elevation={0}>
-        <ApprovedMaterials subjectId={subjectId} subjectAcronym={subjectAcronym} locale={locale} />
+        <ApprovedMaterials
+          subjectId={subjectId}
+          subjectName={subjectName}
+          subjectAcronym={subjectAcronym}
+          hasLegacyMaterials={materials.length > 0}
+          locale={locale}
+        />
       </Paper>
 
-      {materials.length > 0 ? (
+      {materials.length > 0 && (
         <Paper className="subject-status-panel" elevation={0}>
           <Stack direction="row" spacing={1.5} className="status-heading" sx={{ alignItems: 'center' }}>
             <Typography variant="h5" component="h2">{t('subjectStatus.heading')}</Typography>
@@ -44,15 +50,6 @@ export default function SubjectStatus({ subjectId, subjectName, subjectAcronym, 
             {t('subjectStatus.recoveredAlert')}
           </Alert>
           <ResourceCollection materials={materials} locale={locale} />
-        </Paper>
-      ) : (
-        <Paper className="subject-status-panel" elevation={0}>
-          <Alert className="review-alert" icon={<InfoOutlined />} severity="info">
-            {t('subjectStatus.emptyAlert')}
-          </Alert>
-          <Typography className="status-copy">
-            {t('subjectStatus.helpCopy', { name: subjectName, acronym: subjectAcronym })}
-          </Typography>
         </Paper>
       )}
     </AppThemeProvider>

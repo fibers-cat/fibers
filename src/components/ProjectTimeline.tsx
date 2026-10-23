@@ -151,7 +151,7 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
                           startIcon={icon}
                           variant="outlined"
                           size="small"
-                          sx={{ minHeight: 48, px: 2, borderColor: '#e1e4e9', borderRadius: '12px', color: '#20242c', fontWeight: 700, '&:hover': { borderColor: '#c5cbd4', bgcolor: '#fafbfc' } }}
+                          sx={{ minHeight: 48, px: 2, borderColor: '#e1e4e9', borderRadius: 'var(--button-radius)', color: '#20242c', fontWeight: 700, '&:hover': { borderColor: '#c5cbd4', bgcolor: '#fafbfc' } }}
                         >
                           {link.text}
                         </Button>
@@ -165,7 +165,7 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
                           startIcon={link.icon === 'github' ? icon : undefined}
                           variant="outlined"
                           size="small"
-                          sx={{ minHeight: 48, px: 2, borderColor: '#e1e4e9', borderRadius: '12px', color: '#20242c', fontWeight: 700, '&:hover': { borderColor: '#c5cbd4', bgcolor: '#fafbfc' } }}
+                          sx={{ minHeight: 48, px: 2, borderColor: '#e1e4e9', borderRadius: 'var(--button-radius)', color: '#20242c', fontWeight: 700, '&:hover': { borderColor: '#c5cbd4', bgcolor: '#fafbfc' } }}
                         >
                           {link.text} ↗
                         </Button>
@@ -192,7 +192,7 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
                 rel="noopener noreferrer"
                 variant="outlined"
                 size="small"
-                sx={{ flexShrink: 0, minHeight: 40, borderColor: '#e1e4e9', borderRadius: '10px', color: '#20242c', fontWeight: 700, whiteSpace: 'nowrap' }}
+                sx={{ flexShrink: 0, minHeight: 40, borderColor: '#e1e4e9', borderRadius: 'var(--button-radius)', color: '#20242c', fontWeight: 700, whiteSpace: 'nowrap' }}
               >
                 {preview.openLink.text} ↗
               </Button>

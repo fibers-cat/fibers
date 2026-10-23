@@ -14,6 +14,7 @@
   --teal: #158b84;
   --line: #e6e8ec;
   --sidebar: #20242c;
+  --button-radius: 12px;
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -210,7 +211,7 @@ textarea {
 }
 
 .mobile-contribute {
-  border-radius: 999px !important;
+  border-radius: var(--button-radius) !important;
 }
 
 .mobile-drawer {
@@ -436,7 +437,7 @@ textarea {
   justify-content: center;
   gap: 17px;
   padding: 0 19px;
-  border-radius: 12px;
+  border-radius: var(--button-radius);
   font-size: var(--text-base);
   font-weight: 700;
   text-decoration: none;
@@ -459,7 +460,7 @@ textarea {
   min-height: 46px;
   gap: 0;
   padding: 0 19px;
-  border-radius: 12px;
+  border-radius: var(--button-radius);
   color: #fff;
   background: var(--coral);
   box-shadow: 0 7px 16px rgba(233, 75, 80, .19);
@@ -710,7 +711,7 @@ textarea {
   width: 40px;
   height: 40px;
   border: 1px solid #d5d9df !important;
-  border-radius: 12px !important;
+  border-radius: var(--button-radius) !important;
   background: #fff !important;
 }
 
@@ -954,7 +955,7 @@ textarea {
   gap: 6px;
   padding: 0 11px;
   border: 1px solid #d5ebe7;
-  border-radius: 999px;
+  border-radius: var(--button-radius);
   background: #f4faf9;
   color: #126f69 !important;
   font-size: var(--text-sm) !important;
@@ -1758,7 +1759,7 @@ textarea {
   gap: 8px;
   padding: 9px 15px;
   border: 1px solid rgba(233, 75, 80, .3);
-  border-radius: 999px;
+  border-radius: var(--button-radius);
   background: #fff;
   color: #2f3946;
   font-size: 0.875rem;
@@ -3481,7 +3482,7 @@ textarea {
   flex: none;
   padding-inline: 18px;
   border-color: #d7dbe1;
-  border-radius: 999px;
+  border-radius: var(--button-radius);
   color: var(--ink);
 }
 
@@ -3588,7 +3589,7 @@ textarea {
 .profile-alias-form .MuiButton-root {
   align-self: flex-start;
   padding-inline: 20px;
-  border-radius: 999px;
+  border-radius: var(--button-radius);
 }
 
 .profile-alias-form .MuiOutlinedInput-root { border-radius: 11px; background: #fff; }
@@ -3602,7 +3603,7 @@ textarea {
 .profile-actions .MuiButton-root {
   justify-content: flex-start;
   padding-inline: 14px;
-  border-radius: 11px;
+  border-radius: var(--button-radius);
 }
 
 .profile-signin {
