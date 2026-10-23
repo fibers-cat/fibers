@@ -112,7 +112,7 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
                   </Typography>
                 ))}
                 {item.note && (
-                  <Alert severity="info" sx={{ mt: 1 }}>
+                  <Alert severity="info" sx={{ mt: 1, fontSize: "0.91rem" }}>
                     {item.note}
                   </Alert>
                 )}
