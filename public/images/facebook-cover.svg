@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="312" viewBox="0 0 820 312">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#fff8f5"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#20242c" flood-opacity=".12"/></filter>
+  </defs>
+  <rect width="820" height="312" fill="#f2f4f7"/>
+  <rect x="18" y="18" width="784" height="276" rx="24" fill="url(#paper)" stroke="#e7e9ed"/>
+  <circle cx="700" cy="60" r="80" fill="#fff0ef"/>
+  <g transform="translate(59 53) scale(0.0908)" fill="#ea4747"><path d="M112 80h96v32h-96z M304 80h96v32h-96z M80 112h160v32H80z M272 112h160v32H272z M48 144h416v96H48z M80 240h352v32H80z M112 272h288v32H112z M144 304h224v32H144z M176 336h160v32H176z M208 368h96v32h-96z M240 400h32v32h-32z"/></g>
+  <text x="116" y="90" font-family="Arial, sans-serif" font-size="36" font-weight="700" letter-spacing="-2" fill="#20242c">fibers<tspan fill="#e94b50">.</tspan></text>
+  <text x="52" y="190" font-family="Arial, sans-serif" font-size="40" font-weight="700" letter-spacing="-1.5" fill="#20242c">Materials d'estudi</text>
+  <text x="52" y="232" font-family="Arial, sans-serif" font-size="40" font-weight="700" letter-spacing="-1.5" fill="#e94b50">de la FIB</text>
+  <text x="54" y="268" font-family="Arial, sans-serif" font-size="16" fill="#626b77">Apunts, exercicis i recursos compartits per la comunitat.</text>
+  <g filter="url(#shadow)" transform="rotate(9 600 165)">
+    <rect x="545" y="95" width="110" height="150" rx="12" fill="#f5dedb"/>
+    <rect x="505" y="105" width="112" height="152" rx="12" fill="#fff" stroke="#eceef1"/>
+    <rect x="524" y="126" width="62" height="6" rx="3" fill="#f3b4b1"/>
+    <rect x="524" y="143" width="77" height="4" rx="2" fill="#e7e9ed"/>
+    <rect x="524" y="156" width="73" height="4" rx="2" fill="#e7e9ed"/>
+    <rect x="524" y="177" width="77" height="40" rx="6" fill="#fff2f1"/>
+    <path d="M533 205l15-14 13 10 17-19 14 15" fill="none" stroke="#e94b50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <circle cx="705" cy="240" r="22" fill="#158b84"/>
+  <path d="M695 240l7 7 13-14" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
