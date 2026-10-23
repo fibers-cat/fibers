@@ -62,7 +62,9 @@ async function fetchContributorsWithLegacyView(
   }
 
   return (ranking.data ?? [])
-    .map((item) => ({ alias: item.alias, count: Number(item.material_count) }))
+    .flatMap((item) => item.alias
+      ? [{ alias: item.alias, count: Number(item.material_count ?? 0) }]
+      : [])
     .sort((a, b) => {
       const countDifference = b.count - a.count;
       if (countDifference !== 0) return countDifference;
@@ -97,10 +99,9 @@ export async function fetchContributors(): Promise<Contributor[]> {
     throw new Error(`No s’ha pogut carregar el rànquing: ${error.message}`);
   }
 
-  return (data ?? []).map((item) => ({
-    alias: item.alias,
-    count: Number(item.material_count),
-  }));
+  return (data ?? []).flatMap((item) => item.alias
+    ? [{ alias: item.alias, count: Number(item.material_count ?? 0) }]
+    : []);
 }
 
 /**

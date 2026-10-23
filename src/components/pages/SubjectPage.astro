@@ -1,6 +1,6 @@
 ---
 import SiteLayout from '@/layouts/SiteLayout.astro';
-// import SiteBreadcrumbs from '../shared/SiteBreadcrumbs';
+import SiteBreadcrumbs from '@/components/shared/SiteBreadcrumbs.astro';
 import SubjectStatus from '@/components/SubjectStatus';
 import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from '@/i18n';
 import type { Subject } from '@/services/supabase';
@@ -13,11 +13,40 @@ const { subject } = Astro.props;
 const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
 const subjectDescription = t('subject.metaDescription', { name: subject.name, acronym: subject.acronym });
+const breadcrumbs = [
+  { href: localizePath('/', locale), label: t('nav.home') },
+  { href: localizePath('/assignatures/', locale), label: t('nav.subjects') },
+  { label: `${subject.acronym}: ${subject.name}` },
+];
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://fibers.cat').href;
+const courseId = `${pageUrl}#course`;
+const subjectCourseSchema = {
+  '@type': 'Course',
+  '@id': courseId,
+  name: `${subject.acronym}: ${subject.name}`,
+  description: subjectDescription,
+  courseCode: subject.code ?? subject.acronym,
+  inLanguage: subject.languages.map((language) =>
+    language === 'ca' ? 'ca-ES' : language === 'es' ? 'es-ES' : 'en',
+  ),
+  provider: {
+    '@type': 'EducationalOrganization',
+    '@id': 'https://www.fib.upc.edu/#organization',
+    name: 'Facultat d’Informàtica de Barcelona',
+    url: 'https://www.fib.upc.edu/',
+  },
+};
 ---
 
-<SiteLayout title={`${subject.acronym}: ${subject.name}`} description={subjectDescription}>
+<SiteLayout
+  title={`${subject.acronym}: ${subject.name}`}
+  description={subjectDescription}
+  breadcrumbs={breadcrumbs}
+  mainEntityId={courseId}
+  additionalStructuredData={[subjectCourseSchema]}
+>
   <div class="page-content inner-page subject-page">
-    <!-- <SiteBreadcrumbs items={[{ href: '/', label: 'Inici' }, { href: '/assignatures/', label: 'Assignatures' }, { label: subject.acronym }]} /> -->
+    <SiteBreadcrumbs items={breadcrumbs} ariaLabel={t('breadcrumbs.ariaLabel')} />
     <header class="subject-title-panel">
       <span class="subject-code subject-code-large">{subject.acronym}</span>
       <div class="subject-title-body">

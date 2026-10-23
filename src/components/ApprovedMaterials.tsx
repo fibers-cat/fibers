@@ -6,7 +6,7 @@ import CodeBlock from "@/components/shared/CodeBlock";
 import { detectLanguage } from "@/data/codeLanguage";
 import { hasSupabaseConfig } from "@/services/supabase";
 import { fetchApprovedMaterials, type ApprovedContribution, type LegacyMaterial } from "@/services/contributions";
-import { intlLocale, useTranslations, type Locale } from "@/i18n";
+import { intlLocale, useTranslations as createTranslator, type Locale } from "@/i18n";
 
 type Props = { subjectId: string; locale: Locale };
 
@@ -25,7 +25,7 @@ function LegacyCode({ content, locale }: { content: string; locale: Locale }) {
 }
 
 export default function ApprovedMaterials({ subjectId, locale }: Props) {
-  const t = useTranslations(locale);
+  const t = useMemo(() => createTranslator(locale), [locale]);
   const [items, setItems] = useState<ApprovedContribution[]>([]);
   const [legacyItems, setLegacyItems] = useState<LegacyMaterial[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,7 +52,7 @@ export default function ApprovedMaterials({ subjectId, locale }: Props) {
     return () => {
       active = false;
     };
-  }, [subjectId, locale, t]);
+  }, [subjectId, t]);
 
   return (
     <section

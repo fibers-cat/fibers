@@ -19,12 +19,18 @@ interface Props {
   description?: string;
   noindex?: boolean;
   ogImage?: string;
+  breadcrumbs?: { label: string; href?: string }[];
+  mainEntityId?: string;
+  additionalStructuredData?: Record<string, unknown>[];
 }
 
 const {
   title,
   noindex = false,
   ogImage = '/images/og-fibers.png',
+  breadcrumbs = [],
+  mainEntityId,
+  additionalStructuredData = [],
 } = Astro.props;
 
 const currentLocale: Locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
@@ -41,6 +47,17 @@ const canonicalUrl = new URL(localizePath(basePath, currentLocale), site).href;
 const imageUrl = new URL(ogImage, site).href;
 const documentTitle = `${title} | Fibers`;
 const ogLocale = currentLocale === 'ca' ? 'ca_ES' : 'es_ES';
+const breadcrumbSchema = breadcrumbs.length > 0
+  ? {
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.label,
+        item: new URL(item.href ?? canonicalUrl, site).href,
+      })),
+    }
+  : null;
 const alternatePaths = locales.map((locale) => ({
   locale,
   href: new URL(localizePath(basePath, locale), site).href,
@@ -67,7 +84,10 @@ const structuredData = noindex
           description,
           inLanguage: currentLocale === 'ca' ? 'ca-ES' : 'es-ES',
           isPartOf: { '@id': `${siteOrigin}/#website` },
+          ...(mainEntityId ? { mainEntity: { '@id': mainEntityId } } : {}),
         },
+        ...(breadcrumbSchema ? [breadcrumbSchema] : []),
+        ...additionalStructuredData,
         ...(basePath === '/'
           ? [{
               '@type': 'Organization',
@@ -75,6 +95,11 @@ const structuredData = noindex
               name: 'Fibers',
               url: `${siteOrigin}/`,
               logo: `${siteOrigin}/images/fibers-heart.png`,
+              sameAs: [
+                'https://github.com/fibers-cat/fibers/',
+                'https://www.facebook.com/fibers.cat/',
+                'https://discord.gg/pqsbcBb',
+              ],
               description: t('org.description'),
               contactPoint: {
                 '@type': 'ContactPoint',

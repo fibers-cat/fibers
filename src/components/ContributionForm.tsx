@@ -1,26 +1,23 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type SyntheticEvent } from "react";
 import AppThemeProvider from '@/components/shared/AppThemeProvider';
+import ContributionFilesField from '@/components/ContributionFilesField';
 import Alert from "@mui/material/Alert";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
-import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import AttachFileRounded from "@mui/icons-material/AttachFileRounded";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
-import CloseRounded from "@mui/icons-material/CloseRounded";
 import ErrorOutlineRounded from "@mui/icons-material/ErrorOutlineRounded";
 import LockOutlined from "@mui/icons-material/LockOutlined";
 import { hasSupabaseConfig, type Subject } from "@/services/supabase";
 import { getSession, onAuthStateChange } from "@/services/auth";
 import { listSubjectsForContribution, submitContribution } from "@/services/contributions";
 import { fetchUserProfile } from "@/services/profiles";
-import { formatFileSize } from "@/data/materials";
 import { getDictionary, localizePath, useTranslations, type Locale } from "@/i18n";
 
 type Props = { initialSubject?: string; locale: Locale };
@@ -31,13 +28,6 @@ const maxFileSize = 50 * 1024 * 1024;
  * first and the form opens empty, so nothing typed can be lost on the way.
  */
 type AuthPhase = "loading" | "signedOut" | "signedIn" | "unavailable" | "error";
-
-/** Short uppercase tag with the extension of a file name. */
-function fileExtension(name: string): string {
-  const index = name.lastIndexOf(".");
-  if (index <= 0 || index === name.length - 1) return "FILE";
-  return name.slice(index + 1).toUpperCase().slice(0, 4);
-}
 
 /** Label of a subject inside the searchable select. */
 function subjectOptionLabel(subject: Subject): string {
@@ -86,7 +76,6 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
   const [files, setFiles] = useState<File[]>([]);
   const [fileSizeError, setFileSizeError] = useState(false);
   const [fileFormatError, setFileFormatError] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
   const [subjectId, setSubjectId] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -204,8 +193,6 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
     return unsubscribe;
   }, [loadSubjects, loadIdentity]);
 
-  const totalSize = files.reduce((sum, file) => sum + file.size, 0);
-
   const allowedExtensions = new Set([
     "pdf", "txt", "c", "cpp", "png", "jpg", "jpeg", "webp", "zip", "rar",
     "doc", "docx", "ppt", "pptx", "xls", "xlsx",
@@ -234,7 +221,9 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
     const input = fileInputRef.current;
     if (input) {
       const transfer = new DataTransfer();
-      selected.forEach((file) => transfer.items.add(file));
+      selected.forEach((file) => {
+        transfer.items.add(file);
+      });
       input.files = transfer.files;
     }
   };
@@ -492,110 +481,15 @@ export default function ContributionForm({ initialSubject = "", locale }: Props)
           }}
           fullWidth
         />
-        <div className="contribution-files">
-          <span className="contribution-field-label" id="contribution-files-label">
-            {t("contributionForm.attachFiles")}
-            <span className="contribution-required-mark" aria-hidden="true">
-              *
-            </span>
-          </span>
-          <input
-            ref={fileInputRef}
-            id="contribution-files-input"
-            className="file-input"
-            type="file"
-            multiple
-            required
-            accept=".pdf,.txt,.c,.cpp,.png,.jpg,.jpeg,.webp,.zip,.rar,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
-            aria-labelledby="contribution-files-label"
-            aria-describedby="contribution-files-hint"
-            aria-invalid={showValidationErrors ? Boolean(fieldErrors.files) : undefined}
-            onChange={(event) => {
-              const selected = Array.from(event.target.files ?? []);
-              event.target.value = "";
-              acceptFiles(selected);
-            }}
-          />
-          <label
-            className={`file-dropzone ${isDragging ? "file-dropzone--dragging" : ""} ${showValidationErrors && fieldErrors.files ? "file-dropzone--error" : ""}`}
-            htmlFor="contribution-files-input"
-            onDragEnter={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              setIsDragging(true);
-            }}
-            onDragOver={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              event.dataTransfer.dropEffect = "copy";
-              setIsDragging(true);
-            }}
-            onDragLeave={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-                setIsDragging(false);
-              }
-            }}
-            onDrop={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              setIsDragging(false);
-              const dropped = Array.from(event.dataTransfer.files ?? []);
-              acceptFiles(dropped);
-            }}
-          >
-            <span className="file-dropzone-icon" aria-hidden="true">
-              <AttachFileRounded fontSize="small" />
-            </span>
-            <span className="file-dropzone-copy">
-              <span className="file-dropzone-title">{t("contributionForm.attachFilesAction")}</span>
-              <span className="file-dropzone-hint" id="contribution-files-hint">
-                {t("contributionForm.attachFilesHint")}
-              </span>
-            </span>
-          </label>
-          {(fileSizeError || fileFormatError || (showValidationErrors && fieldErrors.files)) && (
-            <FormHelperText error className="contribution-field-error">
-              {fieldErrors.files}
-            </FormHelperText>
-          )}
-          {files.length > 0 && (
-            <div className="file-list">
-              <div className="file-list-head">
-                <span className="file-list-title">{t("contributionForm.filesTitle")}</span>
-                <span className="file-list-meta">
-                  {t("contributionForm.filesTotalSize")}: {formatFileSize(totalSize)}
-                </span>
-              </div>
-              <ul className="file-items">
-                {files.map((file, index) => (
-                  <li className="file-item" key={`${file.name}-${file.size}-${index}`}>
-                    <span className="file-item-ext" aria-hidden="true">
-                      {fileExtension(file.name)}
-                    </span>
-                    <span className="file-item-copy">
-                      <span className="file-item-name" title={file.name}>
-                        {file.name}
-                      </span>
-                      <span className="file-item-size">{formatFileSize(file.size)}</span>
-                    </span>
-                    <IconButton
-                      className="file-item-remove"
-                      size="small"
-                      aria-label={t("contributionForm.removeFile")}
-                      onClick={() =>
-                        setFiles((current) => current.filter((_, position) => position !== index))
-                      }
-                    >
-                      <CloseRounded fontSize="small" />
-                    </IconButton>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+        <ContributionFilesField
+          locale={locale}
+          inputRef={fileInputRef}
+          files={files}
+          error={fieldErrors.files}
+          showError={Boolean(fileSizeError || fileFormatError || (showValidationErrors && fieldErrors.files))}
+          onAcceptFiles={acceptFiles}
+          onRemoveFile={(file) => setFiles((current) => current.filter((item) => item !== file))}
+        />
         <Stack spacing={0.5} useFlexGap className="contribution-checkbox-group">
           <FormControlLabel
             control={

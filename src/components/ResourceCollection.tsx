@@ -23,7 +23,7 @@ import {
 } from "@/data/materials";
 import { hasSupabaseConfig } from "@/services/supabase";
 import { fetchMaterialAttributionRows } from "@/services/materialAttributions";
-import { intlLocale, useTranslations, type Locale } from "@/i18n";
+import { intlLocale, useTranslations as createTranslator, type Locale } from "@/i18n";
 
 type Props = {
   materials: Material[];
@@ -43,7 +43,8 @@ function supportsPreview(material: Material) {
 }
 
 function Collection({ materials, attributions: initialAttributions, locale }: Props) {
-  const t = useTranslations(locale);
+  const t = useMemo(() => createTranslator(locale), [locale]);
+  const dateFormatter = useMemo(() => new Intl.DateTimeFormat(intlLocale(locale)), [locale]);
   const groups = getMaterialGroups(materials);
   const [attributions, setAttributions] = useState<Record<string, string>>(
     initialAttributions ?? {},
@@ -67,9 +68,7 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
           if (item.path)
             next[item.path] = t("resourceCollection.attributedTo", {
               alias: item.profiles?.alias ?? t("resourceCollection.unknownAuthor"),
-              date: new Intl.DateTimeFormat(intlLocale(locale)).format(
-                new Date(`${item.contributed_at}T00:00:00`),
-              ),
+              date: dateFormatter.format(new Date(`${item.contributed_at}T00:00:00`)),
             });
         }
         setAttributions(next);
@@ -80,7 +79,7 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
       .finally(() => {
         setAttributionsLoading(false);
       });
-  }, [initialAttributions, materials, locale, t]);
+  }, [initialAttributions, materials, t, dateFormatter]);
 
   useEffect(() => {
     if (
@@ -118,7 +117,7 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
     return () => {
       cancelled = true;
     };
-  }, [selectedMaterial]);
+  }, [selectedMaterial, t]);
 
   const selectedExtension = selectedMaterial?.extension.toLowerCase();
   const isText = Boolean(

@@ -10,6 +10,12 @@
     "dev": "astro dev",
     "build": "astro build",
     "check": "astro check",
+    "lint": "biome lint",
+    "test": "node --test",
+    "test:integration": "node --env-file-if-exists=.env --test tests/integration/supabase-public.test.mjs",
+    "test:rls": "node --env-file-if-exists=.env scripts/test-rls.mjs",
+    "db:types": "node scripts/generate-database-types.mjs",
+    "security:rotate-discord": "node scripts/rotate-discord-webhook-secret.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -31,6 +37,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.11",
+    "@biomejs/biome": "2.6.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "supabase": "2.121.0",
