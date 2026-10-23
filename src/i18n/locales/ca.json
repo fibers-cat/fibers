@@ -66,9 +66,9 @@
     "stickerLine1": "apunts",
     "stickerLine2": "oberts",
     "tagTwo": "fet entre estudiants",
-    "catalogEyebrow": "EL CATÀLEG",
-    "catalogTitle": "Troba la teva assignatura",
-    "catalogLead": "Comença pel nom o l’acrònim i consulta l’estat de cada espai.",
+    "catalogEyebrow": "ÚLTIMES ACTUALITZACIONS",
+    "catalogTitle": "Contingut afegit recentment",
+    "catalogLead": "Les 9 assignatures que han rebut contingut més recentment.",
     "catalogCta": "Veure el catàleg",
     "dataNote": "Comprova la data i la vigència del contingut abans d'utilitzar-lo.",
     "shareTitle": "Has preparat uns bons apunts?",
@@ -373,14 +373,9 @@
     "removeFile": "Elimina el fitxer",
     "acknowledgement": "Confirmo que tinc dret a compartir aquest material i que no inclou contingut protegit.",
     "gate": {
-      "title": "Inicia sessió per compartir material",
-      "text": "Per enviar una aportació necessites un compte de Fibers. Inicia sessió i el formulari s’obrirà buit i amb tot el que escriguis quedarà a salvo.",
-      "action": "Inicia sessió",
-      "benefits": [
-        "El formulari només s’obre amb la sessió iniciada.",
-        "Si tornes més tard, el material continuarà esperant-te.",
-        "Cada aportació es revisarà abans de publicar-se."
-      ]
+      "title": "Inicia sessió per aportar",
+      "text": "Necessites un compte de Fibers. Revisarem el material abans de publicar-lo.",
+      "action": "Inicia sessió"
     },
     "errors": {
       "subject": "Selecciona una assignatura.",
@@ -529,6 +524,8 @@
     "empty": "Encara no hi ha aportacions aprovades. Sigues la primera persona a compartir material.",
     "materialsOne": "material",
     "materialsMany": "materials",
+    "logScale": "Escala logarítmica",
+    "logScaleNote": "La barra compara quantitats en escala logarítmica",
     "totalContributors": "Col·laboradors",
     "totalMaterials": "Materials compartits",
     "tierNovice": "Novell",
@@ -669,6 +666,7 @@
     }
   },
   "subjectExplorer": {
+    "onlyWithMaterials": "Amb materials",
     "search": "Busca per nom o acrònim",
     "filter": "Filtra assignatures",
     "filters": "Filtres",
@@ -700,7 +698,7 @@
     "emptyLead": "Prova amb un altre nom o acrònim, o canvia els filtres."
   },
   "subjectStatus": {
-    "heading": "Materials",
+    "heading": "Materials legacy",
     "filesOne": "{count} fitxer",
     "filesMany": "{count} fitxers",
     "recoveredAlert": "Fitxers recuperats de la web anterior; comprova si el material continua vigent.",
@@ -709,7 +707,7 @@
     "contributeCta": "Aporta material"
   },
   "approvedMaterials": {
-    "heading": "Aportacions de la comunitat",
+    "heading": "Materials",
     "loading": "Carregant…",
     "error": "No s’han pogut carregar els materials aprovats.",
     "attributedTo": "Aportat per {alias}",

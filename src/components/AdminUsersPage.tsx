@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
@@ -24,12 +24,12 @@ import CheckRounded from '@mui/icons-material/CheckRounded';
 import ContentCopyRounded from '@mui/icons-material/ContentCopyRounded';
 import { fetchManagedUsers, updateManagedUser, type ManagedRole, type ManagedUser } from '@/services/adminUsers';
 import { useCurrentRole } from '@/services/useCurrentRole';
-import { intlLocale, localizePath, useTranslations, type Locale } from '@/i18n';
+import { intlLocale, localizePath, useTranslations as createTranslator, type Locale } from '@/i18n';
 
 type Draft = { alias: string; role: ManagedRole };
 
 export default function AdminUsersPage({ locale }: { locale: Locale }) {
-  const t = useTranslations(locale);
+  const t = useMemo(() => createTranslator(locale), [locale]);
   const { role, loading: roleLoading, error: roleError } = useCurrentRole();
   const [users, setUsers] = useState<ManagedUser[]>([]);
   const [drafts, setDrafts] = useState<Record<string, Draft>>({});
@@ -59,7 +59,7 @@ export default function AdminUsersPage({ locale }: { locale: Locale }) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (role === 'superadmin') void loadUsers();

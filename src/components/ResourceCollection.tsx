@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -14,6 +14,7 @@ import CloseRounded from "@mui/icons-material/CloseRounded";
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded";
 import VisibilityRounded from "@mui/icons-material/VisibilityRounded";
 import CodeBlock from "@/components/shared/CodeBlock";
+import { renderAsync } from "docx-preview";
 import { detectLanguage, languageFromFileName } from "@/data/codeLanguage";
 import type { Material } from "@/data/materials";
 import {
@@ -23,7 +24,7 @@ import {
 } from "@/data/materials";
 import { hasSupabaseConfig } from "@/services/supabase";
 import { fetchMaterialAttributionRows } from "@/services/materialAttributions";
-import { intlLocale, useTranslations, type Locale } from "@/i18n";
+import { intlLocale, useTranslations as createTranslator, type Locale } from "@/i18n";
 
 type Props = {
   materials: Material[];
@@ -34,20 +35,39 @@ type Props = {
 const textExtensions = new Set(["txt", "c", "cpp"]);
 const imageExtensions = new Set(["gif", "jpeg", "jpg", "png", "svg", "webp"]);
 
+function attributionDate(value?: string): number {
+  if (!value) return 0;
+  const match = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (!match) return 0;
+  const [, day, month, year] = match;
+  return new Date(Number(year), Number(month) - 1, Number(day)).getTime();
+}
+
 function supportsPreview(material: Material) {
+  const extension = material.extension.toLowerCase();
   return (
-    textExtensions.has(material.extension.toLowerCase()) ||
-    imageExtensions.has(material.extension.toLowerCase()) ||
-    material.extension.toLowerCase() === "pdf"
+    textExtensions.has(extension) ||
+    imageExtensions.has(extension) ||
+    extension === "pdf" ||
+    extension === "docx"
   );
 }
 
 function Collection({ materials, attributions: initialAttributions, locale }: Props) {
-  const t = useTranslations(locale);
-  const groups = getMaterialGroups(materials);
+  const t = useMemo(() => createTranslator(locale), [locale]);
+  const dateFormatter = useMemo(() => new Intl.DateTimeFormat(intlLocale(locale)), [locale]);
   const [attributions, setAttributions] = useState<Record<string, string>>(
     initialAttributions ?? {},
   );
+  const groups = useMemo(() => {
+    const sortedMaterials = [...materials].sort((a, b) => {
+      const dateA = attributionDate(attributions[a.path]);
+      const dateB = attributionDate(attributions[b.path]);
+      if (dateB !== dateA) return dateB - dateA;
+      return 0;
+    });
+    return getMaterialGroups(sortedMaterials);
+  }, [materials, attributions]);
   const [attributionsLoading, setAttributionsLoading] = useState(
     !initialAttributions && hasSupabaseConfig && materials.length > 0,
   );
@@ -67,9 +87,7 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
           if (item.path)
             next[item.path] = t("resourceCollection.attributedTo", {
               alias: item.profiles?.alias ?? t("resourceCollection.unknownAuthor"),
-              date: new Intl.DateTimeFormat(intlLocale(locale)).format(
-                new Date(`${item.contributed_at}T00:00:00`),
-              ),
+              date: dateFormatter.format(new Date(`${item.contributed_at}T00:00:00`)),
             });
         }
         setAttributions(next);
@@ -80,7 +98,7 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
       .finally(() => {
         setAttributionsLoading(false);
       });
-  }, [initialAttributions, materials, locale, t]);
+  }, [initialAttributions, materials, t, dateFormatter]);
 
   useEffect(() => {
     if (
@@ -118,7 +136,7 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
     return () => {
       cancelled = true;
     };
-  }, [selectedMaterial]);
+  }, [selectedMaterial, t]);
 
   const selectedExtension = selectedMaterial?.extension.toLowerCase();
   const isText = Boolean(
@@ -330,7 +348,14 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
                 />
               )}
 
-              {selectedExtension && imageExtensions.has(selectedExtension) && (
+              {selectedExtension === "docx" && (
+                 <DocxViewer
+                   url={materialUrl(selectedMaterial)}
+                   errorLabel={t("resourceCollection.loadError")}
+                 />
+               )}
+
+               {selectedExtension && imageExtensions.has(selectedExtension) && (
                 <Box
                   sx={{
                     display: "grid",
@@ -359,6 +384,62 @@ function Collection({ materials, attributions: initialAttributions, locale }: Pr
         )}
       </Drawer>
     </>
+  );
+}
+
+function DocxViewer({ url, errorLabel }: { url: string; errorLabel: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let cancelled = false;
+    container.innerHTML = "";
+    setLoading(true);
+    setError(false);
+
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) throw new Error("loadError");
+        return response.blob();
+      })
+      .then((blob) => {
+        if (cancelled || !containerRef.current) return;
+        return renderAsync(blob, containerRef.current);
+      })
+      .then(() => {
+        if (!cancelled) setLoading(false);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setError(true);
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+      if (containerRef.current) containerRef.current.innerHTML = "";
+    };
+  }, [url]);
+
+  return (
+    <Box sx={{ flex: 1, minHeight: 0, overflow: "auto", bgcolor: "background.paper", p: 0 }}>
+      <style>{`
+        .docx-wrapper { background: transparent !important; padding: 0 !important; }
+        .docx-wrapper > section.docx { box-shadow: none !important; margin-bottom: 16px !important; }
+      `}</style>
+      {loading && (
+        <Box sx={{ display: "grid", minHeight: 180, placeItems: "center" }}>
+          <CircularProgress size={28} />
+        </Box>
+      )}
+      {error && <Alert severity="error">{errorLabel}</Alert>}
+      <div ref={containerRef} />
+    </Box>
   );
 }
 

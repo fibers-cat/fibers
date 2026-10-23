@@ -19,7 +19,7 @@ export async function fetchSubjectMaterialCounts(): Promise<
 
   const counts: Record<string, number> = {};
   for (const item of data ?? []) {
-    counts[item.subject_id] = Number(item.file_count);
+    if (item.subject_id) counts[item.subject_id] = Number(item.file_count ?? 0);
   }
   return counts;
 }

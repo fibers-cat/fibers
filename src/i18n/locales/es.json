@@ -66,9 +66,9 @@
     "stickerLine1": "apuntes",
     "stickerLine2": "abiertos",
     "tagTwo": "hecho entre estudiantes",
-    "catalogEyebrow": "EL CATÁLOGO",
-    "catalogTitle": "Encuentra tu asignatura",
-    "catalogLead": "Empieza por el nombre o el acrónimo y consulta el estado de cada espacio.",
+    "catalogEyebrow": "ÚLTIMAS ACTUALIZACIONES",
+    "catalogTitle": "Contenido añadido recientemente",
+    "catalogLead": "Las 9 asignaturas que han recibido contenido más recientemente.",
     "catalogCta": "Ver el catálogo",
     "dataNote": "Comprueba la fecha y la vigencia del contenido antes de utilizarlo.",
     "shareTitle": "¿Has preparado unos buenos apuntes?",
@@ -373,14 +373,9 @@
     "removeFile": "Eliminar el archivo",
     "acknowledgement": "Confirmo que tengo derecho a compartir este material y que no incluye contenido protegido.",
     "gate": {
-      "title": "Inicia sesión para compartir material",
-      "text": "Para enviar una aportación necesitas una cuenta de Fibers. Inicia sesión y el formulario se abrirá vacío y todo lo que escribas quedará a salvo.",
-      "action": "Inicia sesión",
-      "benefits": [
-        "El formulario solo se abre con la sesión iniciada.",
-        "Si vuelves más tarde, el material seguirá esperándote.",
-        "Cada aportación se revisará antes de publicarse."
-      ]
+      "title": "Inicia sesión para aportar",
+      "text": "Necesitas una cuenta de Fibers. Revisaremos el material antes de publicarlo.",
+      "action": "Inicia sesión"
     },
     "errors": {
       "subject": "Selecciona una asignatura.",
@@ -529,6 +524,8 @@
     "empty": "Todavía no hay aportaciones aprobadas. Sé la primera persona en compartir material.",
     "materialsOne": "material",
     "materialsMany": "materiales",
+    "logScale": "Escala logarítmica",
+    "logScaleNote": "La barra compara cantidades en escala logarítmica",
     "totalContributors": "Colaboradores",
     "totalMaterials": "Materiales compartidos",
     "tierNovice": "Novato",
@@ -669,6 +666,7 @@
     }
   },
   "subjectExplorer": {
+    "onlyWithMaterials": "Solo asignaturas con material",
     "search": "Busca por nombre o acrónimo",
     "filter": "Filtra asignaturas",
     "filters": "Filtros",
@@ -700,7 +698,7 @@
     "emptyLead": "Prueba con otro nombre o acrónimo, o cambia los filtros."
   },
   "subjectStatus": {
-    "heading": "Materiales",
+    "heading": "Materiales legacy",
     "filesOne": "{count} archivo",
     "filesMany": "{count} archivos",
     "recoveredAlert": "Archivos recuperados de la web anterior; comprueba si el material sigue vigente.",
@@ -709,7 +707,7 @@
     "contributeCta": "Aporta material"
   },
   "approvedMaterials": {
-    "heading": "Aportaciones de la comunidad",
+    "heading": "Materiales",
     "loading": "Cargando…",
     "error": "No se han podido cargar los materiales aprobados.",
     "attributedTo": "Aportado por {alias}",

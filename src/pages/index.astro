@@ -3,13 +3,16 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 import SubjectExplorer from "@/components/SubjectExplorer";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import { fetchSubjects } from "@/services/subjects";
-import { fetchSubjectMaterialCounts } from "@/services/subjectMaterialCounts";
+import { fetchLatestMaterialDates, fetchSubjectMaterialCounts } from "@/services/subjectMaterialCounts";
 import { getLocaleFromUrl, isLocale, localizePath, useTranslations } from "@/i18n";
 
 const locale = isLocale(Astro.currentLocale) ? Astro.currentLocale : getLocaleFromUrl(Astro.url);
 const t = useTranslations(locale);
-const subjects = await fetchSubjects();
-const materialCounts = await fetchSubjectMaterialCounts();
+const [subjects, materialCounts, latestMaterialDates] = await Promise.all([
+  fetchSubjects(),
+  fetchSubjectMaterialCounts(),
+  fetchLatestMaterialDates(),
+]);
 ---
 
 <SiteLayout title={t('home.meta.title')} description={t('home.meta.description')}>
@@ -60,12 +63,17 @@ const materialCounts = await fetchSubjectMaterialCounts();
             {t('home.catalogTitle')}
           </h2><p>{t('home.catalogLead')}</p>
         </div>
-        <a class="text-link" href={localizePath('/assignatures/', locale)}
-          >{t('home.catalogCta')} <span aria-hidden="true">→</span></a
-        >
+        <a class="button-secondary catalog-header-action" href={localizePath('/assignatures/', locale)}>
+          {t('home.catalogCta')} <span aria-hidden="true">→</span>
+        </a>
       </div>
-      <SubjectExplorer client:load subjects={subjects} featured initialMaterialCounts={materialCounts} locale={locale} />
+      <SubjectExplorer client:load subjects={subjects} featured initialMaterialCounts={materialCounts} initialLatestMaterialDates={latestMaterialDates} locale={locale} />
       <p class="data-note">{t('home.dataNote')}</p>
+      <div class="catalog-preview-action">
+        <a class="button-primary" href={localizePath('/assignatures/', locale)}>
+          {t('home.catalogCta')} <span aria-hidden="true">→</span>
+        </a>
+      </div>
     </section>
 
     <section class="share-banner">
@@ -79,3 +87,17 @@ const materialCounts = await fetchSubjectMaterialCounts();
     </section>
   </div>
 </SiteLayout>
+
+<style>
+  .catalog-preview-action {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+
+  @media (max-width: 760px) {
+    .catalog-header-action {
+      align-self: flex-end;
+    }
+  }
+</style>

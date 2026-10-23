@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const WEBHOOK_URL = Deno.env.get("DISCORD_WEBHOOK_URL");
-const WEBHOOK_SECRET = Deno.env.get("WEBHOOK_SECRET");
+const WEBHOOK_SECRET = Deno.env.get("WEBHOOK_SECRET")?.trim();
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
@@ -14,11 +14,18 @@ const CORAL = 0xe94b50;
 const TEAL = 0x158b84;
 
 serve(async (req) => {
-  if (WEBHOOK_SECRET) {
-    const provided = req.headers.get("x-webhook-secret");
-    if (provided !== WEBHOOK_SECRET) {
-      return new Response("Unauthorized", { status: 401 });
-    }
+  if (!WEBHOOK_SECRET || WEBHOOK_SECRET.length < 32) {
+    return new Response("Webhook authentication is not configured", { status: 503 });
+  }
+  if (req.method !== "POST") {
+    return new Response("Method not allowed", {
+      status: 405,
+      headers: { Allow: "POST" },
+    });
+  }
+  const providedSecret = req.headers.get("x-webhook-secret");
+  if (!providedSecret || providedSecret !== WEBHOOK_SECRET) {
+    return new Response("Unauthorized", { status: 401 });
   }
 
   if (!WEBHOOK_URL) {
@@ -35,6 +42,9 @@ serve(async (req) => {
   const table = payload.table ?? "unknown";
   const record = payload.record ?? {};
   const type = payload.type ?? "INSERT";
+  if (type !== "INSERT" || !["profiles", "contributions"].includes(table)) {
+    return new Response("Unsupported webhook event", { status: 400 });
+  }
 
   let embed: Record<string, unknown> = {
     color: CORAL,
@@ -164,7 +174,7 @@ serve(async (req) => {
   } else {
     embed = {
       title: `🔔 ${type} a ${table}`,
-      description: "```json\n" + JSON.stringify(record, null, 2).slice(0, 1000) + "\n```",
+      description: `\`\`\`json\n${JSON.stringify(record, null, 2).slice(0, 1000)}\n\`\`\``,
       color: CORAL,
       timestamp: new Date().toISOString(),
     };

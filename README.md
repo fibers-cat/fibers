@@ -41,6 +41,18 @@ npm run build
 npm run preview
 ```
 
+## Comprovacions
+
+```sh
+npm run check
+npm run lint
+npm test
+npm run test:integration
+npm run test:rls
+```
+
+`test:integration` comprova la superfície pública amb la clau publicable i s’omet si no hi ha `.env`. `test:rls` comprova les polítiques i els permisos d’un usuari normal/superadmin en transaccions que es reverteixen; requereix `SUPABASE_PROJECT_ID` a `.env` (copia `.env.example`) i el CLI autenticat. Per regenerar els tipus del projecte Supabase, inicia sessió amb el CLI (`npx supabase login`) i executa `npm run db:types`. El fitxer de sortida és `src/services/database.types.ts`; també pots definir `SUPABASE_PROJECT_ID` per seleccionar un altre projecte.
+
 Les pàgines d’assignatura i la llista inicial del catàleg es generen durant la compilació amb les dades de Supabase; els canvis en aquestes dades es reflecteixen després de tornar a compilar i desplegar. La disponibilitat dels materials recuperats es mostra com a pendent de revisió.
 
 El catàleg conserva l’acrònim que s’utilitza als enllaços i als materials, i també registra el codi oficial UPC (`code`), els idiomes d’impartició, l’especialitat i la vigència de cada assignatura, segons el [pla d’estudis oficial de la FIB](https://www.fib.upc.edu/ca/graus/grau-en-enginyeria-informatica/pla-destudis/assignatures). Les assignatures que la FIB identifica com a no vigents es mantenen com a referència històrica.

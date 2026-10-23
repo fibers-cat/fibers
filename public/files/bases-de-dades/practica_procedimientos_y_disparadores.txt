@@ -5,8 +5,6 @@ RETURN NULL;
 END;
 $$LANGUAGE plpgsql;
 CREATE TRIGGER compciutat2 AFTER DELETE OR UPDATE ON empleats2  FOR EACH ROW EXECUTE PROCEDURE comprobar_ciutat2();
-</div>
-<div id="pre" class="pre2">
 CREATE OR REPLACE FUNCTION assignar_individual(nom char(10),
 		club char(10)) RETURNS void AS $$
 DECLARE 

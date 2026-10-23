@@ -125,7 +125,8 @@ export async function fetchApprovedMaterials(subjectId: string): Promise<{
           : [],
     )
     .filter((item) => !item.path)
-    .map((item) => ({ ...item, profiles: firstProfile(item.profiles) }));
+    .map((item) => ({ ...item, profiles: firstProfile(item.profiles) }))
+    .sort((a, b) => b.contributed_at.localeCompare(a.contributed_at));
 
   return { contributions, legacyMaterials };
 }

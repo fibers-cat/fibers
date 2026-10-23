@@ -50,14 +50,13 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
 
   return (
     <AppThemeProvider>
-      <>
       <Timeline
         position="right"
         sx={{
           p: 0,
-          [`& .MuiTimelineOppositeContent-root, & .MuiTimelineContent-root`]: { py: 1, px: { xs: 1, sm: 2 }, flex: 1 },
-          [`& .MuiTimelineConnector-root`]: { bgcolor: '#e2e5e9', width: 2 },
-          [`& .MuiTimelineDot-root`]: {
+          '& .MuiTimelineOppositeContent-root, & .MuiTimelineContent-root': { py: 1, px: { xs: 1, sm: 2 }, flex: 1 },
+          '& .MuiTimelineConnector-root': { bgcolor: '#e2e5e9', width: 2 },
+          '& .MuiTimelineDot-root': {
             width: 16,
             height: 16,
             p: 0,
@@ -69,9 +68,9 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
             my: 0.5,
           },
           '@media (max-width: 600px)': {
-            [`& .MuiTimelineItem-root`]: { minHeight: 0, flexDirection: 'row' },
-            [`& .MuiTimelineOppositeContent-root`]: { display: 'none' },
-            [`& .MuiTimelineContent-root`]: { px: 1, textAlign: 'left' },
+            '& .MuiTimelineItem-root': { minHeight: 0, flexDirection: 'row' },
+            '& .MuiTimelineOppositeContent-root': { display: 'none' },
+            '& .MuiTimelineContent-root': { px: 1, textAlign: 'left' },
           },
         }}
       >
@@ -205,7 +204,6 @@ export default function ProjectTimeline({ locale }: { locale: Locale }) {
           {preview && <iframe title={t('timeline.previewTitle', { title: preview.title })} src={preview.href} style={{ flex: 1, width: '100%', border: 0 }} />}
         </Box>
       </Drawer>
-      </>
     </AppThemeProvider>
   );
 }

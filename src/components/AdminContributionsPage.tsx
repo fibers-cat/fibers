@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import AppThemeProvider from '@/components/shared/AppThemeProvider';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -21,7 +21,7 @@ import Typography from '@mui/material/Typography';
 import { hasSupabaseConfig } from '@/services/supabase';
 import { fetchPendingContributions, reviewContribution, type PendingContribution } from '@/services/contributions';
 import { useCurrentRole } from '@/services/useCurrentRole';
-import { intlLocale, localizePath, useTranslations, type Locale } from '@/i18n';
+import { intlLocale, localizePath, useTranslations as createTranslator, type Locale } from '@/i18n';
 import CheckCircleRounded from '@mui/icons-material/CheckCircleRounded';
 import CancelRounded from '@mui/icons-material/CancelRounded';
 import CloseRounded from '@mui/icons-material/CloseRounded';
@@ -31,7 +31,7 @@ import VisibilityRounded from '@mui/icons-material/VisibilityRounded';
 type SortKey = 'title' | 'subject' | 'author' | 'date' | 'files';
 
 export default function AdminContributionsPage({ locale }: { locale: Locale }) {
-  const t = useTranslations(locale);
+  const t = useMemo(() => createTranslator(locale), [locale]);
   const { role, loading: roleLoading, error: roleError } = useCurrentRole();
   const [items, setItems] = useState<PendingContribution[]>([]);
   const [loading, setLoading] = useState(false);
@@ -55,7 +55,7 @@ export default function AdminContributionsPage({ locale }: { locale: Locale }) {
     } finally {
       setLoading(false);
     }
-  }, [locale]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [t]);
 
   useEffect(() => {
     if (role === 'admin' || role === 'superadmin') void loadPending();

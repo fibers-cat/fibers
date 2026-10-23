@@ -172,7 +172,7 @@ textarea {
 
 .sidebar-bottom {
   margin-top: auto;
-  padding: 14px 14px 0px;
+  padding: 14px 14px 4px;
   border-top: 1px solid rgba(255, 255, 255, .1);
   display: flex;  
   justify-content: space-between;
@@ -787,9 +787,9 @@ textarea {
 /* Dos clases para ganar a la transición de .MuiPaper-root que inyecta Emotion */
 .subject-card.MuiPaper-root {
   transition:
-    transform .3s ease,
-    box-shadow .3s ease,
-    border-color .3s ease;
+    transform .18s ease,
+    box-shadow .18s ease,
+    border-color .18s ease;
 }
 
 .subject-card-action.MuiCardActionArea-root {
@@ -809,11 +809,8 @@ textarea {
 
   .subject-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(21, 139, 132, .32);
-    box-shadow:
-      0 0 0 4px rgba(21, 139, 132, .06),
-      0 10px 28px rgba(21, 139, 132, .10),
-      0 2px 4px rgba(32, 36, 44, .03);
+    border-color: #f0cfca;
+    box-shadow: 0 12px 26px rgba(32, 36, 44, .06);
   }
 }
 
@@ -972,11 +969,6 @@ textarea {
 .subject-open svg {
   width: 15px;
   height: 15px;
-  transition: transform .2s ease;
-}
-
-.subject-open:hover svg {
-  transform: translateX(2px);
 }
 
 .resource-open.MuiButton-root {
@@ -990,12 +982,6 @@ textarea {
 
 .resource-open .MuiButton-endIcon svg {
   font-size: 15px;
-}
-
-.subject-open:hover {
-  color: #0e5f5a !important;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 .resource-open.MuiButton-root:hover {
@@ -1123,11 +1109,17 @@ textarea {
   color: #443c30;
 }
 
+.subject-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .subject-title-panel {
   display: flex;
   align-items: flex-start;
   gap: 19px;
-  margin: 43px 0 25px;
+  margin: 0;
   padding: 27px 29px;
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -1195,7 +1187,6 @@ textarea {
 }
 
 .subject-status-panel {
-  max-width: 760px;
   padding: 25px !important;
   border: 1px solid var(--line);
   border-radius: 18px !important;
@@ -1203,7 +1194,7 @@ textarea {
 
 .approved-materials {
   min-width: 0;
-  margin-top: 25px;
+  margin-top: 0;
 }
 
 .approved-contribution-list {
@@ -1386,7 +1377,7 @@ textarea {
 
 .back-link {
   display: inline-block;
-  margin-top: 24px;
+  margin-top: 0;
   color: #65707c;
   font-size: var(--text-base);
   font-weight: 700;
@@ -1400,7 +1391,7 @@ textarea {
 .resource-groups {
   display: grid;
   gap: 20px;
-  margin: 19px 0 22px;
+  margin: 0;
 }
 
 .resource-group-heading {
@@ -2169,29 +2160,27 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 14px;
-  padding: 30px 28px;
-  border: 1px solid #f0e0dc;
-  border-radius: 16px;
-  background:
-    radial-gradient(circle at 92% 4%, rgba(233, 75, 80, .08), transparent 42%),
-    linear-gradient(140deg, #fffdfc, #fff7f4);
+  gap: 12px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
 }
 
 .contribution-gate-icon {
   display: grid;
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   place-items: center;
-  border-radius: 14px;
-  background: rgba(233, 75, 80, .1);
-  color: var(--coral);
+  border-radius: 12px;
+  background: #f2f4f6;
+  color: var(--muted);
 }
 
 .contribution-gate-title {
   margin: 0;
   color: var(--ink);
-  font-size: 1.3125rem;
+  font-size: 1.125rem;
   font-weight: 700;
   letter-spacing: -.4px;
   line-height: 1.25;
@@ -2202,34 +2191,11 @@ textarea {
   margin: 0;
   color: var(--muted);
   font-size: var(--text-base);
-  line-height: 1.65;
+  line-height: 1.55;
 }
 
 .contribution-gate-action {
   align-self: flex-start;
-}
-
-.contribution-gate-points {
-  display: grid;
-  gap: 9px;
-  margin: 4px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.contribution-gate-points li {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  color: #4a5462;
-  font-size: var(--text-sm);
-  line-height: 1.5;
-}
-
-.contribution-gate-points svg {
-  margin-top: 2px;
-  flex: 0 0 auto;
-  color: var(--teal);
 }
 
 .guide-hero {
@@ -3322,7 +3288,7 @@ textarea {
   .subject-title-panel {
     align-items: flex-start;
     gap: 13px;
-    margin-top: 35px;
+    margin: 0;
     padding: 19px;
   }
 
@@ -3670,7 +3636,7 @@ textarea {
 .podium-slot--2 { background: linear-gradient(180deg, #f8fafc, #fff); border-color: #cbd5e1; }
 .podium-slot--3 { background: linear-gradient(180deg, #fff7ed, #fff); border-color: #fdba74; }
 
-.ranking-panel .contributor-ranking { width: 100%; margin: 30px 0; padding: 0; list-style: none; text-align: left; }
+.ranking-panel .contributor-ranking { width: 100%; margin: 0 0 30px 0; padding: 0; list-style: none; text-align: left; }
 .contributor-ranking li { display: grid; grid-template-columns: 48px minmax(0, 1fr) minmax(200px, 2fr); align-items: center; gap: 4px 14px; padding: 12px 8px; border-bottom: 1px solid rgba(24, 36, 52, .08); }
 .ranking-position { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; background: #eef1f5; font-weight: 700; }
 .ranking-alias { font-weight: 700; }

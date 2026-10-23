@@ -14,17 +14,23 @@ function getOrCreateContainer(): HTMLDivElement {
   return container;
 }
 
-function createFibersCache(): EmotionCache {
-  if (typeof document === 'undefined') {
-    return createCache({ key: 'fibers' });
-  }
+function createClientCache(): EmotionCache {
   return createCache({ key: 'fibers', container: getOrCreateContainer() });
 }
 
-const globalObject = globalThis as { [CACHE_KEY]?: EmotionCache };
+/**
+ * Emotion's `inserted` registry must be request-scoped during SSR. Reusing a
+ * server cache across requests makes later HTML omit styles it saw earlier.
+ * In the browser, share one cache across islands and ClientRouter navigations.
+ */
+export function getFibersEmotionCache(): EmotionCache {
+  if (typeof document === 'undefined') {
+    return createCache({ key: 'fibers' });
+  }
 
-if (!globalObject[CACHE_KEY]) {
-  globalObject[CACHE_KEY] = createFibersCache();
+  const globalObject = globalThis as { [CACHE_KEY]?: EmotionCache };
+  if (!globalObject[CACHE_KEY]) {
+    globalObject[CACHE_KEY] = createClientCache();
+  }
+  return globalObject[CACHE_KEY];
 }
-
-export const fibersEmotionCache: EmotionCache = globalObject[CACHE_KEY];
